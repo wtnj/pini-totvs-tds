@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="PatchWizard">
+		<item value="2" key="PatchWizardPage1.INPUT_METHOD"/>
+		<item value="759" key="DIALOG_WIDTH"/>
+		<item value="8" key="DIALOG_Y_ORIGIN"/>
+		<item value="349" key="DIALOG_X_ORIGIN"/>
+		<item value="713" key="DIALOG_HEIGHT"/>
+		<item value="/nova pini srv/sped/nfe/danfeii.prw" key="PatchWizardPage1.WORKSPACE_PATH"/>
+		<item value="C:\Users\thiago.lima\Desktop\Atualização\14-01-22-update-bra-chi-eua-par-uru-tttp110\14-01-22-update-bra-chi-eua-par-uru-tttp110.upd" key="PatchWizardPage1.PATCH_FILES"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<list key="PatchWizardPage1.PATCH_URLS">
+			<item value=""/>
+		</list>
+		<list key="PatchWizardPage1.PATCH_FILES">
+			<item value="C:\Users\thiago.lima\Desktop\Atualização\14-01-22-update-bra-chi-eua-par-uru-tttp110\14-01-22-update-bra-chi-eua-par-uru-tttp110.upd"/>
+		</list>
+	</section>
+	<section name="PreviewPatchPage">
+		<item value="false" key="generateRejects"/>
+		<item value="true" key="expandPatchOptions"/>
+	</section>
+</section>
