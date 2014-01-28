@@ -1,0 +1,115 @@
+#include "rwmake.ch"        
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFIN028   ³Autor: DANILO CESAR SESTARI PALA ³ Data: 20110111³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo: Relatorio CONTAS A PAGAR TITULO PAI                        ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : Pini													     ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function PFIN028()
+
+SetPrvt("CPERG,_StringArq, cquery, MHORA, aRegs")
+MHORA      := TIME()
+_StringArq := "\SIGA\ARQTEMP\"+ SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2) +".DBF"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Vari veis utilizadas para parametros      ³
+//³ mv_par01             Vencto de            ³
+//³ mv_par02             Vencto ate           ³
+//³ mv_par03             Tipo				  ³
+//³ mv_par04             Natureza             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cPerg    := "PFIN028"  
+ValidPerg()
+If !Pergunte(cPerg)
+   Return
+Endif
+
+If Select("PFIN028") <> 0
+	DbSelectArea("PFIN028")
+	DbCloseArea()
+EndIf
+      
+bBloco:= { |lEnd| RptDetail()  }
+MsAguarde( bBloco, "Aguarde" ,"Processando...", .T. )
+
+RETURN
+
+
+Static Function RptDetail() 
+
+cQuery := "select se2.e2_prefixo, se2.e2_num, se2.e2_parcela, se2.e2_tipo, se2.e2_naturez, se2.e2_codret, se2.e2_fornece, se2.e2_loja, sf1.f1_fornece, sf1.f1_loja, sa2.a2_nome, se2.e2_emissao, se2.e2_baixa, se2.e2_vencto, se2.e2_vencrea, se2.e2_titpai, sf1.f1_valbrut, se2.e2_valor"
+cQuery := cQuery + " from "+ RetSqlName("SE2") +" se2, "+ RetSqlName("SF1") +" sf1, "+ RetSqlName("SA2") +" sa2"
+cQuery := cQuery + " where e2_filial='"+ xFilial("SE1") +"' and e2_vencto >='"+ DTOS(MV_PAR01) +"' and e2_vencto <='"+ DTOS(MV_PAR02) +"' and e2_tipo = '"+ MV_PAR03 +"' and e2_naturez='"+ MV_PAR04 +"' and se2.d_e_l_e_t_<>'*'"
+cQuery := cQuery + " and sf1.f1_filial(+)='"+ xFilial("SF1") +"' and sf1.f1_prefixo(+) = substr(se2.e2_titpai,1,3)"
+cQuery := cQuery + " and sf1.f1_doc(+) = substr(se2.e2_titpai,4,9)"
+cQuery := cQuery + " and sf1.f1_fornece(+) = substr(se2.e2_titpai,17,6)"
+cQuery := cQuery + " and sf1.f1_loja(+) = substr(se2.e2_titpai,23,2)"
+cQuery := cQuery + " and sf1.d_e_l_e_t_(+)<>'*'"
+cQuery := cQuery + " and sa2.a2_filial(+) = '"+ xFilial("SA2") +"'"
+cQuery := cQuery + " and sa2.a2_cod(+)= sf1.f1_fornece"
+cQuery := cQuery + " and sa2.a2_loja(+)= sf1.f1_loja"  
+cQuery := cQuery + " order by se2.e2_prefixo, se2.e2_num, se2.e2_parcela, se2.e2_tipo"
+
+MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PFIN028", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
+DBSelectArea("PFIN028")
+DBGotop()
+COPY TO &_StringArq
+DBCLOSEAREA()   
+MsgInfo(_StringArq)
+RETURN
+
+
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³ValidPerg ºAutor  ³Marcio Torresson    º Data ³  10/06/08   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³Cria parametros no SX1 nao existir os parametros.           º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ Pini                                                       º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function ValidPerg()
+_sAlias := Alias()
+dbSelectArea("SX1")
+dbSetOrder(1)
+cPerg    := PADR(cPerg,10) //mp10 x1_grupo char(10)
+aRegs := {}
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Vari veis utilizadas para parametros      ³
+//³ mv_par01             Vencto de            ³
+//³ mv_par02             Vencto ate           ³
+//³ mv_par03             Tipo				  ³
+//³ mv_par04             Natureza             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+aAdd(aRegs,{cPerg,"01","Vencimento de  ","Vencimento de  ","Vencimento de  ","mv_ch1","D",08,0,0,"G","","MV_PAR01","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"02","Vencimento ate ","Vencimento ate ","Vencimento ate ","mv_ch2","D",08,0,0,"G","","MV_PAR02","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"03","Tipo           ","Tipo           ","Tipo           ","mv_ch3","C",03,0,0,"G","","MV_PAR03","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"04","Natureza       ","Natureza       ","Natureza       ","mv_ch4","C",10,0,0,"G","","MV_PAR04","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+
+_nLimite := If(Len(aRegs[1])<FCount(),Len(aRegs[1]),FCount())
+For i := 1 To Len(aRegs)
+	If !DbSeek(cPerg + aRegs[i,2])
+		Reclock("SX1", .T.)
+		For j := 1 to _nLimite
+			FieldPut(j, aRegs[i,j])
+		Next
+		MsUnlock()
+	Endif
+Next
+DbSelectArea(_sAlias)
+
+Return(.T.)

@@ -1,0 +1,335 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/ Alterado por Danilo C S Pala em 20041117   
+// icms: Danilo CS Pala 20051117
+//Danilo C S Pala 20060328: dados de enderecamento do DNE
+//Danilo C S Pala 20070704: beneficiamento consultar SA1
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT021   ³Autor: Solange Nalini         ³ Data:   26/03/98 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Notas Fiscais de Entrada									 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfat027()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("LI,LIN,CBTXT,CBCONT,NORDEM,ALFA")
+SetPrvt("Z,M,TAMANHO,LIMITE,TITULO,CDESC1")
+SetPrvt("CDESC2,CDESC3,CNATUREZA,ARETURN,SERNF,NOMEPROG")
+SetPrvt("CPERG,NLASTKEY,LCONTINUA,WNREL,NTAMNF,CSTRING")
+SetPrvt("TREGS,M_MULT,P_ANT,P_ATU,P_CNT,M_SAV20")
+SetPrvt("M_SAV7,INICIO,NOTA_NUM,NOTA_EMIS,NOTA_CLIE,NOTA_LOJA")
+SetPrvt("NOTA_MERC,NOTA_DESP,NOTA_TOTA,NOTA_COND,NREGATU,NOTA_TESA")
+SetPrvt("MD2CF,MD2SF,NOTA_NATU,NOTA_COFI,CLIE_CGC,CLIE_NOME")
+SetPrvt("CLIE_INSC,CLIE_ENDE,CLIE_BAIR,CLIE_MUNI,CLIE_ESTA,CLIE_CEP")
+SetPrvt("CLIE_FONE,CLIE_TIPO,XMENSNF1,XMENSNF2,XMENSNF3,XMENSNF4")
+SetPrvt("XMENSNF5,COL,COL2,ITEM_CODI,ITEM_QUAN,ITEM_VUNI")
+SetPrvt("ITEM_TOTA,ITEM_UNID,ITEM_DESC,TP_ENT, NPESOLIQUIDO")   
+SetPrvt("xBASE_ICMS, xVALOR_ICMS,xBSICMRET, xICMS_RET,mhora") //20051109
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Lote                                 ³
+//³ mv_par02             // Data                                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+li        := 0
+LIN       := 0
+CbTxt     := ""
+CbCont    := ""
+nOrdem    := 0
+Alfa      := 0
+Z         := 0
+M         := 0
+tamanho   := "G"
+limite    := 220
+titulo    := PADC("Nota Fiscal - Nfiscal",74)
+cDesc1    := PADC("Este programa ira emitir a Nota Fiscal da Editora Pini ",74)
+cDesc2    := ""
+cDesc3    := ""
+cNatureza := ""
+
+aReturn   := { "Especial", 1,"Administracao", 1, 2, 1,"",1 }
+SERNF     := 'CNE'
+nomeprog  := "NFENT"
+cPerg     := "FAT004"
+nLastKey  := 0
+lContinua := .T.
+MHORA := TIME()
+wnrel     := "NFEP_" + SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Tamanho do Formulario de Nota Fiscal (em Linhas)          ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+nTamNf:=66     // Apenas Informativo
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas, busca o padrao da Nfiscal           ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Pergunte(cPerg,.T.)               // Pergunta no SX1
+
+cString:="SF1"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao SETPRINT                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+wnrel:=SetPrint(cString,wnrel,cPerg,Titulo,cDesc1,cDesc2,cDesc3,.T.)
+
+If nLastKey == 27
+	Return
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica Posicao do Formulario na Impressora                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+	Return
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  Prepara regua de impressÆo                                  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+tregs := LastRec()-Recno()+1
+
+LIN    := PROW()
+LI     := 0
+INICIO := .T.
+
+DBSELECTAREA("SF1")
+DBSETORDER(1)
+If !DbSeek(xFilial("SF1")+MV_PAR01)
+	RETURN
+ENDIF
+
+WHILE SF1->F1_DOC>=MV_PAR01 .AND. SF1->F1_DOC<=MV_PAR02 .And. !EOF()
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*                          CABECALHO DA NOTA                         *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	NOTA_NUM     := SF1->F1_DOC
+	NOTA_EMIS    := SF1->F1_EMISSAO                         //&& DATA EMISSAO
+	NOTA_CLIE    := SF1->F1_FORNECE                         //&& CODIGO DO CLIENTE
+	NOTA_LOJA    := SF1->F1_LOJA                            //&& CODIGO DA LOJA
+	NOTA_MERC    := SF1->F1_VALMERC                         //&& VALOR MERCADORIA
+	NOTA_DESP    := SF1->F1_DESPESA                         //&& VALOR DESPESA
+	NOTA_TOTA    := SF1->F1_VALMERC                         //SF1->F1_VALBRUT  //&& VALOR BRUTO FATURADO - O Valor impresso aqui estava incorreto.
+	NOTA_COND    := SF1->F1_COND                            //&& CONDICAO PAGAMENTO
+	SERNF        := SF1->F1_SERIE
+	TP_ENT       := SF1->F1_TIPO
+	//Danilo 20051117
+	xBASE_ICMS   := SF1->F1_BASEICM         // Base do ICMS.
+	xVALOR_ICMS  := SF1->F1_VALICM          // Valor do ICMS.
+	xVALOR_IPI   := SF1->F1_VALIPI          // Valor do IPI.
+	xICMS_RET    := SF1->F1_ICMSRET         // Valor do ICMS Retido.
+	xBSICMRET    := 0
+
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*             ITENS DO CABECALHO QUE ESTAO NO ARQ. DE ITENS          *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	DbSelectArea("SD1")
+	DbSetOrder(1)
+	DbSeek(xFilial("SD1")+NOTA_NUM+SERNF+NOTA_CLIE+NOTA_LOJA)
+//20060105            
+	NREGATU:=RECNO()        
+	NOTA_NATU:=' '
+	NOTA_COFI:=' '
+	
+	WHILE NOTA_NUM == SD1->D1_DOC .AND. SD1->D1_SERIE == SERNF .AND. !EOF()
+		NOTA_TESA := SD1->D1_TES     // && TIPO ENTRADA E SAIDA
+		DbSelectArea("SF4")
+		DbSeek(xFilial("SF4")+SD1->D1_TES)
+		MD2CF     := SD1->D1_CF
+		MD2SF     := SF4->F4_TEXTO
+
+		IF NOTA_NATU==' '
+			NOTA_NATU :=TRIM(SF4->F4_TEXTO)
+			NOTA_COFI :=TRIM(MD2CF)
+		ELSE
+			IF TRIM(MD2SF)$(NOTA_NATU)
+				NOTA_NATU :=TRIM(NOTA_NATU)
+			ELSE
+				NOTA_NATU :=TRIM(NOTA_NATU)+'/'+TRIM(SF4->F4_TEXTO)
+			ENDIF
+			IF TRIM(MD2CF)$(NOTA_COFI)
+				NOTA_COFI :=TRIM(NOTA_COFI)
+			ELSE
+				NOTA_COFI :=TRIM(NOTA_COFI)+'/'+TRIM(SD1->D1_CF)
+			ENDIF
+		ENDIF
+		DBSELECTAREA("SD1")
+		DBSKIP()
+	END
+	DBGOTO(NREGATU)
+//ate aki 20060105	
+	
+	
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*                          DADOS DO CLIENTE                          *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	DbSelectArea("SD1")
+	IF TP_ENT == "D" .or. TP_ENT == "B" //20070704
+		DbSelectArea("SA1")
+		DBSEEK(xFilial("SA1")+NOTA_CLIE+NOTA_LOJA)
+		CLIE_CGC  := SA1->A1_CGC
+		CLIE_NOME := SA1->A1_NOME
+		CLIE_INSC := SA1->A1_INSCR
+		CLIE_ENDE := ALLTRIM(SA1->A1_TPLOG) + " " + ALLTRIM(SA1->A1_LOGR) + " " + ALLTRIM(SA1->A1_NLOGR) + " " + ALLTRIM(SA1->A1_COMPL) //20060328
+		CLIE_BAIR := SA1->A1_BAIRRO
+		CLIE_MUNI := SA1->A1_MUN
+		CLIE_ESTA := SA1->A1_EST
+		CLIE_CEP  := SA1->A1_CEP
+		CLIE_FONE := SA1->A1_TEL
+		CLIE_TIPO := SA1->A1_TIPO
+		//ENDIF
+	ELSE
+		// IF TP_ENT := "N"
+		DbSelectArea("SA2")
+		DBSEEK(xFilial("SA2")+NOTA_CLIE+NOTA_LOJA)
+		CLIE_CGC  := SA2->A2_CGC
+		CLIE_NOME := SA2->A2_NOME
+		CLIE_INSC := SA2->A2_INSCR
+		CLIE_ENDE := SA2->A2_END
+		CLIE_BAIR := SA2->A2_BAIRRO
+		CLIE_MUNI := SA2->A2_MUN
+		CLIE_ESTA := SA2->A2_EST // 20040416
+		CLIE_CEP  := SA2->A2_CEP
+		CLIE_FONE := SA2->A2_TEL
+		CLIE_TIPO := SA2->A2_TIPO
+	ENDIF
+	
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*                         ENDERECO DE COBRANCA                     *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*        DEFINE CONDICAO DE PAGAMENTO P/TIPO DE OPER                 *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	// inicializa as variaveis de mensagem
+	XMENSNF1:='NF EMITIDA NOS TERMOS DO ARTIGO 127,INCISO I'
+	XMENSNF2:='LETRA A DO RICMS/1991'
+	XMENSNF3:=MEMOLINE(SF1->F1_MENSNF,44,1)
+	XMENSNF4:=MEMOLINE(SF1->F1_MENSNF,44,2)
+	XMENSNF5:=MEMOLINE(SF1->F1_MENSNF,44,3)
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	//*                   IMPRESSAO DA NOTA FISCAL                 *
+	//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+	IF INICIO
+		SETPRC(4,0) // LINHA -2
+		COL:=92
+		COL2:=114
+		@ 04,01  PSAY '.' // LINHA -2
+	ELSE
+		SETPRC(0,0)
+		@ 07,01  PSAY '.' // LINHA -2
+		COL:=90
+		COL2:=112
+		SETPRC(4,0) // LINHA -2
+	ENDIF
+	
+	@ 04,COL  PSAY 'XX'  // linha -2 20041117
+	@ 04,COL2 PSAY NOTA_NUM // linha -2 20041117
+	@ 05,001  PSAY ' ' // linha -2 20041117
+	// RETIRADO A PEDIDO DO USUARIO CICERO EM 18/10/2000 - GILBERTO
+	//@ 10,025  PSAY 'FONE:0(XX11)3224-8811'
+	//@ 10,050  PSAY 'FAX:0(XX11)3224-0314'
+	
+	IF INICIO
+		INICIO:=.F.
+		INKEY(0)
+	ENDIF
+	
+	@ 10,003 PSAY NOTA_NATU // linha -2 20041117
+	@ 10,039 PSAY NOTA_COFI // linha -2 20041117
+	@ 13,003 PSAY CLIE_NOME     + ' ' +NOTA_CLIE                && nome do cliente // linha -2 20041117
+	@ 13,077 PSAY CLIE_CGC                          && c.g.c. // linha -2 20041117
+	@ 13,116 PSAY NOTA_EMIS                         && data de emissao // linha -2 20041117
+	@ 15,003 PSAY substr(CLIE_ENDE,1,65)                         && endereco do cliente // linha -2 20041117 20060328
+	@ 15,069 PSAY CLIE_BAIR                         && bairro // linha -2 20041117 char(20) era 6 20060328
+	@ 15,092 PSAY SUBS(CLIE_CEP,1,5)+'-'+SUBS(CLIE_CEP,6,3)   && cep do cliente // linha -2 20041117
+	@ 17,003 PSAY CLIE_MUNI                         && cep do cliente // linha -2 20041117
+	@ 17,042 PSAY CLIE_FONE                         && fone do cliente // linha -2 20041117
+	@ 17,068 PSAY CLIE_ESTA                         && estado do cliente // linha -2 20041117
+	@ 17,087 PSAY CLIE_INSC                         && inscricao estadual // linha -2 20041117
+	LIN:=29  // linha -2 20041117
+	
+	DbSelectArea('SD1')
+	// DbSetOrder(3)
+	NPESOLIQUIDO := 0 //20041213		
+	WHILE NOTA_NUM == SD1->D1_DOC .AND. SD1->D1_SERIE == SERNF .AND. !EOF()
+		ITEM_CODI := ALLTRIM(SD1->D1_COD)                         && codigo produto
+		ITEM_QUAN := ABS(SD1->D1_QUANT)                  && quantidade
+		ITEM_VUNI := ABS(SD1->D1_VUNIT)                  && preco unitario
+		ITEM_TOTA := ABS(SD1->D1_TOTAL)                  && preco total   
+//		NPESOLIQUIDO := NPESOLIQUIDO + D1_PESO 	// peso do produto 20041213
+		
+		DbSelectArea("SB1")
+		DbSetOrder(1)
+		DbSeek(xFilial()+ITEM_CODI)
+		
+		ITEM_UNID := SB1->B1_UM                     && unidade do produto
+		NPESOLIQUIDO := NPESOLIQUIDO + (B1_PESO * ITEM_QUAN) 	// peso do produto	
+		
+		// GILBERTO - 23/01/2001
+		IF ALLTRIM(ITEM_CODI) = "0699001" .or. ALLTRIM(ITEM_CODI) = "0699002" .or. ALLTRIM(ITEM_CODI) = "0699003"
+			ITEM_DESC := SUBS(SD1->D1_DESCRI,1,40)   && descricao do produto
+		ELSE
+			ITEM_DESC := SUBS(SB1->B1_DESC,1,40)     && descricao do produto
+		ENDIF
+		//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+		//*                       Detalhes do Item - Produto                    *
+		//*ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ*
+		@ LIN+LI,002 PSAY ITEM_CODI                      && imprime cod do produto
+		@ LIN+LI,014 PSAY ITEM_DESC                      && imprime descricao do item
+		@ LIN+LI,058 PSAY 'CFOP:'+SD1->D1_CF                           && SITUACAO TRIBUTARIA
+		@ LIN+LI,080 PSAY ITEM_UNID                          && SITUACAO TRIBUTARIA
+		@ LIN+LI,084 PSAY ITEM_QUAN PICTURE '@E 999999'
+		@ LIN+LI,095 PSAY ITEM_VUNI PICTURE '@E 99,999.99'
+		@ LIN+LI,108 PSAY ITEM_TOTA PICTURE '@E 9,999,999.99'
+		@ LIN+LI,123 PSAY IIf(Empty(SD2->D2_PICM),0,SD1->D1_PICM) Picture "@E 99" //danilo 20051117
+		
+		DBSELECTAREA("SD1")
+		DBSKIP()
+		LIN++
+	END
+
+	//danilo 20051117
+	@ 47,003  PSAY xBASE_ICMS  Picture "@E@Z 999,999,999.99"  // Base do ICMS.
+	@ 47,028  PSAY xVALOR_ICMS Picture "@E@Z 999,999,999.99"  // Valor do ICMS.
+	@ 47,055  PSAY xBSICMRET   Picture "@E@Z 999,999,999.99"  // Base ICMS Ret.
+	@ 47,080  PSAY xICMS_RET   Picture "@E@Z 999,999,999.99"  // Valor  ICMS Ret.
+	
+	@ 47,102 PSAY NOTA_MERC    PICTURE '@E 9,999,999,999.99'  //LINHA +7 20041117
+	@ 49,054 PSAY NOTA_DESP    PICTURE '@E 9,999,999,999.99' //LINHA +7 20041117
+	@ 49,102 PSAY NOTA_TOTA    PICTURE '@E 9,999,999,999.99' //LINHA +7 20041117
+	
+	LIN:=55 //LINHA +7 20041117
+	if NPESOLIQUIDO > 0 
+		@ LIN +1 ,112 psay NPESOLIQUIDO PICTURE "@E 9,999.99"
+	end if //ateh aki
+	LIN := LIN +3
+	
+	@ LIN+2,20 PSAY XMENSNF1
+	@ LIN+3,20 PSAY XMENSNF2
+	@ LIN+4,20 PSAY XMENSNF3
+	@ LIN+5,20 PSAY XMENSNF4
+	@ LIN+6,20 PSAY XMENSNF5
+	@ 069, 115 PSAY NOTA_NUM //LINHA +6 20041117
+	DBSELECTAREA("SF1")
+	DBSKIP()
+END
+
+SET DEVICE TO SCREEN
+DBSELECTAREA("SF1")
+DBSETORDER(1)
+
+IF aRETURN[5] == 1
+	Set Printer to
+	dbcommitAll()
+	ourspool(WNREL)
+ENDIF
+
+MS_FLUSH()
+
+Return

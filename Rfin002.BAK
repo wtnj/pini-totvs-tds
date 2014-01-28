@@ -1,0 +1,518 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+#DEFINE REC_NAO_CONCILIADO 1
+#DEFINE REC_CONCILIADO     2
+#DEFINE PAG_NAO_CONCILIADO 3
+#DEFINE PAG_CONCILIADO     4
+/*
+Danilo C S Pala 20070227: incluir baixa automatica no mapa    20070301 desfazer
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³RFIN002   ºAutor  ³Microsiga           º Data ³  04/09/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³Gera mapa de fluxo de vendas                                º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+User Function Rfin002()        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+
+SetPrvt("CDESC1,CDESC2,CDESC3,CSTRING,TITULO,ARETURN")
+SetPrvt("NOMEPROG,ALINHA,NLASTKEY,CPERG,MSALAPL,WNREL")
+SetPrvt("TAMANHO,LIMITE,NSALDOATU,NENTRADAS,NSAIDAS,NSALDOINI")
+SetPrvt("CFIL,NORDSE5,ARECON,_ASTRU,_CARQUIVO,LALLFIL")
+SetPrvt("CBTXT,CBCONT,LI,M_PAG,CBANCO,CNOMEBANCO")
+SetPrvt("CAGENCIA,CCONTA,NLIMCRED,CABEC1,CABEC2,NTIPO")
+SetPrvt("CCHAVE,CCOND,CINDEX,NINDEX,CCONDWHILE,LEND")
+SetPrvt("_LSUBTRAI,CDOC,_MVALOR,L,TOTENT,TOTSAI")
+SetPrvt("TOTOUT,MSUBT,MTIPON,MTIT,")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Define Variaveis                                             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cDesc1   := OemToAnsi("Este programa ir  emitir o relat¢rio di rio do fluxo")
+cDesc2   := " "
+cDesc3   := " "
+cString  := "SE5"
+
+titulo   := OemToAnsi("Relatorio de Fluxo Di rio")
+aReturn  := { OemToAnsi("Especial"), 1,OemToAnsi("Administra‡Æo"), 2, 2, 1, "",1 }  //"Zebrado"###"Administracao"
+nomeprog := "RFIN002"
+aLinha   := { }
+nLastKey := 0
+cPerg    := "FINR02"
+Msalapl  := 0
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas                           ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+pergunte(cPerg,.F.)
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                        ³
+//³ mv_par01            // a partir de                          ³
+//³ mv_par02            // ate                                  ³
+//³ mv_par03            // Qual Moeda                           ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a fun‡„o SETPRINT                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+wnrel := "FINR470"            //Nome Default do relatorio em Disco
+WnRel := SetPrint(cString,wnrel,cPerg,@titulo,cDesc1,cDesc2,cDesc3,.F.,"",.T.,"","",.F.)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao REPORTINI substituir as variaveis.³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If nLastKey == 27
+	Return
+Endif
+
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+	Return
+Endif
+
+lEnd := .f.
+
+Processa({|lEnd| Fa470(@lEnd)},titulo, "Selecionando registros...",.t.)// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==>    RptStatus({|| Execute(Fa470)},titulo)
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o    ³ FA470IMP ³ Autor ³ Fabio/Solange         ³ Data ³ 10/06/99 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³ Relat¢rio Diario do Fluxo                                  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function FA470()
+tamanho   := "p"
+limite    := 132
+nSaldoAtu := 0
+nEntradas := 0
+nSaidas   := 0
+nSaldoIni := 0
+cFil      := ""
+nOrdSE5   := SE5->(IndexOrd())
+aRecon    := {}
+
+AAdd( aRecon, {0,0,0,0} )
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Prepara Area de Trabalho                                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea("SE5")
+_aStru    := DbStruct()
+_cArquivo := CriaTrab(_aStru,.t.)
+
+dbUseArea( .T.,, _cArquivo, "trb", if(.T. .OR. .F., !.F., NIL), .F. )
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Limpa Naturezas                                              ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+DBSELECTAREA("SED")
+DBSETORDER(1)
+DBGOTOP()
+While !EOF()
+	Reclock("SED",.F.)
+	SED->ED_DTFLUXO := CTOD("  /  /  ")
+	SED->ED_VLRMAP  := 0
+	MSUnlock()
+	DbSelectArea("SED")
+	DBSkip()
+End
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis privadas exclusivas deste programa                                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+lAllFil :=.F.
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para Impressao do Cabecalho e Rodape    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cbtxt    := SPACE(10)
+cbcont   := 0
+//li       := 80
+m_pag    := 1
+
+nSaldoAtu:= 0
+nSaldoIni:= 0
+
+dbSelectArea("SA6")
+DbGoTop()
+While !eof()
+	If SA6->A6_FLUXCAI <> "S"
+		DbSkip()
+		Loop
+	Endif
+	
+	cBanco      := SA6->A6_COD
+	cNomeBanco  := SA6->A6_NREDUZ
+	cAgencia    := SA6->A6_AGENCIA
+	cConta      := SA6->A6_NUMCON
+	nLimCred    := SA6->A6_LIMCRED
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Saldo de Partida                                             ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	dbSelectArea("SE8")
+	dbSeek( xFilial("SE8")+cBanco+cAgencia+cConta+Dtos(mv_par01),.T.)
+	dbSkip(-1)
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Defini‡„o dos cabe‡alhos                                     ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	IF SE8->E8_BANCO # cBanco .or. SE8->E8_AGENCIA # cAgencia .or. SE8->E8_CONTA # cConta .or. BOF() .or. EOF()
+	Else
+		nSaldoAtu:=nSaldoAtu+xMoeda(E8_SALATUA,1,mv_par03,SE8->E8_DTSALAT,3)
+		nSaldoIni:=nSaldoIni+xMoeda(E8_SALATUA,1,mv_par03,SE8->E8_DTSALAT,3)
+	EndIf
+	
+	DbSelectarea("SA6")
+	DbSkip()
+End
+
+titulo   := OemToAnsi("Relatorio de Fluxo Di rio")
+Cabec1 := ""
+Cabec2 := ""
+nTipo  := IIF(aReturn[4]==1,15,18)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Filtra o arquivo por tipo e vencimento                                               ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cChave  := "E5_FILIAL+DTOS(E5_DTDISPO)+E5_NATUREZ+E5_PREFIXO+E5_NUMERO+E5_PARCELA+E5_RECPAG+E5_SEQ"
+cCond   := 'E5_VALOR <> 0 .and. E5_SITUACA <> "C"'
+
+dbSelectArea("SE5")
+
+cIndex  := CriaTrab(nil,.f.)
+dbSelectArea("SE5")
+
+IndRegua("SE5",cIndex,cChave,,cCond,OemToAnsi("Selecionando Registros"))  //"Selecionando Registros..."
+//nIndex   := RetIndex("SE5")
+cFil       := Iif(lAllFil,"",xFilial("SE5"))
+
+dbSeek(cFil+DtoS(mv_par01),.T.)
+ProcRegua(RecCount())
+
+If lAllFil
+	cCondWhile := "!Eof() .And. SE5->E5_DTDISPO <= mv_par02"
+Else
+	cCondWhile := "!Eof() .And. SE5->E5_FILIAL == xFilial('SE5') .And. SE5->E5_DTDISPO <= mv_par02"
+EndIf
+
+lEnd := .f.
+While &(cCondWhile)
+	IF lEnd
+		@PROW()+1,0 PSAY OemToAnsi("Cancelado Pelo Operador")  //"Cancelado pelo operador"
+		EXIT
+	End
+	
+	IncProc()
+	
+	IF E5_TIPODOC $ "DC/JR/MT/CM/D2/J2/M2/C2/V2/CP/TL"  //Valores de Baixas
+		dbSkip()
+		Loop
+	End
+	
+	DbSelectArea("SA6")
+	DbSeek(xFilial("SA6")+SE5->E5_BANCO+SE5->E5_AGENCIA+SE5->E5_CONTA)
+	if SA6->A6_FLUXCAI <> "S"
+		DbSelectArea("SE5")
+		DbSkip()
+		Loop
+	Endif
+	
+	DbSelectarea("SE5")
+	
+	IF SE5->E5_MOEDA $ "C1/C2/C3/C4/C5" .and. Empty(SE5->E5_NUMCHEQ)
+		dbSkip()
+		Loop
+	End
+	
+	IF SE5->E5_VENCTO > mv_par02 .or. SE5->E5_VENCTO > dDataBase .or. SE5->E5_VENCTO > SE5->E5_DATA
+		dbSkip()
+		Loop
+	End
+	
+	If SubStr(SE5->E5_NUMCHEQ,1,1)=="*"
+		dbSkip()
+		Loop
+	End
+	
+	If !Empty( SE5->E5_MOTBX )
+		If !MovBcoBx( SE5->E5_MOTBX )
+			dbSkip()
+			Loop
+		EndIf
+	EndIf
+	
+   	IF E5_TIPODOC == "BA"      //Baixa Automatica //Erika nao deve sair no mapa! //descomentado:20070301
+		dbSkip()
+		Loop
+	End 
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Nao deve somar o ES quando for baixa por lote       ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	_lSUBTRAI := .F.
+	IF E5_TIPODOC == "ES"
+		cChave :=  DTOS(E5_DTDISPO)+E5_NATUREZ+E5_PREFIXO+E5_NUMERO+E5_PARCELA     //Baixa Automatica
+		dbSkip()
+		if cChave == DTOS(E5_DTDISPO)+E5_NATUREZ+E5_PREFIXO+E5_NUMERO+E5_PARCELA .and. ;
+			E5_TIPODOC == "BA"
+			_lSUBTRAI := .T.
+		endif
+		dbskip(-1)
+	End
+	
+	//   Zera o controle de cancelamento de baixa por lote
+	cChave := ""
+	dbSelectArea("SE5")
+	cDoc := SE5->E5_NUMCHEQ
+	
+	IF Empty( cDoc )
+		cDoc := SE5->E5_DOCUMEN
+	End
+	
+	IF Len(Alltrim(E5_DOCUMEN)) + Len(Alltrim(E5_NUMCHEQ)) <= 14
+		cDoc := Alltrim(E5_DOCUMEN) + " " + Alltrim(E5_NUMCHEQ )
+	End
+	
+	If Substr( cDoc ,1, 1 ) == "*"
+		dbSkip( )
+		Loop
+	End
+	
+	_MVALOR:=SE5->E5_VALOR
+	IF SE5->E5_TIPODOC=='ES' .OR. _lSubtrai
+		_mvalor := _MVALOR*-1
+	ENDIF
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Grava na natureza o valor correspondente                     ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	DbSelectArea("SED")
+	If DbSeek(xFilial("SED")+SE5->E5_NATUREZ)
+		RECLOCK("SED",.F.)
+		SED->ED_VLRMAP  :=  SED->ED_VLRMAP+ _MVALOR
+		SED->ED_DTFLUXO :=  MV_PAR01
+		msUnlock()
+	ENDIF
+	DbSelectarea("SE5")
+	App()
+	IF SE5->E5_RECPAG=="R" .and. !_lSubtrai
+		nSaldoAtu := nSaldoAtu + xMoeda(SE5->E5_VALOR,1,mv_par03,SE5->E5_DTDISPO,3)
+	Else
+		nSaldoAtu := nSaldoAtu - xMoeda(E5_VALOR,1,mv_par03,SE5->E5_DTDISPO,3)
+	Endif
+	if _lSubtrai
+		nSaldoAtu := nSaldoAtu + xMoeda(E5_VALOR,1,mv_par03,SE5->E5_DTDISPO,3) * 2
+	Endif
+	
+	dbSelectArea("SE5")
+	dbSkip()
+End
+
+IMP_MAPA()
+
+Roda(0,"",tamanho)
+
+DbSelectArea("SE5")
+RetIndex("SE5")
+
+Set Filter To
+RetIndex("SE5")
+
+DbSelectArea("TRB")
+DbCloseArea()
+
+If aReturn[5] == 1
+	Set Printer To
+	ourspool(wnrel)
+End
+
+MS_FLUSH()
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³App       ºAutor  ³Microsiga           º Data ³  04/09/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³                                                            º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function app()
+
+DbSelectArea("TRB")
+RecLock("TRB",.T.)
+TRB->E5_FILIAL  := SE5->E5_FILIAL
+TRB->E5_DATA    := SE5->E5_DATA
+TRB->E5_TIPO    := SE5->E5_TIPO
+TRB->E5_MOEDA   := SE5->E5_MOEDA
+TRB->E5_VALOR   := _MVALOR
+TRB->E5_NATUREZ := SE5->E5_NATUREZ
+TRB->E5_BANCO   := SE5->E5_BANCO
+TRB->E5_AGENCIA := SE5->E5_AGENCIA
+TRB->E5_CONTA   := SE5->E5_CONTA
+TRB->E5_NUMCHEQ := SE5->E5_NUMCHEQ
+TRB->E5_DOCUMEN := SE5->E5_DOCUMEN
+TRB->E5_VENCTO  := SE5->E5_VENCTO
+TRB->E5_RECPAG  := SE5->E5_RECPAG
+TRB->E5_BENEF   := SE5->E5_BENEF
+TRB->E5_HISTOR  := SE5->E5_HISTOR
+TRB->E5_TIPODOC := SE5->E5_TIPODOC
+TRB->E5_VLMOED2 := SE5->E5_VLMOED2
+TRB->E5_LA      := SE5->E5_LA
+TRB->E5_SITUACA := SE5->E5_SITUACA
+TRB->E5_LOTE    := SE5->E5_LOTE
+TRB->E5_PREFIXO := SE5->E5_PREFIXO
+TRB->E5_NUMERO  := SE5->E5_NUMERO
+TRB->E5_PARCELA := SE5->E5_PARCELA
+TRB->E5_CLIFOR  := SE5->E5_CLIFOR
+TRB->E5_LOJA    := SE5->E5_LOJA
+TRB->E5_DTDIGIT := SE5->E5_DTDIGIT
+TRB->E5_TIPOLAN := SE5->E5_TIPOLAN
+TRB->E5_DEBITO  := SE5->E5_DEBITO
+TRB->E5_CREDITO := SE5->E5_CREDITO
+TRB->E5_MOTBX   := SE5->E5_MOTBX
+TRB->E5_RATEIO  := SE5->E5_RATEIO
+TRB->E5_RECONC  := SE5->E5_RECONC
+TRB->E5_SEQ     := SE5->E5_SEQ
+TRB->E5_DTDISPO := SE5->E5_DTDISPO
+TRB->E5_CCD     := SE5->E5_CCD
+TRB->E5_CCC     := SE5->E5_CCC
+TRB->E5_OK      := SE5->E5_OK
+TRB->E5_ARQRAT  := SE5->E5_ARQRAT
+TRB->E5_IDENTEE := SE5->E5_IDENTEE
+TRB->E5_FLSERV  := SE5->E5_FLSERV
+msunlock()
+return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³Imp_mapa()ºAutor  ³Microsiga           º Data ³  04/09/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³                                                            º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static FUNCTION IMP_MAPA()
+
+L := 0
+
+DbSelectArea("SED")
+DbSetOrder(4)  //  data fluxo + tipo + ordem /mp10 era 2
+DbSeek(xFilial("SED")+DTOS(MV_PAR01))
+
+TOTENT := 0
+TOTSAI := 0
+TOTOUT := 0
+MSUBT  := PADC('** MOVIMENTO DE : ' +DTOC(MV_PAR01)+' **',74)
+
+LI := cabec(titulo,cabec1,cabec2,nomeprog,tamanho,nTipo)
+LI++
+@ LI,00 PSAY MSUBT
+LI += 2
+
+While !eof() .and. SED->ED_DTFLUXO <=  MV_PAR02
+	If li >= 55
+		Roda(0,"",tamanho)
+		LI := cabec(titulo,cabec1,cabec2,nomeprog,tamanho,nTipo)
+		LI++
+		@ LI,00 PSAY MSUBT
+		LI += 2
+	EndIf
+	
+	MTIPON := SED->ED_TIPON
+	
+	WHILE !eof() .and. MTIPON == ED_TIPON   //20031023 eof
+		IF !SED->ED_MAPSN == 'S'    
+			dbselectArea("SED")//20031023
+			DBSKIP()
+			LOOP
+		ENDIF
+		
+		@ Li,00 PSAY '['+SUBS(ED_CODIGO,1,4) +']   '+TRIM(ED_DESCRIC)+REPLICATE('-',(40-(LEN(TRIM(ED_DESCRIC)))))
+		@ Li,57 PSAY 'R$'
+		@ Li, 60 PSAY SED->ED_VLRMAP   PICTURE "@E 9,999,999,999.99"
+		
+		DO CASE
+			CASE MTIPON == '1'
+				TOTENT := TOTENT+SED->ED_VLRMAP
+				MTIT   := '[A ]  ENTRADAS OPERACIONAIS'
+			CASE MTIPON == '2'
+				TOTSAI := TOTSAI+SED->ED_VLRMAP
+				MTIT   := '[B ]  SAIDAS   OPERACIONAIS'
+			CASE MTIPON == '3'
+				TOTENT := TOTOUT+SED->ED_VLRMAP
+		ENDCASE
+		
+		IF Li >= 55
+			Roda(0,"",tamanho)
+			LI := cabec(titulo,cabec1,cabec2,nomeprog,tamanho,nTipo)
+			LI++
+		ELSE
+			Li++
+		ENDIF
+		
+		DbSelectArea("SED")
+		DbSkip()
+	End
+	
+	@ Li,00 PSAY REPLICATE('-',80)
+	
+	DO CASE
+		CASE MTIPON == '1'
+			@ Li+1,00 PSAY MTIT
+			@ Li+1,60 PSAY TOTENT  PICTURE "@E 9,999,999,999.99"
+		CASE MTIPON == '2'
+			@ Li+1,00 PSAY MTIT
+			@ Li+1,60 PSAY TOTSAI PICTURE "@E 9,999,999,999.99"
+	ENDCASE
+	@ Li+2,00 PSAY REPLICATE('-',80)
+	Li += 3
+END
+
+// CALCULO DO SALDO DA APLICACAO
+DBSELECTAREA("SEH")
+DbSelectArea(xFilial("SEH"))
+
+WHILE !EOF() .AND. SEH->EH_FILIAL == xFilial("SEH")
+	Msalapl := Msalapl+SEH->EH_SALDO
+	DBSKIP()
+END
+
+@ Li,00 PSAY '[O ]  Saldo Inicial'
+@ li,57 PSAY 'R$'
+@ li,60 PSAY nSaldoIni   PICTURE "@E 9,999,999,999.99"
+@ Li+1,00 PSAY REPLICATE('-',80)
+li += 2
+@ Li,00 PSAY 'Saldo Aplicado '
+@ li,57 PSAY 'R$'
+@ li,60 PSAY msalapl  PICTURE "@E 9,999,999,999.99"
+@ Li+1,00 PSAY REPLICATE('-',80)
+li += 2
+@ li,00 PSAY '[O ] Saldo Final'
+@ li,57 PSAY 'R$'
+@ li,60 PSAY nSaldoAtu PICTURE "@E 9,999,999,999.99"
+li += 2
+@ li,00 PSAY replicate('-',80)
+
+//Roda(0,"",tamanho)
+return

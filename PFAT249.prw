@@ -1,0 +1,163 @@
+#INCLUDE "rwmake.ch"                       
+#include "topconn.ch"
+#include "tbiconn.ch"
+
+/*/          
+Alterado por Danilo C S Pala em 20111122: sft e cd2
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT249   ³Autor: Danilo C S Pala        ³ Data:   20100910 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: ALTERAR SITACAO TRIBUTARIA                                 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : Pini					                                     ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+/*/
+User Function PFAT249() 
+Private cQuery := ""
+Private cUpdate := ""  
+Private cMsg := ""
+Private nUpd := 0
+
+cperg := "PFAT249"
+ValidPerg()
+Pergunte(cPerg,.t.)   
+
+
+If MV_PAR06 ==1
+	cQuery := "SELECT D1_SERIE, D1_DOC, D1_ITEM, D1_COD, D1_CLASFIS, R_E_C_N_O_ as REG, D1_EMISSAO, D1_FORNECE, D1_LOJA, D1_COD FROM "+ RetSqlName("SD1") +" WHERE D1_FILIAL='"+ xFilial("SD1") +"' AND D1_SERIE='"+ MV_PAR01 +"' AND D1_DOC='"+ MV_PAR02 +"' AND D1_COD='"+ MV_PAR04 +"' AND D_E_L_E_T_<>'*'"
+	MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "D1CLASFIS", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
+	DbSelectArea("D1CLASFIS")
+	If !EOF()
+		//UPDATE   SD1
+		cUpdate := "UPDATE "+ RETSQLNAME("SD1") +" SET D1_CLASFIS='"+ MV_PAR05 +"' WHERE D1_FILIAL='"+ xFilial("SD1") +"' AND D1_SERIE='"+ MV_PAR01 +"' AND D1_DOC='"+ MV_PAR02 +"' AND D1_COD='"+ MV_PAR04 +"' AND D_E_L_E_T_<>'*' AND R_E_C_N_O_="+ALLTRIM(STR(D1CLASFIS->REG))
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := "SD1:Atualizado com sucesso!"
+		Else
+			cMsg := "SD1:Erro ao atualizar!"
+		EndIf
+		//UPDATE   SFT
+		cUpdate := "UPDATE "+ RETSQLNAME("SFT") +" SET FT_CLASFIS='"+ MV_PAR05 +"' WHERE FT_FILIAL='"+ xFilial("SFT") +"' AND FT_SERIE='"+ MV_PAR01 +"' AND FT_NFISCAL='"+ MV_PAR02 +"' AND FT_PRODUTO='"+ MV_PAR04 +"' AND FT_ITEM='"+ D1CLASFIS->D1_ITEM +"' AND FT_CLIEFOR='"+ D1CLASFIS->D1_FORNECE +"' AND FT_LOJA='"+ D1CLASFIS->D1_LOJA +"' AND FT_TIPOMOV='E' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"SFT:Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"SFT:Erro ao atualizar!"
+		EndIf
+		//UPDATE   CD2  CD2_TPMOV, CD2_SERIE, CD2_CODCLI, CD2_LOJCLI, CD2_CODFOR, CD2_LOJFOR, CD2_ITEM, CD2_CODPRO, CD2_DOC, CD2_ORIGEM, CD2_CST
+		cUpdate := "UPDATE "+ RETSQLNAME("CD2") +" SET CD2_ORIGEM='"+ SUBS(MV_PAR05,1,1) +"', CD2_CST='"+ SUBS(MV_PAR05,2,2) +"' WHERE CD2_FILIAL='"+ xFilial("CD2") +"' AND CD2_SERIE='"+ MV_PAR01 +"' AND CD2_DOC='"+ MV_PAR02 +"' AND CD2_CODPRO='"+ MV_PAR04 +"' AND CD2_ITEM='"+ D1CLASFIS->D1_ITEM +"' AND CD2_CODFOR='"+ D1CLASFIS->D1_FORNECE +"' AND CD2_LOJFOR='"+ D1CLASFIS->D1_LOJA +"' AND CD2_TPMOV='E' AND CD2_IMP='ICM   ' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 fornecedor:Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 fornecedor:Erro ao atualizar!"
+		EndIf
+		//UPDATE   CD2  CD2_TPMOV, CD2_SERIE, CD2_CODCLI, CD2_LOJCLI, CD2_CODFOR, CD2_LOJFOR, CD2_ITEM, CD2_CODPRO, CD2_DOC, CD2_ORIGEM, CD2_CST
+		cUpdate := "UPDATE "+ RETSQLNAME("CD2") +" SET CD2_ORIGEM='"+ SUBS(MV_PAR05,1,1) +"', CD2_CST='"+ SUBS(MV_PAR05,2,2) +"' WHERE CD2_FILIAL='"+ xFilial("CD2") +"' AND CD2_SERIE='"+ MV_PAR01 +"' AND CD2_DOC='"+ MV_PAR02 +"' AND CD2_CODPRO='"+ MV_PAR04 +"' AND CD2_ITEM='"+ D1CLASFIS->D1_ITEM +"' AND CD2_CODCLI='"+ D1CLASFIS->D1_FORNECE +"' AND CD2_LOJCLI='"+ D1CLASFIS->D1_LOJA +"' AND CD2_TPMOV='E' AND CD2_IMP='ICM   ' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 cliente:Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 cliente:Erro ao atualizar!"
+		EndIf
+	Else
+		cMsg := "Item de Nota Fiscal de Entrada nao encontrado!"
+	EndIf
+Else
+	cQuery := "SELECT D2_SERIE, D2_DOC, D2_ITEM, D2_COD, D2_CLASFIS, R_E_C_N_O_ as REG, D2_EMISSAO, D2_CLIENTE, D2_LOJA FROM "+ RetSqlName("SD2") +" WHERE D2_FILIAL='"+ xFilial("SD2") +"' AND D2_SERIE='"+ MV_PAR01 +"' AND D2_DOC='"+ MV_PAR02 +"' AND D2_COD='"+ MV_PAR04 +"' AND D_E_L_E_T_<>'*'"
+	MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "D1CLASFIS", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
+	DbSelectArea("D1CLASFIS")
+	If !EOF()
+		//UPDATE SD2
+		cUpdate := "UPDATE "+ RETSQLNAME("SD2") +" SET D2_CLASFIS='"+ MV_PAR05 +"' WHERE D2_FILIAL='"+ xFilial("SD2") +"' AND D2_SERIE='"+ MV_PAR01 +"' AND D2_DOC='"+ MV_PAR02 +"' AND D2_COD='"+ MV_PAR04 +"' AND D_E_L_E_T_<>'*' AND R_E_C_N_O_="+ALLTRIM(STR(D1CLASFIS->REG))
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := "SD2:Atualizado com sucesso!"
+		Else
+			cMsg := "SD2:Erro ao atualizar!"
+		EndIf
+		//UPDATE SFT
+		cUpdate := "UPDATE "+ RETSQLNAME("SFT") +" SET FT_CLASFIS='"+ MV_PAR05 +"' WHERE FT_FILIAL='"+ xFilial("SFT") +"' AND FT_SERIE='"+ MV_PAR01 +"' AND FT_NFISCAL='"+ MV_PAR02 +"' AND FT_PRODUTO='"+ MV_PAR04 +"' AND FT_ITEM='"+ D1CLASFIS->D2_ITEM +"' AND FT_CLIEFOR='"+ D1CLASFIS->D2_CLIENTE +"' AND FT_LOJA='"+ D1CLASFIS->D2_LOJA +"' AND FT_TIPOMOV='S' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"SFT:Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"SFT:Erro ao atualizar!"
+		EndIf
+		//UPDATE CD2  CD2_TPMOV, CD2_SERIE, CD2_CODCLI, CD2_LOJCLI, CD2_CODFOR, CD2_LOJFOR, CD2_ITEM, CD2_CODPRO, CD2_DOC, CD2_ORIGEM, CD2_CST
+		cUpdate := "UPDATE "+ RETSQLNAME("CD2") +" SET CD2_ORIGEM='"+ SUBS(MV_PAR05,1,1) +"', CD2_CST='"+ SUBS(MV_PAR05,2,2) +"' WHERE CD2_FILIAL='"+ xFilial("CD2") +"' AND CD2_SERIE='"+ MV_PAR01 +"' AND CD2_DOC='"+ MV_PAR02 +"' AND CD2_CODPRO='"+ MV_PAR04 +"' AND CD2_ITEM='"+ D1CLASFIS->D2_ITEM +"' AND CD2_CODCLI='"+ D1CLASFIS->D2_CLIENTE +"' AND CD2_LOJCLI='"+ D1CLASFIS->D2_LOJA +"' AND CD2_TPMOV='S' AND CD2_IMP='ICM   ' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 ICM:Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 ICM:Erro ao atualizar!"
+		EndIf
+		//UPDATE PIS
+		cUpdate := "UPDATE "+ RETSQLNAME("CD2") +" SET CD2_ORIGEM='"+ SUBS(MV_PAR07,1,1) +"', CD2_CST='"+ SUBS(MV_PAR07,2,2) +"' WHERE CD2_FILIAL='"+ xFilial("CD2") +"' AND CD2_SERIE='"+ MV_PAR01 +"' AND CD2_DOC='"+ MV_PAR02 +"' AND CD2_CODPRO='"+ MV_PAR04 +"' AND CD2_ITEM='"+ D1CLASFIS->D2_ITEM +"' AND CD2_CODCLI='"+ D1CLASFIS->D2_CLIENTE +"' AND CD2_LOJCLI='"+ D1CLASFIS->D2_LOJA +"' AND CD2_TPMOV='S' AND CD2_IMP='PS2   ' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 PIS: Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 PIS: Erro ao atualizar!"
+		EndIf
+		//UPDATE COFINS
+		cUpdate := "UPDATE "+ RETSQLNAME("CD2") +" SET CD2_ORIGEM='"+ SUBS(MV_PAR07,1,1) +"', CD2_CST='"+ SUBS(MV_PAR07,2,2) +"' WHERE CD2_FILIAL='"+ xFilial("CD2") +"' AND CD2_SERIE='"+ MV_PAR01 +"' AND CD2_DOC='"+ MV_PAR02 +"' AND CD2_CODPRO='"+ MV_PAR04 +"' AND CD2_ITEM='"+ D1CLASFIS->D2_ITEM +"' AND CD2_CODCLI='"+ D1CLASFIS->D2_CLIENTE +"' AND CD2_LOJCLI='"+ D1CLASFIS->D2_LOJA +"' AND CD2_TPMOV='S' AND CD2_IMP='CF2   ' AND D_E_L_E_T_<>'*'"
+		nUpd :=	TCSQLExec(cUpdate)
+		If nUpd <=0 
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 COF: Atualizado com sucesso!"
+		Else
+			cMsg := cMsg +CHR(10)+CHR(13)+"CD2 COF:Erro ao atualizar!"
+		EndIf
+	Else
+		cMsg := "Item de Nota Fiscal de Saida nao encontrado!"
+	EndIf
+EndIf
+                                             
+MsgInfo(cMsg)
+
+dbselectarea("D1CLASFIS")
+dbclosearea()
+Return              
+
+           
+
+
+
+
+Static Function ValidPerg()
+_sAlias := Alias()
+dbSelectArea("SX1")
+dbSetOrder(1)
+cPerg    := PADR(cPerg,10) //mp10 x1_grupo char(10)
+aRegs := {}
+//mv_par01 - Serie
+//mv_par02 - Numero
+//mv_par03 - Item
+//mv_par04 - Produto
+//mv_par05 - Nova Situacao Tributaria
+//mv_par06 - Saida ou Entrada
+aAdd(aRegs,{cPerg,"01","Serie","Serie","Serie","mv_ch1","C",3,0,0,"G","","MV_PAR01","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"02","Numero","Numero","Numero","mv_ch2","C",9,0,0,"G","","MV_PAR02","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"03","Item","Item","Item","mv_ch3","C",4,0,0,"G","","MV_PAR03","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"04","Produto","Produto","Produto","mv_ch4","C",15,0,0,"G","","MV_PAR04","","","","","","","","","","","","","","","","","","","","","","","","","SB1","","","",""})
+aAdd(aRegs,{cPerg,"05","NovaSitTrib","NovaSitTrib","NovaSitTrib","mv_ch5","C",3,0,0,"G","","MV_PAR05","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"06","Entrada/Saida","Entrada/Saida","Entrada/Saida","mv_ch6","N",01,0,2,"C","","MV_PAR06","Entrada","Entrada","Entrada","","","Saida","Saida","Saida","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"07","NovaCSTPIS","NovaCSTPIS","NovaCSTPIS","mv_ch7","C",3,0,0,"G","","MV_PAR07","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"08","NovaCSTCOF","NovaCSTCOF","NovaCSTCOF","mv_ch8","C",3,0,0,"G","","MV_PAR08","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+_nLimite := If(Len(aRegs[1])<FCount(),Len(aRegs[1]),FCount())
+For i := 1 To Len(aRegs)
+	If !DbSeek(cPerg + aRegs[i,2])
+		Reclock("SX1", .T.)
+		For j := 1 to _nLimite
+			FieldPut(j, aRegs[i,j])
+		Next
+		MsUnlock()
+	Endif
+Next
+DbSelectArea(_sAlias)
+
+Return(.T.)

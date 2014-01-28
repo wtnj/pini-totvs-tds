@@ -1,0 +1,63 @@
+USER FUNCTION TOTSAL()
+
+MPVERBAS := {}
+
+DBSELECTAREA("SRV")
+DBSETORDER(1)
+
+REGRV := RECNO()
+
+DBGOTOP()
+
+WHILE !EOF()
+	IF SRV->RV_COD == "193" .OR. SRV->RV_COD == "215" .or. SRV->RV_COD == "212" .or. SRV->RV_COD == "230" 
+		AADD(MPVERBAS,SRV->RV_COD)
+	ENDIF
+	DBSKIP()
+END
+
+DBGOTO(REGRV)
+
+xdata := subs(dtos(mv_par09),1,6)
+
+if subs(xdata,5,2) == "01"
+	xano  := str(val(subs(xdata,1,4))-1)
+	xmes  := "12"
+	xdata := xano+xmes
+else
+	xano  := subs(xdata,1,4)
+	xmes  := strzero(val(subs(xdata,5,2))-1,2)
+	xdata := xano+xmes
+endif
+
+MPVALOR := 0
+
+FOR N:= 1 TO LEN(MPVERBAS)
+	DBSELECTAREA("SRD")
+	DBSETORDER(1)
+	DBSEEK(XFILIAL()+SRA->RA_MAT+xdata+MPVERBAS[N])
+	IF FOUND()
+		MPVALOR := MPVALOR + SRD->RD_VALOR
+	ENDIF
+NEXT N
+
+perc   := sra->ra_percadt/100
+mpadto := (sra->ra_salario+mpvalor)*perc
+
+IF MPADTO <> 0
+	dbselectarea("SRC")
+	DBSETORDER(1)
+	IF !DBSEEK(SRA->RA_FILIAL+SRA->RA_MAT+"410")
+		RECLOCK("SRC",.T.)
+		SRC->RC_FILIAL := sra->ra_filial
+		src->rc_mat    := sra->ra_mat
+		src->rc_pd     := "410"
+		src->rc_tipo1  := "V"
+		src->rc_valor  := mpadto
+		src->rc_cc     := sra->ra_cc
+		src->rc_tipo2  := "I"
+		msunlock()
+	ENDIF
+ENDIF
+
+RETURN

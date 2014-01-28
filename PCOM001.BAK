@@ -1,0 +1,156 @@
+#INCLUDE "rwmake.ch"                       
+#include "topconn.ch"
+#include "tbiconn.ch"
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³PCOM001   º Autor ³ Danilo C S Palan   º Data ³  20090107   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescricao ³ Permite alteracao do valor de rateio da Nota Fiscal de Entrada  º±±
+±±º          ³ (Por padrao apenas um percentual e permitido               º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ Pini                                                       º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+User Function PCOM001(pdoc, pserie, pfornecedor, ploja)
+Local cChave   := ""
+Local nLin
+Local i        := 0
+Local lRet     := .F.                               
+Local cAlias   := "SDE"    
+Local cProcura := ""     
+Local nContS   := 0
+Local cLibera  := ""
+
+Private cT        := "Manutenção dos Itens do Rateio de Centro de Custo"
+Private aC        := {}
+Private aR        := {}
+Private aCGD      := {}
+Private cLinOK    := ""
+Private cAllOK    := "u_VerTudOK()"
+Private aGetsGD   := {}
+Private bF4       := {|| }
+Private cIniCpos  := "+DE_CC"
+Private nMax      := 15
+Private aHeader   := {}
+Private aCols     := {}
+Private nCount    := 0
+Private bCampo    := {|nField| FieldName(nField)}
+Private aAlt      := {}   
+Private xtipo     := "1"
+Private nVlTot    := 0   
+
+dbSelectArea(cAlias)                                                     
+set filter to SDE->DE_DOC == pdoc .and. SDE->DE_SERIE == pserie .and. SDE->DE_FORNECE == pfornecedor .and. SDE->DE_LOJA == ploja
+
+dbselectarea(cAlias)
+For i := 1 to FCount()
+	cCampo := FieldName(i)
+	M->&(cCampo) := CriaVar(cCampo,.T.)
+Next                 
+
+dbselectarea("SX3")
+dbsetorder(1)
+dbseek(cAlias)
+
+while !SX3->(EOF()) .and. SX3->X3_Arquivo == cAlias
+	if X3Uso(SX3->X3_USADO)    .and.;
+	   cNivel >= SX3->X3_Nivel .and.;
+	   Trim(SX3->X3_CAMPO) $ "DE_CC, DE_CONTA, DE_CUSTO1, DE_FORNECE, DE_LOJA, DE_ITEM, DE_SERIE, DE_DOC"
+	   if Trim(SX3->X3_CAMPO) <> "DE_ITEM"
+		   aAdd(aHeader, {Trim(SX3->X3_TITULO),;
+		                       SX3->X3_CAMPO  ,;
+		                       SX3->X3_PICTURE,;
+		                       SX3->X3_TAMANHO,;
+		                       SX3->X3_DECIMAL,;
+		                       SX3->X3_VALID  ,;
+		                       SX3->X3_USADO  ,;
+		                       SX3->X3_TIPO   ,;
+		                       SX3->X3_ARQUIVO,;
+		                       SX3->X3_CONTEXT})
+	   endif
+	endif
+	sx3->(dbskip())
+enddo
+
+m->DE_FORNECE     := (cAlias)->DE_FORNECE
+m->DE_LOJA   := (cAlias)->DE_LOJA
+m->DE_ITEM  := (cAlias)->DE_ITEM
+m->DE_SERIE    := (cAlias)->DE_SERIE
+m->DE_DOC    := (cAlias)->DE_DOC 
+
+cProcura := xfilial(cAlias)+m->DE_DOC+m->DE_SERIE+m->DE_FORNECE+m->DE_LOJA
+
+dbselectarea(cAlias)
+dbsetOrder(1)
+dbseek(cProcura)
+
+while !eof() .and. (cAlias)->(DE_FILIAL+DE_DOC+DE_SERIE+DE_FORNECE+DE_LOJA) == cProcura
+		aAdd(aCols,Array(Len(aHeader)+1))
+		nLin := Len(aCols)
+		For i:= 1 to Len(aHeader) 
+			if aHeader[i][10] = "R" //.and. aHeader[i][2] <> "ZZY_QTDVEN" .and. aHeader[i][2] <> "ZZY_QTDTRA" .and. aHeader[i][2] <> "ZZY_QTDARM" .and. aHeader[i][2] <> "ZZY_PVENDA"
+	   			aCols[nLin][i] := FieldGet(FieldPos(aHeader[i][2]))									   
+			else
+				aCols[nLin][i] := CriaVar(aHeader[i][2],.t.)
+			endif       
+		Next
+		aCols[nLin][Len(aHeader)+1] = .F.
+		aAdd(aAlt, Recno())
+		nContS := nContS + 1
+	dbselectarea(cAlias)
+	dbskip()      
+enddo
+
+//DE_CC, DE_CONTA, DE_CUSTO1, DE_FORNECE, DE_LOJA, DE_ITEM, DE_SERIE, DE_DOC
+aAdd(aC,{"M->DE_FORNECE"  ,{20,10 },"Fornecedor."        ,"@!"    ,           ,     ,.F.})
+aAdd(aC,{"M->DE_LOJA"     ,{20,85 },"Loja"               ,"@!"    ,           ,     ,.F.})
+aAdd(aC,{"M->DE_DOC"      ,{20,120},"Numero Nota"        ,"@!"    ,           ,     ,.F.})
+aAdd(aC,{"M->DE_SERIE"    ,{20,200},"Serie"              ,"@!"    ,           ,     ,.F.})
+aCGD :=  {50,5,108,280}
+
+
+aAdd(aR,{"nVlTot" ,{68,10 },"Total","@E 999,999,999.99",,,.F.})
+
+cLinOk := "U_ValLinSDE()"
+
+cTitulo := cT
+
+lRet := Modelo2(cTitulo,aC,aR,aCGD,4,cLinOK,cAllOk,,,cIniCpos,nMax,{01,01,550,950},.f.)
+
+if lRet
+	if MsgYesNo("Confirma os Dados Digitados?",cTitulo)
+		
+		//Processa({||U_Gravazzy(cAlias)},cTitulo,"Gerando as informações, aguarde por favor!!")
+		
+/*		if xtipo == 1
+		   // Execução do cadastro do Pedido de venda (Mata410)
+           u_gravaPED()
+		elseif xtipo == 2
+		   // Execução do cadastro de NF de Transporte (Mata103)
+           u_gravaNFE()
+		else
+		   // Execução do cadastro de NF de Armazenagem (Mata103)
+           u_gravaNFE()
+		endif*/
+		
+	endif
+else
+	rollbackSX8()
+endif
+return nil
+
+
+User Function ValLinSDE()   
+Local lRet := .t.
+if xtipo == "1"
+	MsgInfo("Validacao de linha por: ValLinSDE",cTitulo)
+	lret := .t.                                       
+endif
+Return lRet       
+

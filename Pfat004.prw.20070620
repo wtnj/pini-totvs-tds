@@ -1,0 +1,197 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+User Function Pfat004()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Declaracao de variaveis utilizadas no programa atraves da funcao    ³
+//³ SetPrvt, que criara somente as variaveis definidas pelo usuario,    ³
+//³ identificando as variaveis publicas do sistema utilizadas no codigo ³
+//³ Incluido pelo assistente de conversao do AP5 IDE                    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+SetPrvt("CSAVTELA,CSAVCURSOR,CSAVCOR,CSAVALIAS,CPERG,MEMPRESA")
+SetPrvt("TREGS,M_MULT,P_ANT,P_ATU,P_CNT,M_SAV20")
+SetPrvt("M_SAV7,MPEDIDO,MLOTEFAT,MDATA,MFILIAL,MITEM")
+SetPrvt("MPRODUTO,MQTDVEN,MPRCVEN,MCLI,MLOJA,MNUM")
+SetPrvt("MGRUPO,")
+
+/*/ ALTERADO POR DANILO C S PALA EM 20050811
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT004   ³Autor: Solange Nalini         ³ Data:   30/04/98 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Libera‡ao de Pedidos de Venda por lote                     ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³ CONVERTIDO P/  WINDOWS por Gilberto A. de Oliveira em  02/08/2000    ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+cPerg:="FAT001"
+mEmpresa:=SM0->M0_CODIGO
+
+/*
+MV_PAR01 = DE LOTE
+MV_PAR02 = ATE LOTE
+MV_PAR03 = DATA DO LOTE DE
+MV_PAR04 = DATA DO LOTE ATE
+MV_PAR05 = NUMERO DA 1 NOTA FISCAL
+*/
+
+If !Pergunte(cPerg)
+   Return
+Endif
+
+Processa( {|| RunProc() } )// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==>    Processa( {|| Execute(RunProc) } )
+
+
+Static Function RunProc()
+
+DbSelectArea("SC6")
+DbSetOrder(16) //20050811 ERA 7
+DbSeek(xFilial("SC6")+MV_PAR01+DTOS(MV_PAR03))
+
+If !Found()
+   Return
+EndIf
+
+ProcRegua( LastRec() )
+
+While SC6->C6_LOTEFAT>=MV_PAR01 .AND.;
+         SC6->C6_LOTEFAT<=MV_PAR02 .AND.;
+         (DTOS(SC6->C6_DATA)>=DTOS(MV_PAR03)  .AND.;
+          DTOS(SC6->C6_DATA)<=DTOS(MV_PAR04)) .AND. !EOF()
+	IncProc()
+
+   tregs := LastRec()-Recno()+1
+
+   MPEDIDO:=SC6->C6_NUM
+   /*/
+   ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+   ³ ABRE O ARQUIVO DE PEDIDOS E VERIFICA SE O PEDIDO JA FOI LIBERADO.           ³
+   ³ SE JA FOI, PROCURA O PROXIMO.                                               ³
+   ³ SENAO  PEGA O N.DO LOTE E A DATA E BAIXA  O PEDIDO NO ARQUIVO DE CONTROLE   ³
+   ³ DE PEDIDOS, COLOCANDO A DATA, O LOTE E O FLAG "B",BAIXADO POR VENDA         ³
+   ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   /*/
+      DBSELECTAREA("SC5")
+      DBSETORDER(1)
+      DBSEEK(XFILIAL()+MPEDIDO)
+      IF SC5->C5_LIBEROK=='S'
+         DBSELECTAREA("SC6")
+         DBSKIP()
+         LOOP
+      ENDIF
+
+      MLOTEFAT := SC5->C5_LOTEFAT
+      MDATA    := SC5->C5_DATA
+
+      DBSELECTAREA("SZD")
+      DBSETORDER(1)
+      DBSEEK(XFILIAL()+MPEDIDO)
+      IF FOUND()
+         RECLOCK("SZD",.F.)
+         REPLACE ZD_LOTEFAT WITH MLOTEFAT
+         REPLACE ZD_DATA WITH MDATA
+         REPLACE ZD_SITUAC WITH 'B'
+         REPLACE ZD_DTSITUA WITH DATE()
+         SZD->(MSUNLOCK())
+      ENDIF
+
+      DBSELECTAREA("SC6")
+
+      While SC6->C6_NUM==MPEDIDO .AND. !EOF()
+
+         // Abaixo incluido por Mauricio em 25/07/2001
+         // por ocasiao da conversÆo das assinaturas
+
+         If SC6->C6_TES == "700" .and. mEmpresa<>'02'
+            dbSkip()
+            Loop
+         Endif
+
+         If SC6->C6_TES == "703" .and. mEmpresa<>'02'
+            dbSkip()
+            Loop
+         Endif
+
+         mFilial   :=SC6->C6_FILIAL
+         MITEM     :=SC6->C6_ITEM
+         MPRODUTO  :=SC6->C6_PRODUTO
+         MQTDVEN   :=SC6->C6_QTDVEN
+         MPRCVEN   :=SC6->C6_PRCVEN
+         MCLI      :=SC6->C6_CLI
+         MLOJA     :=SC6->C6_LOJA
+         MNUM      :=SC6->C6_NUM
+
+         DBSELECTAREA("SB1")
+         DBSETORDER(1)
+         DBSEEK(XFILIAL()+MPRODUTO)
+
+         IF FOUND()
+            MGRUPO:=SB1->B1_GRUPO
+         ENDIF
+
+
+         DBSELECTAREA("SC6")
+
+         RecLock("SC6",.F.)
+         REPLACE C6_QTDEMP WITH C6_QTDVEN
+         SC6->(MSUnlock())
+
+         DbSelectArea("SC9")
+         RecLock("SC9",.T.)
+         REPLACE C9_FILIAL  WITH MFILIAL
+         REPLACE C9_PEDIDO  WITH MPEDIDO
+         REPLACE C9_ITEM    WITH MITEM
+         REPLACE C9_CLIENTE WITH MCLI
+         REPLACE C9_LOJA    WITH MLOJA
+         REPLACE C9_PRODUTO WITH MPRODUTO
+         REPLACE C9_QTDLIB  WITH MQTDVEN
+         REPLACE C9_DATALIB WITH DDATABASE
+         REPLACE C9_SEQUEN  WITH "01"
+         REPLACE C9_GRUPO   WITH MGRUPO
+         REPLACE C9_PRCVEN  WITH MPRCVEN
+         REPLACE C9_LOCAL   WITH SC6->C6_LOCAL
+         SC9->(MsUnLock())
+
+         ***************************************
+         //                                            ||
+         // Incluido por Gilberto em 13.11.2000        ||
+         // Apenas para Cupom Fiscal - Televendas...   \/
+         //
+         ******************************************
+         If Alltrim(SC5->C5_LOTEFAT) == "700"
+            RecLock("SC9",.F.)
+            SC9->C9_LOTEFAT:= SC5->C5_LOTEFAT
+            MsUnLock()
+         Endif
+
+         DbSelectArea("SC6")
+         DbSetOrder(16) //20050811 era 7
+         Dbskip()
+   End
+
+   DbSelectArea("SC5")
+   //DBSETORDER(1)
+   //DBSEEK(XFILIAL()+MPEDIDO)
+
+   //if found()
+      RecLock("SC5",.F.)
+      REPLACE C5_LIBEROK WITH 'S'
+      SC5->(MsUnlock())
+   //endif
+   DbSelectArea("SC6")
+   DbSetOrder(16) //20050811 ERA 7
+End
+
+DbSelectArea("SZ6")
+Reclock("SZ6",.F.)
+REPLACE Z6_LOTELIB WITH 'S'
+SZ6->(MsUnLock())
+
+Return

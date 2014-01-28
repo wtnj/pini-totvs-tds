@@ -1,0 +1,264 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+#IFNDEF WINDOWS
+    #DEFINE PSAY SAY
+#ENDIF
+
+User Function Pfat125()        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Declaracao de variaveis utilizadas no programa atraves da funcao    ³
+//³ SetPrvt, que criara somente as variaveis definidas pelo usuario,    ³
+//³ identificando as variaveis publicas do sistema utilizadas no codigo ³
+//³ Incluido pelo assistente de conversao do AP5 IDE                    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+SetPrvt("_CALIAS,_NORDEM,_NREG,CPERG,CDESC1,CDESC2")
+SetPrvt("CDESC3,TITULO,CTITULO,ARETURN,CPROGRAMA,CSTRING")
+SetPrvt("WNREL,NLASTKEY,LI,NORDEM,M_PAG,NCARACTER")
+SetPrvt("TAMANHO,CCABEC1,CCABEC2,LCONTINUA,MSAIDA,MVALIDA")
+SetPrvt("MCONTA,MCONTA1,MCONTA2,_ACAMPOS,_CARQ,_NCDS")
+SetPrvt("_CMSG,AREGS,I,J,mhora")
+
+#IFNDEF WINDOWS
+// Movido para o inicio do arquivo pelo assistente de conversao do AP5 IDE em 26/02/02 ==>     #DEFINE PSAY SAY
+#ENDIF
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT125   ³Autor: Roger Cangianeli       ³ Data:   15/01/01 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Relatorio de Promocao do Essere - Assinaturas c/CD Gratis  ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento - Editora Pini Ltda.                 ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+/*/
+_cAlias := Alias()
+_nOrdem := IndexOrd()
+_nReg   := Recno()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ MV_PAR01 ³ Data Emissao De      ?                         ³
+//³ MV_PAR02 ³ Data Emissao Ate     ?                         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+#IFNDEF WINDOWS
+    ScreenDraw("SMT050", 3, 0, 0, 0)
+    SetCursor(1)
+    SetColor("B/BG")
+#ENDIF
+
+cPerg:="FAT125"
+ValidPerg()
+If !Pergunte(cPerg)
+   Return
+Endif
+
+cDesc1    :=PADC("Este programa ira gerar o relatorio de vendas promocionais do Essere." ,74)
+cDesc2    :=""
+cDesc3    :=""
+Titulo    :=PADC("RELATàRIO",74)
+cTitulo   :="Emissao de "+DTOC(MV_PAR01)+" a "+DTOC(MV_PAR02)+"."
+aReturn   := { "Especial", 1,"Administra‡Æo", 1, 2, 1,"",1 }
+cPrograma :="FAT125"
+cString   := "SF2"
+MHORA      := TIME()
+wnrel     := "PFAT125_" + SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2)
+nLastKey  := 00
+LI        := 80
+nOrdem    := 00
+m_pag     := 01
+nCaracter := 10
+tamanho   := "P"
+            //          1         2         3         4         5         6         7         8
+            //01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+cCabec1   := " Dt.Emissao   Ser/Num.NF   Num.Ped.   Cliente "
+cCabec2   := ""
+
+lContinua := .T.
+mSaida    := "2"
+mValida   := ""
+
+IF Lastkey()==27
+   Return
+Endif
+
+mConta    :=0
+mConta1   :=0
+mConta2   :=0
+
+wnrel:=SetPrint(cString,wnrel,cPerg,Titulo,cDesc1,cDesc2,cDesc3,.F.)
+//SetDefault(aReturn,cString)
+
+#IFNDEF WINDOWS
+    GeraArq()
+    Relatorio()
+#ELSE
+    Processa(  {|| GeraArq()  }, "Gerando arquivo de trabalho...")// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==>     Processa(  {|| Execute(GeraArq)  }, "Gerando arquivo de trabalho...")
+    RptStatus( {|| Relatorio()}, "Imprimindo CDs Essere..."      )// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==>     RptStatus( {|| Execute(Relatorio)}, "Imprimindo CDs Essere..."      )
+#ENDIF
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Termino do Relatorio                                         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+SET DEVI TO SCREEN
+IF aRETURN[5] == 1
+    Set Printer to
+    dbcommitAll()
+    ourspool(WNREL)
+ENDIF
+MS_FLUSH()
+
+dbSelectArea("TRB")
+dbCloseArea()
+fErase(_cArq+OrdBagExt())
+fErase(_cArq+".DBF")
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Retorna indices originais...                                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea(_cAlias)
+dbSetOrder(_nOrdem)
+dbGoTo(_nReg)
+Return
+
+
+// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==> Function GeraArq
+Static Function GeraArq()
+_aCampos := {}
+aAdd( _aCampos, {"CODCLI",  "C", 08, 0 } )
+aAdd( _aCampos, {"NOME",    "C", 30, 0 } )
+aAdd( _aCampos, {"PEDIDO",  "C", 06, 0 } )
+aAdd( _aCampos, {"SERIE",   "C", 03, 0 } )
+aAdd( _aCampos, {"NUMNF",   "C", 06, 0 } )
+aAdd( _aCampos, {"EMISS",   "D", 08, 0 } )
+
+_cArq   := CriaTrab(_aCampos, .T.)
+dbUseArea( .T., , _cArq, "TRB", .F., .F. )
+IndRegua( "TRB", _cArq, "DTOS(EMISS)+SERIE+NUMNF", , , "Selecionando Registros do Arq..." )
+
+dbSelectArea("SF2")
+dbSetOrder(5)
+ProcRegua(RecCount()/4)
+dbSeek( xFilial("SF2")+DTOS(MV_PAR01), .T. )
+While !Eof() .and. SF2->F2_FILIAL==xFilial("SF2") .and.;
+    SF2->F2_EMISSAO <= MV_PAR02
+
+    IncProc()
+
+    dbSelectArea("SC5")
+    dbSetOrder(5)
+    If dbSeek( xFilial("SC5")+SF2->F2_DOC+SF2->F2_SERIE, .F. )
+
+        If SC5->C5_MENPAD == "030"
+            dbSelectArea("SA1")
+            dbSetOrder(1)
+            dbSeek(xFilial("SA1")+SC5->C5_CLIENTE+SC5->C5_LOJACLI)
+            dbSelectArea("TRB")
+            RecLock("TRB",.T.)
+            TRB->CODCLI := SC5->C5_CLIENTE+SC5->C5_LOJACLI
+            TRB->NOME   := SA1->A1_NOME
+            TRB->PEDIDO := SC5->C5_NUM
+            TRB->SERIE  := SF2->F2_SERIE
+            TRB->NUMNF  := SF2->F2_DOC
+            TRB->EMISS  := SF2->F2_EMISSAO
+            TRB->(msUnlock())
+        EndIf
+
+    EndIf
+
+
+    dbSelectArea("SF2")
+    dbSkip()
+
+End
+
+Return
+
+
+// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==> Function Relatorio
+Static Function Relatorio()
+
+_nCds := 0
+dbSelectArea("TRB")
+If RecCount() > 0
+    SetDefault(aReturn,cString)
+    dbGoTop()
+    SetRegua(RecCount())
+    While !Eof()
+        IncRegua()
+
+        If LI > 55
+            LI := Cabec( cTitulo, cCabec1, cCabec2, "PFAT125", tamanho, 18 )
+            LI := LI + 1
+        EndIf
+
+        @ LI,01 PSAY TRB->EMISS
+        @ LI,14 PSAY TRB->SERIE+"/"+TRB->NUMNF
+        @ LI,27 PSAY TRB->PEDIDO
+        @ LI,38 PSAY SUBSTR(TRB->CODCLI,1,6)+"/"+SUBSTR(TRB->CODCLI,7,2)+"-"
+        @ LI,48 PSAY TRB->NOME
+        _nCds   := _nCds + 1
+        LI := LI + 1
+        dbSkip()
+
+    End
+
+    LI := LI + 1
+    @ LI, 01 PSAY "Total de CD's promocionais :"
+    @ LI, 30 PSAY _nCds     Picture "@E 999,999"
+    LI := LI + 2
+    Roda(0,"",tamanho)
+
+
+Else
+    _cMsg := "Nao foram obtidos dados para a geracao do relatorio. Altere "
+    _cMsg := _cMsg + "os parametros e tente novamente. Grato !"
+    #IFDEF WINDOWS
+        MsgBox(_cMsg, " ATENCAO ", "STOP")
+    #ELSE
+        Alert(_cMsg)
+    #ENDIF
+
+EndIf
+
+Return
+
+
+
+/*/
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±
+±³Funcao    ³VALIDPERG³ Autor ³ Jose Renato July ³ Data ³ 25.01.99 ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±
+±³Descricao ³ Verifica perguntas, incluindo-as caso nao existam.   ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±
+±³Uso       ³ SX1                                                  ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±
+±³Release   ³ 3.0i - Roger Cangianeli - 12/05/99.                  ³±
+±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+/*/
+// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==> Function VALIDPERG
+Static Function VALIDPERG()
+	cPerg    := PADR(cPerg,10) //mp10 x1_grupo char(10)
+   aRegs    := {}
+   dbSelectArea("SX1")
+   dbSetOrder(1)
+   AADD(aRegs,{cPerg,"01","Data Emissao De     ?","mv_ch1","D",08,0,2,"G","","mv_par01","","","","","","","","","","","","","","",""})
+   AADD(aRegs,{cPerg,"02","Data Emissao Ate    ?","mv_ch2","D",08,0,2,"G","","mv_par02","","","","","","","","","","","","","","",""})
+   For i := 1 to Len(aRegs)
+      If !dbSeek(cPerg+aRegs[i,2])
+         RecLock("SX1",.T.)
+         For j := 1 to FCount()
+            If j <= Len(aRegs[i])
+               FieldPut(j,aRegs[i,j])
+            Endif
+         Next
+         SX1->(MsUnlock())
+      Endif
+   Next
+
+
+Return

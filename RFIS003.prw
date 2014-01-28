@@ -1,0 +1,131 @@
+#include "rwmake.ch"        
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ ฑฑ
+ฑฑณPrograma: RFIS003   ณAutor: DANILO CESAR SESTARI PALA ณ Data: 20090505ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณDescriฦo: Relatorio de NFE e contas a pagar                          ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณUso      : Pini													     ณ ฑฑ
+ฑฑภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู ฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+User Function RFIS003()
+
+SetPrvt("CPERG,_StringArq, cquery, MHORA, aRegs")
+SetPrvt("")
+MHORA      := TIME()
+_StringArq := "\SIGA\ARQTEMP\"+ SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2) +".DBF"
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Vari veis utilizadas para parametros     ณ
+//ณ mv_par01             //Filtrar por : 1=Fornecedor , 2=Conta    ณ
+//ณ mv_par02             //Fornecedor  de    ณ
+//ณ mv_par03             //Fornecedor  ate   ณ
+//ณ mv_par04             //Conta de          ณ
+//ณ mv_par05             //Conta ate         ณ
+//ณ mv_par06             //Emissao de        ณ
+//ณ mv_par07             //Emissao ate       ณ
+//ณ mv_par08             //Vencto de         ณ
+//ณ mv_par09             //Vencto ate        ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+cPerg    := "RFS003"  
+ValidPerg()
+If !Pergunte(cPerg)
+   Return
+Endif
+
+If Select("RFIS003") <> 0
+	DbSelectArea("RFIS003")
+	DbCloseArea()
+EndIf
+      
+bBloco:= { |lEnd| RptDetail()  }
+MsAguarde( bBloco, "Aguarde" ,"Processando...", .T. )
+
+RETURN
+
+
+Static Function RptDetail()       
+if mv_par01==1 //filtrar por fornecedor
+	cQuery := "SELECT F1_FORNECE AS FORNECEDOR, A2_NOME AS NOME, A2_CONTA AS CONTA, F1_DOC AS NF, F1_SERIE AS SERIE, F1_PREFIXO AS PREFIXO, F1_EMISSAO AS EMISSAO, E2_PARCELA AS PARCELA, E2_VENCTO AS VENCTO, F1_VALBRUT AS VLBRUTNF, (E2_VALOR + E2_IRRF + E2_PIS + E2_COFINS + E2_CSLL + E2_ISS + E2_INSS - E2_DESCONT + E2_JUROS) AS VL_BRUTO, E2_VALOR AS VL_PAGO, E2_IRRF AS IRRF, E2_PIS AS PIS, E2_COFINS AS COFINS, E2_CSLL AS CSLL, E2_ISS AS ISS, E2_INSS AS INSS, E2_DESCONT AS DESCONTO, E2_JUROS AS JUROS"
+	cQuery := cQuery + " FROM "+ RetSqlName("SF1") +" SF1, "+ RetSqlName("SE2") +" SE2, "+ RetSqlName("SA2") +" SA2 WHERE F1_FILIAL='"+ xFilial("SF1") +"' AND E2_FILIAL='"+ xFilial("SE2") +"' AND F1_DOC = E2_NUM AND F1_PREFIXO=E2_PREFIXO AND F1_EMISSAO=E2_EMISSAO AND E2_TIPO='NF' AND SF1.D_E_L_E_T_<>'*' AND SE2.D_E_L_E_T_<>'*'"
+	cQuery := cQuery + " AND A2_FILIAL='"+ xFilial("SA2") +"' AND F1_FORNECE = A2_COD AND F1_LOJA = A2_LOJA AND SA2.D_E_L_E_T_<>'*'"
+	cQuery := cQuery + " AND F1_FORNECE>='"+ mv_par02 +"' AND F1_FORNECE<='"+ mv_par03 +"' AND F1_EMISSAO>='"+ DTOS(MV_PAR06) +"' AND F1_EMISSAO<='"+ DTOS(MV_PAR07) +"' AND E2_VENCTO>='"+ DTOS(MV_PAR08) +"' AND E2_VENCTO<='"+ DTOS(MV_PAR09) +"'"
+else //filtrar por 
+	cQuery := "SELECT F1_FORNECE AS FORNECEDOR, A2_NOME AS NOME, A2_CONTA AS CONTA, F1_DOC AS NF, F1_SERIE AS SERIE, F1_PREFIXO AS PREFIXO, F1_EMISSAO AS EMISSAO, E2_PARCELA AS PARCELA,  E2_VENCTO AS VENCTO, F1_VALBRUT AS VLBRUTNF, (E2_VALOR + E2_IRRF + E2_PIS + E2_COFINS + E2_CSLL + E2_ISS + E2_INSS - E2_DESCONT + E2_JUROS) AS VL_BRUTO, E2_VALOR AS VL_PAGO, E2_IRRF AS IRRF, E2_PIS AS PIS, E2_COFINS AS COFINS, E2_CSLL AS CSLL, E2_ISS AS ISS, E2_INSS AS INSS, E2_DESCONT AS DESCONTO, E2_JUROS AS JUROS"
+	cQuery := cQuery + " FROM "+ RetSqlName("SF1") +" SF1, "+ RetSqlName("SE2") +" SE2, "+ RetSqlName("SA2") +" SA2 WHERE F1_FILIAL='"+ xFilial("SF1") +"' AND E2_FILIAL='"+ xFilial("SE2") +"' AND F1_DOC = E2_NUM AND F1_PREFIXO=E2_PREFIXO AND F1_EMISSAO=E2_EMISSAO AND E2_TIPO='NF' AND SF1.D_E_L_E_T_<>'*' AND SE2.D_E_L_E_T_<>'*'"
+	cQuery := cQuery + " AND A2_FILIAL='"+ xFilial("SA2") +"' AND F1_FORNECE = A2_COD AND F1_LOJA = A2_LOJA AND SA2.D_E_L_E_T_<>'*'"
+	cQuery := cQuery + " AND A2_CONTA>='"+ mv_par04 +"' AND A2_CONTA<='"+ mv_par05 +"' AND F1_EMISSAO>='"+ DTOS(MV_PAR06) +"' AND F1_EMISSAO<='"+ DTOS(MV_PAR07) +"' AND E2_VENCTO>='"+ DTOS(MV_PAR08) +"' AND E2_VENCTO<='"+ DTOS(MV_PAR09) +"'"
+endif
+
+MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "RFIS003", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
+
+TcSetField("RFIS003","EMISSAO"   ,"D")
+TcSetField("RFIS003","VENCTO"   ,"D")
+
+COPY TO &_StringArq VIA "DBFCDXADS" // 20121106 
+DBCLOSEAREA()   
+MsgInfo(_StringArq)
+
+RETURN
+
+
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณValidPerg บAutor  ณMarcio Torresson    บ Data ณ  10/06/08   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณCria parametros no SX1 nao existir os parametros.           บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function ValidPerg()
+_sAlias := Alias()
+dbSelectArea("SX1")
+dbSetOrder(1)
+cPerg    := PADR(cPerg,10) //mp10 x1_grupo char(10)
+aRegs := {}
+//
+//ณ mv_par01             //Filtrar por : 1=Fornecedor , 2=Conta    ณ
+//ณ mv_par02             //Fornecedor  de    ณ
+//ณ mv_par03             //Fornecedor  ate   ณ
+//ณ mv_par04             //Conta de          ณ
+//ณ mv_par05             //Conta ate         ณ
+//ณ mv_par06             //Emissao de        ณ
+//ณ mv_par07             //Emissao ate       ณ
+//ณ mv_par08             //Vencto de         ณ
+//ณ mv_par09             //Vencto ate        ณ
+
+aAdd(aRegs,{cPerg,"01","Filtrar por    ","Filtrar por    ","Filtrar por    ","mv_ch1","C",01,0,2,"C","","MV_PAR01","Fornecedor","Fornecedor","Fornecedor","","","Conta","Conta","Conta","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"02","Fornecedor de  ","Fornecedor de  ","Fornecedor de  ","mv_ch2","C",06,0,0,"G","","MV_PAR02","","","","","","","","","","","","","","","","","","","","","","","","","SA2","","","",""})
+aAdd(aRegs,{cPerg,"03","Fornecedor ate ","Fornecedor ate ","Fornecedor ate ","mv_ch3","C",06,0,0,"G","","MV_PAR03","","","","","","","","","","","","","","","","","","","","","","","","","SA2","","","",""})
+aAdd(aRegs,{cPerg,"04","Conta de       ","Conta de       ","Conta de       ","mv_ch4","C",20,0,0,"G","","MV_PAR04","","","","","","","","","","","","","","","","","","","","","","","","","CT1","","","",""})
+aAdd(aRegs,{cPerg,"05","Conta ate      ","Conta ate      ","Conta ate      ","mv_ch5","C",20,0,0,"G","","MV_PAR05","","","","","","","","","","","","","","","","","","","","","","","","","CT1","","","",""})
+aAdd(aRegs,{cPerg,"06","Emissao de     ","Emissao de     ","Emissao de     ","mv_ch6","D",08,0,0,"G","","MV_PAR06","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"07","Emissao ate    ","Emissao ate    ","Emissao ate    ","mv_ch7","D",08,0,0,"G","","MV_PAR07","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"08","Vencimento de  ","Vencimento de  ","Vencimento de  ","mv_ch8","D",08,0,0,"G","","MV_PAR08","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"09","Vencimento ate ","Vencimento ate ","Vencimento ate ","mv_ch9","D",08,0,0,"G","","MV_PAR09","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+
+_nLimite := If(Len(aRegs[1])<FCount(),Len(aRegs[1]),FCount())
+For i := 1 To Len(aRegs)
+	If !DbSeek(cPerg + aRegs[i,2])
+		Reclock("SX1", .T.)
+		For j := 1 to _nLimite
+			FieldPut(j, aRegs[i,j])
+		Next
+		MsUnlock()
+	Endif
+Next
+DbSelectArea(_sAlias)
+
+Return(.T.)

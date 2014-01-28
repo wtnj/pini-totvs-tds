@@ -1,0 +1,294 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT037   ³Autor: Solange Nalini         ³ Data:   24/06/98 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Relatorio de comissoes a pagar                             ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Alterado em 17/11 - criado flag p/estorno e3_status(at‚ nova versao)  ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Pfat037()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("TITULO,CDESC1,CTITULO,CCABEC1,CCABEC2,XCABEC1")
+SetPrvt("XCABEC2,NCARACTER,ARETURN,SERNF,CPROGRAMA,CPERG")
+SetPrvt("NLASTKEY,M_PAG,LCONTINUA,WNREL,L,CBTXT")
+SetPrvt("CBCONT,NORDEM,ALFA,Z,M,TAMANHO")
+SetPrvt("CDESC2,CDESC3,CSTRING,TREGS,M_MULT,P_ANT")
+SetPrvt("P_ATU,P_CNT,M_SAV20,M_SAV7,MVEND,MEMISSN")
+SetPrvt("MNOMEVEND,MREGIAO,MEQUIPE,MVALTOT,MVALCOM,MVALBASE")
+SetPrvt("MPREFIXO,MNUM,MPARCELA,MCODCLI,MLOJA,MVBASE")
+SetPrvt("MPEDIDO,MVLRBASE,MPORC,MCOMIS,MTIPO,MSTATUS")
+SetPrvt("MEMISSAO,MVENCTO,MBAIXA,MNOMECLI,MCALCCOM,MCALCFGTS")
+SetPrvt("MCALCDSR,MTOTALCOM,")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Da Regiao                            ³
+//³ mv_par02             // At‚ Regiao                           ³
+//³ mv_par03             // Data de Pagamento                    ³
+//³ mv_par04             // Mensal/Semestral                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Titulo    := PADC("COMISSOES ",74)
+cDesc1    := PADC("Este programa emite relatorio de Comissäes a pagar ",74)
+cTitulo   := ' **** RELATORIO DE COMISSOES **** '
+// Regua para impressao dos sub-titulos
+//                 10        20        30        40        50        60        70         80        90        100      110       120     130         140      150       160
+//        123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 12456789'
+cCabec1   := 'PEDIDO    CODIGO    LJ   NOME CLIENTE                                 DUPL      DATA      DATA        DATA             VALOR         %             VALOR       OBSERVACAO'
+cCabec2   := '          CLIENTE                                                               EMISSAO   VENCTO      PAGTO            BASE                     COMISSAO    '
+xCabec1   := 'DEMONSTRATIVO DE VENDAS - RESUMO'
+xCabec2   := ' '
+nCaracter := 18
+aReturn   := { "Especial", 1,"Administracao", 1, 2, 1,"",1 }
+SERNF     := 'UNI'
+cPrograma := "RELCOM"
+cPerg     := "FAT009"
+nLastKey  := 0
+M_PAG     := 1
+lContinua := .T.
+wnrel     := "RELCOM"
+L         := 0
+CbTxt     := ""
+CbCont    := ""
+nOrdem    := 0
+Alfa      := 0
+Z         := 0
+M         := 0
+tamanho   := "G"
+cDesc2    := ""
+cDesc3    := ""
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas.                                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Pergunte(cPerg,.T.)               // Pergunta no SX1
+
+cString:="SE3"
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao SETPRINT                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+wnrel:=SetPrint(cString,wnrel,cPerg,Titulo,cDesc1,cDesc2,cDesc3,.F.)
+
+If nLastKey == 27
+	Return
+Endif
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica Posicao do Formulario na Impressora                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+	Return                                                   
+Endif
+
+Processa({|| P037Proc()})
+
+Return
+
+Static Function P037Proc()
+
+dbSelectArea("SE3")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  Prepara regua de impressÆo                                  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSetOrder(4)
+dbSeek(xFILIAL("SE3")+DTOS(MV_PAR03)+MV_PAR01,.t.)
+ProcRegua(RecCount())
+While DTOS(SE3->E3_DATA) == DTOS(MV_PAR03) .AND. SE3->E3_REGIAO >= MV_PAR01 .AND. SE3->E3_REGIAO <= MV_PAR02
+	
+	IncProc("Titulo: "+SE3->E3_PREFIXO+SE3->E3_NUM+SE3->E3_PARCELA)
+	
+	mVend   :=SE3->E3_VEND
+	
+	IF MVEND # MV_PAR05 .AND. MV_PAR05 # SPACE(6)
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	dbSelectArea("SA3")
+	DBSETORDER(1)
+	dbSeek(xFILIAL("SA3")+mVEND)
+	If Found()
+		
+		If SA3->A3_EMISSN == 'N' .OR. SA3->A3_TIPOVEN == 'CT'
+			dbSelectArea("SE3")
+			dbskip()
+			loop
+		Endif
+		
+		MEMISSN   := SA3->A3_EMISSN
+		mNOMEVEND := SA3->A3_NOME
+		mREGIAO   := SA3->A3_REGIAO
+		mEQUIPE   := SA3->A3_EQUIPE
+	Endif
+	mValtot  := 0
+	mVALCOM  := 0
+	mVALBASE := 0
+	L        := 0
+	dbSelectArea("SE3")
+	While Alltrim(Mvend) == Alltrim(SE3->E3_VEND)
+		If SE3->E3_PER # MV_PAR04
+			dbSkip()
+			Loop
+		Endif
+		
+		mPREFIXO  := SE3->E3_PREFIXO
+		mNUM      := SE3->E3_NUM
+		mPARCELA  := SE3->E3_PARCELA
+		mCODCLI   := SE3->E3_CODCLI
+		mLOJA     := SE3->E3_LOJA
+		mVBASE    := SE3->E3_BASE
+		mPEDIDO   := SE3->E3_PEDIDO
+		mVLRBASE  := SE3->E3_BASE
+		mPORC     := SE3->E3_PORC
+		mCOMIS    := SE3->E3_COMIS
+		mTIPO     := SE3->E3_TIPO
+		mVEND     := SE3->E3_VEND
+		mSTATUS   := SE3->E3_SITUAC
+		
+		If val(SE3->E3_SITUAC)==0
+			dbSelectArea("SE1")
+			DBSETORDER(1)
+			dbSeek(xFILIAL()+mPREFIXO+mNUM+mPARCELA)
+			If Found()
+				mEMISSAO := SE1->E1_EMISSAO
+				mVENCTO  := SE1->E1_VENCTO
+				mBAIXA   := SE1->E1_BAIXA
+			Endif
+		Else
+			mEMISSAO := ' '
+			mVENCTO  := ' '
+			mBAIXA   := ' '
+		Endif
+		
+		dbSelectArea("SA1")
+		dbSeek(xFILIAL()+mCODCLI+mLOJA)
+		If found()
+			mNOMECLI := SA1->A1_NOME
+		Endif
+		DO CASE
+			CASE MEMISSN == 'P'
+				IMPPLAN()
+			CASE MEMISSN == 'R'
+				IMPRECI()
+		ENDCASE
+		
+		dbSelectArea("SE3")
+		dbSkip()
+		
+	End
+	
+	If MEMISSN == "P"
+		@ l+2,000 psay 'TOTAL===========> '
+		@ L+2,114 psay STR(mVALBASE,10,2)
+		@ L+2,142 psay STR(mVALCOM,10,2)
+	ELSEIF MEMISSN == 'R'
+		IF VAL(MVEND)#10
+			@ l+2,05 psay ' TOTAL DA PRODU€ÇO : '+STR(MVALBASE,10,2)
+			@ L+4,05 psay ' TOTAL DE COMISSåES: '+STR(MVALCOM,10,2)
+			@ L+5,05 psay '                      =========='
+		ELSE
+			MCALCCOM  := MVALBASE*.7915/100
+			MCALCFGTS := MVALBASE*.074084/100
+			MCALCDSR  := MVALBASE*.134555/100
+			MTOTALCOM := MCALCCOM+MCALCFGTS+MCALCDSR
+			@ L +2,10 psay 'TOTAL DA PRODUCAO......: ' + STR(MVALBASE,10,2)
+			@ L +4,10 psay 'VALOR DE COMISSOES ....: ' + STR(MCALCCOM,10,2)
+			@ L +6,10 psay 'VALOR FGTS ............: ' + STR(MCALCFGTS,10,2)
+			@ L +8,10 psay 'VALOR DSR  ............: ' + STR(MCALCDSR,10,2)
+			@ L+10,10 psay 'TOTAL DE COMISSOES.....: ' + STR(MTOTALCOM,10,2)
+		ENDIF
+	ENDIF
+	Roda(0,"",tamanho)
+END
+
+SET DEVICE TO SCREEN
+
+IF aRETURN[5] == 1
+	Set Printer to
+	dbcommitAll()
+	ourspool(WNREL)
+ENDIF
+
+MS_FLUSH()
+
+Return
+
+Static FUNCTION IMPPLAN()
+
+IF L == 0
+	L := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+	L += 2
+	@ L,001 psay  'REPRES.....:  ' + MVEND +' ' +MNOMEVEND +' '+'REGIAO: '+MREGIAO+' ' +'EQUIPE: ' + MEQUIPE
+	L += 2
+ENDIF
+
+@ L,001 psay  mPEDIDO
+@ L,010 psay  mCODCLI
+@ L,020 psay  mLOJA
+@ L,025 psay  mNOMECLI
+@ L,070 psay  mNUM
+@ L,077 psay  mPARCELA
+@ L,080 psay  mEMISSAO
+@ L,090 psay  mVENCTO
+@ L,102 psay  mBAIXA
+//  @ L,114 psay  STR(MVALOR,10,2)
+@ L,114 psay  STR(MVLRBASE,10,2)
+@ L,130 psay  STR(mPORC,6,3)
+@ L,142 psay  STR(MCOMIS,10,2)
+DO CASE
+	CASE MSTATUS=='1'
+		@ L,159 psay 'FATURAMENTO CANCELADO'
+	CASE MSTATUS=='2'
+		@ L,159 psay 'ESTORNO DE VENDEDOR'
+	CASE MSTATUS=='3'
+		@ L,159 psay 'ESTORNO DE PRODUTO'
+	CASE MSTATUS=='4'
+		@ L,159 psay 'ESTORNO DE CLIENTE'
+	CASE MSTATUS=='5'
+		@ L,159 psay 'COMISSAO PGA EM DUPLICIDADE'
+	CASE MSTATUS=='6'
+		@ L,159 psay 'ESTORNO PARA ACERTO DE VALOR'
+ENDCASE
+IF VAL(MSTATUS)>0
+	//      MVALTOT  := MVALTOT-MVALOR
+	MVALCOM  := MVALCOM-MCOMIS
+	MVALBASE := MVALBASE-MVLRBASE
+ELSE
+	//      MVALTOT  := MVALTOT+MVALOR
+	MVALBASE := MVALBASE+MVLRBASE
+	MVALCOM  := MVALCOM+MCOMIS
+ENDIF
+IF L >= 55
+	L:=0
+ELSE
+	L++
+ENDIF
+
+RETURN
+
+Static FUNCTION IMPRECI()
+
+IF L == 0
+	L := CABEC(cTitulo,xCabec1,xCabec2,cPrograma,tamanho)
+	L += 2
+	@ L,001 psay  'REPRES.....:  ' + MVEND +' ' +MNOMEVEND +' '+'REGIAO: '+MREGIAO+' ' +'EQUIPE: ' + MEQUIPE
+	L += 2
+ENDIF
+
+IF VAL(MSTATUS)>0
+	//  MVALTOT  := MVALTOT-MVALOR
+	MVALCOM  := MVALCOM-MCOMIS
+	MVALBASE := MVALBASE-MVLRBASE
+ELSE
+	//    MVALTOT  := MVALTOT+MVALOR
+	MVALBASE := MVALBASE+MVLRBASE
+	MVALCOM  := MVALCOM+MCOMIS
+ENDIF
+
+Return

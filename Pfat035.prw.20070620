@@ -1,0 +1,199 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT035   ³Autor: Solange Nalini         ³ Data:   18/05/98 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Libera‡ao de Pedidos - ESPECIAL                            ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Pfat035()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("CSAVTELA,CSAVCURSOR,CSAVCOR,CSAVALIAS,CPERG,LIBERA")
+SetPrvt("MPEDIDO,MCONFIRMA,TREGS,M_MULT,P_ANT,P_ATU")
+SetPrvt("P_CNT,M_SAV20,M_SAV7,MLOTEFAT,MDATA,MFILIAL")
+SetPrvt("MITEM,MPRODUTO,MQTDVEN,MPRCVEN,MCLI,MLOJA")
+SetPrvt("MNUM,MGRUPO,")
+
+CPERG:="FAT001"
+
+Processa( {|| RunProc() } )// Substituido pelo assistente de conversao do AP5 IDE em 13/03/02 ==> Processa( {|| Execute(RunProc) } )
+
+Return
+
+Static Function RunProc()
+
+MPEDIDO   := SPACE(06)
+MCONFIRMA := SPACE(01)
+
+@ 96,042 TO 323,505 DIALOG oDlg6 TITLE " Acerto de Liberação "
+@ 08,010 TO 84,222
+@ 40,025 say " PEDIDO--> "
+@ 40,090 GET MPEDIDO
+//@ 60,25 say 'CONFIRMA S/N ? '
+//@ 60,90 GET MCONFIRMA PICTURE '@!'
+@ 91,079 BMPBUTTON TYPE 1 ACTION LIB_PED()//BUTTON "Confirma" Size 70,20  ACTION PROCUra()// Substituido pelo assistente de conversao do AP5 IDE em 13/03/02 ==> @ 91,079 BUTTON "Confirma" Size 70,20  ACTION Execute(PROCUra)
+@ 91,159 BMPBUTTON TYPE 2 ACTION close(odlg6) //BUTTON "Abandona" Size 70,20  ACTION close(odlg6)
+ACTIVATE DIALOG oDlg6 CENTERED
+
+Return
+/*
+Static Function PROCURA()
+CLOSE(OdLG6)
+LIBERA := .T.
+WHILE LIBERA
+//MPEDIDO:=SPACE(6)
+//MCONFIRMA:=SPACE(1)
+IF MPEDIDO == SPACE(6)
+LIBERA := .F.
+LOOP
+ENDIF
+IF MCONFIRMA   == 'N'
+LOOP
+Else MCONFIRMA == 'S'
+LIB_PED()
+EXIT
+EndIf
+END
+RETURN
+*/
+//RETURN
+//DBSELECTAREA("SZ6")
+//DBSEEK(XFILIAL()+MV_PAR01+DTOS(MV_PAR03))
+//IF FOUND()
+//   IF SZ6->Z6_LOTELIB=='S'
+//      RETURN
+//   ENDIF
+//ENDIF
+
+Static FUNCTION LIB_PED()
+
+IF MPEDIDO == SPACE(6)
+	CLOSE(OdLG6)
+ELSE
+	DBSELECTAREA('SC6')
+	ProcRegua(RecCount())
+	DBSETORDER(1)
+	IF !DbSeek(xFilial("SC6")+MPEDIDO)
+		RETURN
+	ENDIF
+	
+	WHILE !EOF() .AND. SC6->C6_FILIAL == xFilial("SC6") .and. SC6->C6_NUM == MPEDIDO
+		IncProc(" Acertando Registros "+Alltrim(SC6->C6_NUM))
+		tregs := LastRec()-Recno()+1
+		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+		//³ ABRE O ARQUIVO DE PEDIDOS E VERIFICA SE O PEDIDO JA FOI LIBERADO.           ³
+		//³ SE JA FOI, PROCURA O PROXIMO.                                               ³
+		//³ SENAO  PEGA O N.DO LOTE E A DATA E BAIXA  O PEDIDO NO ARQUIVO DE CONTROLE   ³
+		//³ DE PEDIDOS, COLOCANDO A DATA, O LOTE E O FLAG "B",BAIXAO POR VENDA          ³
+		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+		DBSELECTAREA("SC5")
+		DBSETORDER(1)
+		DBSEEK(XFILIAL()+MPEDIDO)
+		IF SC5->C5_LIBEROK == 'S'
+			DBSELECTAREA("SC6")
+			DBSKIP()
+			LOOP
+		ENDIF
+		
+		MLOTEFAT := SC5->C5_LOTEFAT
+		MDATA    := SC5->C5_DATA
+		
+		DBSELECTAREA("SZD")
+		DBSETORDER(2)
+		If DBSEEK(XFILIAL("SZD")+MPEDIDO)
+			RECLOCK("SZD",.F.)
+			REPLACE ZD_LOTEFAT WITH MLOTEFAT
+			REPLACE ZD_DATA WITH MDATA
+			REPLACE ZD_SITUAC WITH 'B'
+			REPLACE ZD_DTSITUA WITH DATE()
+			MSUNLOCK()
+		ENDIF
+		
+		DBSELECTAREA("SC6")
+		WHILE !eof() .and. SC6->C6_FILIAL == xFilial("SC6") .and. SC6->C6_NUM == MPEDIDO
+			mfilial   :=SC6->C6_FILIAL
+			MITEM     :=SC6->C6_ITEM
+			MPRODUTO  :=SC6->C6_PRODUTO
+			MQTDVEN   :=SC6->C6_QTDVEN
+			MPRCVEN   :=SC6->C6_PRCVEN
+			MCLI      :=SC6->C6_CLI
+			MLOJA     :=SC6->C6_LOJA
+			MNUM      :=SC6->C6_NUM
+			
+			If SC6->C6_TES == "700"
+				dbSkip()
+				Loop
+			Endif
+			
+			If SC6->C6_TES == "703"
+				dbSkip()
+				Loop
+			Endif
+			
+			DBSELECTAREA("SB1")
+			DBSETORDER(1)
+			If DBSEEK(XFILIAL()+MPRODUTO)
+				MGRUPO := SB1->B1_GRUPO
+			ENDIF
+			
+			RecLock("SC6",.F.)
+			REPLACE C6_QTDEMP WITH C6_QTDVEN
+			MSUnlock()
+			
+			DBSELECTAREA("SC9")
+			DbSetOrder(1)
+			If !DbSeek(xFilial("SC9")+SC6->C6_NUM+SC6->C6_ITEM)
+				RECLOCK("SC9",.T.)
+				REPLACE C9_FILIAL  WITH MFILIAL
+				REPLACE C9_PEDIDO  WITH MPEDIDO
+				REPLACE C9_ITEM    WITH MITEM
+				REPLACE C9_CLIENTE WITH MCLI
+				REPLACE C9_LOJA    WITH MLOJA
+				REPLACE C9_PRODUTO WITH MPRODUTO
+				REPLACE C9_QTDLIB  WITH MQTDVEN
+				REPLACE C9_DATALIB WITH DDATABASE
+				REPLACE C9_SEQUEN  WITH '01'
+				REPLACE C9_GRUPO   WITH MGRUPO
+				REPLACE C9_PRCVEN  WITH MPRCVEN
+				REPLACE C9_LOCAL   WITH SC6->C6_LOCAL
+				MSUNLOCK()
+			Else
+				If Empty(SC9->C9_NFISCAL)
+					RecLock("SC9",.f.)
+					REPLACE C9_QTDLIB  WITH MQTDVEN
+					REPLACE C9_DATALIB WITH DDATABASE
+					REPLACE C9_PRCVEN  WITH MPRCVEN
+					REPLACE C9_LOCAL   WITH SC6->C6_LOCAL
+					REPLACE C9_BLEST   WITH ""
+					REPLACE C9_BLCRED  WITH ""
+					MsUnlock()
+				EndIf
+			EndIf
+			
+			DBSELECTAREA("SC6")
+			dbskip()
+		END
+		
+		DBSELECTAREA("SC5")
+		DBSETORDER(1)
+		If DBSEEK(XFILIAL()+MPEDIDO)
+			RecLock("SC5",.F.)
+			REPLACE C5_LIBEROK WITH 'S'
+			msUnlock()
+		ENDIF
+		
+		DBSELECTAREA("SC6")
+		DBSKIP()
+	END
+	
+	MPEDIDO := SPACE(06)
+	CLOSE(OdLG6)
+ENDIF
+
+RETURN

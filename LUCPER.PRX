@@ -1,0 +1,109 @@
+#IFNDEF WINDOWS
+    #DEFINE PSAY SAY
+#ENDIF
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: LUCPER    ³Autor: SOLANGE NALINI         ³ Data:  28/04/01  ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Preparacao dos titulos para Lucros e Perdas                ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo Financeiro - Espec¡fico PINI                        ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+/*/
+
+//ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ MV_PAR01 ³ Data do Cancelamento: ³
+//ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Pergunte(cPerg,.T.)
+
+#IFNDEF WINDOWS
+    ScreenDraw("SMT050", 3, 0, 0, 0)
+    SetCursor(1)
+    SetColor("B/BG")
+#ENDIF
+
+cPerg:="FIN001"
+
+If !Pergunte(cPerg)
+   Return
+Endif
+
+IF Lastkey()==27
+   Return
+Endif
+
+xDATA1 := mv_par01-185
+xDATA2 := mv_par01-365
+
+DbSelectArea("SE1")
+
+cIndex:=CriaTrab(Nil,.F.)
+cKey:="E1_NUM"
+_cFiltro := 'E1_FILIAL == "'+ xFilial("SE1")+'"'
+_cFiltro := _cFiltro + '.And. E1_SALDO <> 0 .AND. E1_TIPO == "NF "'
+_cFiltro := _cFiltro + '.And. (E1_SERIE == "UNI" .OR. E1_SERIE == "SER")'
+_cFiltro := _cFiltro + '.And. EMPTY(E1_BAIXA)'
+Indregua("SE1",cIndex,ckey,,_cFiltro,"Selecionando Registros do Arq")
+dbGoTop()
+
+
+#IFNDEF WINDOWS
+    DrawAdvWin(" AGUARDE  - ALTERANDO AS NATUREZA PARA BAIXA .." , 8, 0, 15, 75 )
+  //  LUPERDAS()
+#ELSE
+     lEnd:= .F.
+  //   xAguarde:= { |lEnd| Execute(LUPERDAS)}
+     MsAguarde( ,"Aguarde" ,"Alterando natureza para baixa ..", .T. )
+#ENDIF
+
+
+
+
+Do While !EOF()
+   DBSKIP()
+   _RegPos:=RECNO()
+   DBSKIP(-1)
+
+   dBSelectArea("SF2")
+   dbSetOrder(1)
+
+   DbSeek(xfilial()+SE1->E1_NUM+SE1->E1_SERIE)
+
+   _valnf   := SF2->F2_VALBRUT-SF2->F2_DESPREM
+   If _valnf <= 5000
+      If SE1->E1_EMISSAO<=xDATA1
+         ALT_NAT()
+      Endif
+   Else
+      If SE1->E1_EMISSAO<=xDATA2
+         ALT_NAT()
+      Endif
+   Endif
+   DBSELECTAREA("SE1")
+   DBGOTO(_REGPOS)
+   Dbskip()
+Enddo
+RETURN
+
+
+FUNCTION ALT_NAT
+   _Naturez:='LP'
+   _Nportado:= 'BLP'
+   _Nagedep := '99999'
+   _Nconta  :=   '9999999999'
+   _Nsituaca:='0'
+   DbSelectarea("SE1")
+   Reclock("SE1",.F.)
+     SE1->E1_NATUREZ := _Naturez
+     SE1->E1_PORTADO := _Nportado
+     SE1->E1_AGEDEP  := _Nagedep
+     SE1->E1_CONTA   := _Nconta
+     SE1->E1_SITUACA := _Nsituaca
+   MsUnlock()
+
+Return
+
+

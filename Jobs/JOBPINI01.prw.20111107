@@ -1,0 +1,781 @@
+#include "rwmake.ch"
+#include "Fileio.ch"
+#include "topconn.ch"
+#include "tbiconn.ch"
+
+/*
+Alterado por Danilo C S Pala em 20110620: importar NF-e da ContentSutff
+Alterado por Danilo C S Pala em 20110810: 0115 = 0127 + 0128
+Alterado por Danilo C S Pala em 20111107: round qdo nfator=2
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณJOBPINI01 บAutor  ณDanilo C S Pala     บ Data ณ  20100728   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/                 
+
+User Function JOBPINI01(cParTipo)
+If cParTipo <>"TELA"
+	Prepare Environment EMPRESA '01' FILIAL '01' MODULO 'FAT'
+EndIf
+
+Private cQuery 		:= ""
+Private codUsuario 	:= "21" //como testes usar o 1
+Private aReserva   	:= {}     
+Private cNumero		:= SPACE(6)
+Private cProduto	:= SPACE(15)
+Private cLocal		:= SPACE(2)
+Private nQuant		:= 1
+Private nAcao		:= 1
+Private cTpReserva	:= "PD"
+Private cDoc		:= "000000000"
+Private cSolicit	:= "LOJAPINI"
+Private cFilialR   	:= "01"
+Private cObs		:= "LOTEWS 000000001"
+Private aHeader		:= {}
+Private aItem       := {}
+Private aDetails   := {}
+
+Private bPedido := .F.
+Private cNum := "A00003"
+Private cTipo := "N"    
+Private cDivven := "MERC"           
+Private cCodProm := "N"
+Private cIdentif := "."
+Private cCliente := "LOJAPI"
+Private cLoja := "01"               
+Private cCondPagto := "201"
+Private cVend1 := "000101"
+Private cVend2 := space(6)
+Private cVend3 := space(6)
+Private cVend4 := space(6)
+Private cVend5 := space(6)        
+Private dEmissao := dDataBase
+Private nValor := 10
+Private cTipoOper := "13"
+//Private cObs := "."+space(119)
+Private cLoteFat := "LOJ" 
+Private cTipocli := "F"
+Private cAvesp := "N"
+Private cTpTrans := "99"           
+Private nDespRem := 0
+        
+
+Private cItem := "01"
+//Private cProduto := "02021752"
+//Private cLocal := posicione("SB1",1,xfilial("SB1")+cProduto,"B1_LOCPAD")
+Private nQtd := 1
+Private nValorUnitario := 10
+Private nValorTotal := 10
+Private cDescricao := SB1->B1_DESC
+Private cUnidade := SB1->B1_UM
+Private cTES := SB1->B1_TS
+Private cCF := posicione("SF4",1,xfilial("SF4")+cTES,"F4_CF")
+Private nDesconto := 0
+Private nComis1 := 0.1
+Private nComis2 := 0
+Private nComis3 := 0
+Private nComis4 := 0
+Private nComis5 := 0
+Private nEdInic := 9999
+Private nEdFin := 9999
+Private nEdVenc := 9999
+Private nEdSusp := 9999
+Private cTpop := "F"
+Private cClasFis := Subs(SB1->B1_ORIGEM,1,1)+SF4->F4_SITTRIB
+Private cSituac := "AA"
+Private cTipoRev := "0"
+Private cRegcot := "99"+space(13)
+Private cTpprog :="N"   
+Private cSemaforo := ""
+Private cNumExt := ""
+Private cCodCliente := ""
+Private cObsPed := ""
+Private nContItem  := 1
+Private nContCM  := 0
+Private nFator  := 1
+
+cSemaforo := u_piniparametro("SEMAFORO_JOBPINI01")
+codUsuario 	:= u_piniparametro("CODUSUARIO_JOBPINI01")
+
+If cSemaforo == "T"
+	u_UpdPiniParametro("SEMAFORO_JOBPINI01","F") //bloquear processamento
+	
+	//************************************************************************
+	//************************************************************************              
+	//************************************************************************
+	//INSERIR RESERVAS: SE TIPOPEDIDO<>'E': nao fazer reserva para pedido de nota fiscal eletronica //20110620
+	cQuery := "SELECT idPedido, codUsuario, codEmpresa, numPedido, to_char(dataPedido,'yyyyMMdd') as dataPedido, codClientePini, codClienteFornecedor, nomeCliente, cpfCnpj, loteWS FROM PiniPedido WHERE CODEMPRESA='"+ SM0->M0_CODIGO +"' AND CODUSUARIO="+ codUsuario +" AND STATUS='A' AND TIPOPEDIDO<>'E' ORDER BY IDPEDIDO"
+	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "JOBPINI", .T., .F. )
+	DbSelectArea("JOBPINI")
+	dbGotop()
+	While !EOF() //loop nos pedidos
+		DBSelectArea("SC0")
+		cNumero	:= GetSx8Num("SC0")
+		ConfirmSX8()
+		
+		cQuery := "SELECT idItemPedido, codEmpresa, numPedido, item, codProduto, descricao, qtd FROM PiniItemPedido WHERE CODEMPRESA='"+ JOBPINI->CODEMPRESA +"' AND CODUSUARIO="+ alltrim(str(JOBPINI->CODUSUARIO)) +" AND NUMPEDIDO='"+ alltrim(JOBPINI->NUMPEDIDO) +"' ORDER BY NUMPEDIDO, ITEM"
+		DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PINIITEM", .T., .F. )
+		DbSelectArea("PINIITEM")
+		dbGotop()
+		While !EOF() //loop nos itens do pedido
+			//PEGAR O ALMOXARIFADO PADRAO E INSERIR RESERVA              
+		
+			/*aReserva
+			[1] -> [Operacao : 1 Inclui,2 Altera,3 Exclui]
+			[2] -> [Tipo da Reserva]
+			[3] -> [Documento que originou a Reserva]
+			[4] -> [Solicitante]
+			[5] -> [Filial da Reserva]
+			[6] -> [Observacao] 
+			[7] -> cNumero := "000004"
+			[8] -> cProduto	:= PADR("02021752",15) //codProduto
+			[9] -> cLocal		:= "T5"
+			[10] -> nQuant		:= 1*/
+			nAcao 		:= 1
+			cDoc		:= alltrim(JOBPINI->NUMPEDIDO)
+			cObs		:= "LOTEWS:"+ ALLTRIM(STR(JOBPINI->LOTEWS)) + ", IDPEDIDO:"+ ALLTRIM(STR(JOBPINI->IDPEDIDO)) +", NUMPEDIDO:"+ ALLTRIM(PINIITEM->NUMPEDIDO)
+			DbSelectArea("SB1")
+			DBSetOrder(1)
+			If DBSeek(xFilial("SB1")+  alltrim(PINIITEM->CODPRODUTO))
+				cProduto	:= PADR(PINIITEM->CODPRODUTO,15)
+			Else 
+				cProduto := "PRODANILO"
+			EndIf
+			cLocal 		:= posicione("SB1",1,xFilial("SB1")+alltrim(cProduto),"B1_LOCPAD")
+			nQuant		:= PINIITEM->QTD
+			aReserva := {nAcao, cTpReserva, cDoc, cSolicit, cFilialR, cObs, cNumero, cProduto, cLocal, nQuant}
+			u_ReservaAlmox(aReserva)   
+				
+			//		MsgAlert("PEDIDO="+ alltrim(PINIITEM->NUMPEDIDO) + ", ITEM="+ PINIITEM->ITEM +", PRODUTO="+ PINIITEM->CODPRODUTO )	
+			DbSelectArea("PINIITEM")
+			DbSkip()
+		End 
+		DbSelectArea("PINIITEM")  
+		DbCloseArea()	
+
+		//UPDATE NO STATUS DO PEDIDO
+		updPiniPedido(JOBPINI->IDPEDIDO, "R", cNumero)
+		updReserva(cNumero, "I") //ATUALIZAR VALIDADE DA RESERVA
+		DbSelectArea("JOBPINI")
+		DbSkip()
+	End
+	dbselectarea("JOBPINI")
+	dbclosearea()
+
+                                                                          
+	//************************************************************************
+	//************************************************************************
+	//*********************************************************
+	//INSERIR PEDIDO: //20110620 dados da Nfe inserir Cliente
+	cQuery := "SELECT idPedido, codUsuario, codEmpresa, numPedido, to_char(dataPedido,'yyyyMMdd') as dataPedido, codClientePini, nomeCliente, cpfCnpj, CEP, ENDERECO, BAIRRO, MUNICIPIO, estado, loteWS, divisaoVenda, codFormaPagto, codVendedor1 as vend1, codVendedor2 as vend2, codVendedor3 as vend3, codVendedor4 as vend4, codVendedor5 as vend5, valor, codTipoOperacao, frete, numReservaPini, msgNota, status, to_char(dataReserva,'yyyyMMdd') as dataRes, to_char(dataFinalizado,'yyyyMMdd') as dataFin, to_char(dataCancelado,'yyyyMMdd') as dataCanc, to_char(dataPedidoValidado,'yyyyMMdd') as dataVal, to_char(dataLiberado,'yyyyMMdd') as dataLib, tipoPedido, versaoNfe, chaveNfe, natOp, serieNfe, numNfe, to_char(dataNfe,'yyyyMMdd') as dataNfe, tipoNfe, ambiente, inscricaoEstadual, suframa, Logr, Nlogr, Clogr, codMunicipio, codPais, nomePais, origem, tributacao, pisCodigoST, pisBase, pisPercentual, pisValor, cofinsCodigoST, cofinsBase, cofinsPercentual, cofinsValor, totalBaseICMS, totalValorICMS, totalBaseICMST, totalValorICMSST, totalValorProdutos, totalValorFrete, totalValorSeguro, totalValorDesconto, totalvalorII, totalvalorIPI, totalvalorPIS, totalvalorCOFINS, totalvalorOutro, totalvalorNfe FROM PiniPedido WHERE CODEMPRESA='"+ SM0->M0_CODIGO +"' AND CODUSUARIO="+ codUsuario +" AND STATUS='L' ORDER BY IDPEDIDO"
+	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "JOBPINI", .T., .F. )
+	DbSelectArea("JOBPINI")
+	dbGotop()
+	While !EOF() //loop nos pedidos
+		//montar array do SC5 
+		/*aHeader
+		[01] -> C5_NUM
+		[02] -> C5_TIPO
+		[03] -> C5_DIVVEN
+		[04] -> C5_CODPROM
+		[05] -> C5_IDENTIF
+		[06] -> C5_CLIENTE
+		[07] -> C5_LOJAENT
+		[08] -> C5_LOJACLI
+		[09] -> C5_CONDPAG
+		[10] -> C5_VEND1
+		[11] -> C5_VEND2
+		[12] -> C5_VEND3
+		[13] -> C5_VEND4
+		[14] -> C5_VEND5
+		[15] -> C5_EMISSAO
+		[16] -> C5_TIPOCLI
+		[17] -> C5_LOTEFAT
+		[18] -> C5_DATA
+		[19] -> C5_VLRPED
+		[20] -> C5_TIPOOP
+		[21] -> C5_DTCALC
+		[22] -> C5_AVESP
+		[23] -> C5_TPTRANS
+		[24] -> C5_MENNOTA
+		[25] -> C5_DESPREM 
+		[26] -> C5_NUMEXT
+		[27] -> C5_OBSPED
+		*/                    
+		//cNum := GETSXENUM("SC5","C5_NUM")
+		//CONFIRMSXE()
+	
+
+		cCodCliente := CarregarCliente()//20110620
+		IF 	alltrim(cCodCliente) == "LOJAPINI01"
+			updPiniPedido(JOBPINI->IDPEDIDO, "B", cNum) //aguarda configurar cliente
+			//MSGALERT("PEDIDO AGUARDA CONFIGURACAO DO CLIENTE: "+ JOBPINI->NUMPEDIDO)
+		ELSE
+			DBSelectArea("SC5")
+			cNum	:= GetSx8Num("SC5")
+			ConfirmSX8()
+			If alltrim(JOBPINI->DIVISAOVENDA) <> "MERC" .or. alltrim(JOBPINI->DIVISAOVENDA) <>"SOFT"
+				cDivven := "MERC"
+			Else
+				cDivven := JOBPINI->DIVISAOVENDA
+			EndIf
+			DbSelectArea("SA1")
+			DBSetOrder(1)
+			If DBSeek(xFilial("SA1")+  alltrim(cCodCliente))
+				cCliente := IIF(EMPTY(cCodCliente), "LOJAPI", SUBS(cCodCliente,1,6))
+				cLoja := IIF(EMPTY(cCodCliente), "01", SUBS(cCodCliente,7,2))
+			Else 
+				cCliente := "LOJAPI"
+				cLoja := "01"
+			EndIf
+			DbSelectArea("SE4")
+			DBSetOrder(1)
+			If DBSeek(xFilial("SE4")+  alltrim(JOBPINI->CODFORMAPAGTO))
+				cCondPagto := IIF(EMPTY(JOBPINI->CODFORMAPAGTO), "201",JOBPINI->CODFORMAPAGTO)
+			Else 
+				cCondPagto := "201"
+			EndIf
+			DbSelectArea("SA3")
+			DBSetOrder(1)
+			If DBSeek(xFilial("SA3")+  alltrim(JOBPINI->VEND1))
+				cVend1 := IIF(EMPTY(JOBPINI->VEND1), "000101",SUBS(JOBPINI->VEND1,1,6))
+			Else 
+				cVend1 := "000101"
+			EndIf
+			If DBSeek(xFilial("SA3")+  alltrim(JOBPINI->VEND2))
+				cVend2 := IIF(EMPTY(JOBPINI->VEND2), SPACE(6),SUBS(JOBPINI->VEND2,1,6))
+			Else 
+				cVend2 := SPACE(6)
+			EndIf
+			If DBSeek(xFilial("SA3")+  alltrim(JOBPINI->VEND3))
+				cVend3 := IIF(EMPTY(JOBPINI->VEND3), SPACE(6),SUBS(JOBPINI->VEND3,1,6))
+			Else
+				cVend3 := SPACE(6)
+			EndIf
+			If DBSeek(xFilial("SA3")+  alltrim(JOBPINI->VEND4))
+				cVend4 := IIF(EMPTY(JOBPINI->VEND4), SPACE(6),SUBS(JOBPINI->VEND4,1,6))
+			Else      
+				cVend4 := SPACE(6)
+			EndIf
+			If DBSeek(xFilial("SA3")+  alltrim(JOBPINI->VEND5))
+				cVend5 := IIF(EMPTY(JOBPINI->VEND5), SPACE(6),SUBS(JOBPINI->VEND5,6))
+			Else  
+				cVend5 := SPACE(6)
+			EndIf
+			DbSelectArea("SZ9")
+			DBSetOrder(1)
+			If DBSeek(xFilial("SZ9")+  alltrim(JOBPINI->CODTIPOOPERACAO))
+				cTipoOper := JOBPINI->CODTIPOOPERACAO
+			Else 
+				cTipoOper := "13"
+			EndIf
+			//dEmissao := STOD(JOBPINI->DATAPEDIDO)
+			nValor := (JOBPINI->VALOR - JOBPINI->FRETE) //reduzir o frete
+			nDespRem := JOBPINI->FRETE
+			cNumero := JOBPINI->NUMRESERVAPINI
+			cNumExt := JOBPINI->NUMPEDIDO
+			cObs := IIF(EMPTY(JOBPINI->MSGNOTA), ".", Alltrim(JOBPINI->MSGNOTA))
+			cObsPed := IIF(JOBPINI->TIPOPEDIDO=="E","LOJAPINI NFE CONTENTSTUFF","")
+	
+			DbSelectArea("SZD") //validar numero do pedido
+			DBSetOrder(1)
+			If !DBSeek(xFilial("SZD")+ cNum)
+				Reclock("SZD",.T.)
+	    			SZD->ZD_FILIAL  := xFilial("SZD")
+	    			SZD->ZD_CODVEND := cVend1
+		    		SZD->ZD_PEDIDO  := cNum
+	    			SZD->ZD_REQUIS  := "000000"
+		   	 		SZD->ZD_SITUAC  := 'D'
+	    			SZD->ZD_DTREQ   := dDataBase
+				    SZD->ZD_DTSITUA := dDataBase
+	    			SZD->ZD_DIVVEND := cDivven
+			    MsUnlock()                     
+			 EndIf
+
+			aHeader := {}   
+			aDetails := {}
+			aAdd(aHeader , cNum)
+			aAdd(aHeader , cTipo)
+			aAdd(aHeader , cDivven)
+			aAdd(aHeader , cCodProm)
+			aAdd(aHeader , cIdentif)
+			aAdd(aHeader , cCliente)
+			aAdd(aHeader , cLoja)
+			aAdd(aHeader , cLoja)
+			aAdd(aHeader , cCondPagto)
+			aAdd(aHeader , cVend1)
+			aAdd(aHeader , cVend2)
+			aAdd(aHeader , cVend3)
+			aAdd(aHeader , cVend4)
+			aAdd(aHeader , cVend5)
+			aAdd(aHeader , dEmissao)
+			aAdd(aHeader , cTipocli)
+			aAdd(aHeader , cLoteFat)
+			aAdd(aHeader , dEmissao)
+			aAdd(aHeader , nValor)
+			aAdd(aHeader , cTipoOper)
+			aAdd(aHeader , dEmissao)
+			aAdd(aHeader , cAvesp)
+			aAdd(aHeader , cTpTrans)
+			aAdd(aHeader , cObs)
+			aAdd(aHeader , nDespRem)
+			aAdd(aHeader , cNumExt)
+			aAdd(aHeader , cObsPed)
+
+			nContItem  := 1 //20110810
+			nFator  := 1 //20110810
+			nContCM  := 0
+			cQuery := "SELECT idItemPedido, codEmpresa, numPedido, item, codProduto, descricao, edicaoInicial, qtd, valorUnitario, valorTotal, desconto, edicaofinal FROM PiniItemPedido WHERE CODEMPRESA='"+ JOBPINI->CODEMPRESA +"' AND CODUSUARIO="+ alltrim(str(JOBPINI->CODUSUARIO)) +" AND NUMPEDIDO='"+ alltrim(JOBPINI->NUMPEDIDO) +"' ORDER BY NUMPEDIDO, ITEM"
+			DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PINIITEM", .T., .F. )
+			DbSelectArea("PINIITEM")
+			dbGotop()
+			While !EOF() .and. nContCM <= 1//loop nos itens do pedido
+				//montar array do SC6
+				/*aDetails = array de aItem
+				aItem
+				[01] -> C6_NUM
+				[02] -> C6_ITEM
+				[03] -> C6_PRODUTO
+				[04] -> C6_DESCRI
+				[05] -> C6_TES
+				[06] -> C6_LOCAL
+				[07] -> C6_CF
+				[08] -> C6_QTDVEN
+				[09] -> C6_PRCVEN
+				[10] -> C6_PRUNIT
+				[11] -> C6_VALOR
+				[12] -> C6_UM
+				[13] -> C6_CLI
+				[14] -> C6_LOJA
+				[15] -> C6_COMIS1
+				[16] -> C6_COMIS2
+				[17] -> C6_COMIS3
+				[18] -> C6_COMIS4
+				[19] -> C6_COMIS5
+				[20] -> C6_DATA
+				[21] -> C6_ENTREGA
+				[22] -> C6_TPOP
+				[23] -> C6_TIPOREV
+				[24] -> C6_EDINIC
+				[25] -> C6_EDFIN
+				[26] -> C6_EDVENC
+				[27] -> C6_EDSUSP
+				[28] -> C6_REGCOT
+				[29] -> C6_TPPROG
+				[30] -> C6_SITUAC
+				[31] -> C6_CLASFIS
+				[31] -> C6_VALDESC
+				*/               
+				cProduto := PINIITEM->CODPRODUTO // daqui 20110810
+				cItem := strzero(nContItem,2)//PINIITEM->ITEM 
+				if alltrim(cProduto) == "0115001" .and. nContCM == 0
+					cProduto := "0127001"
+					nFator := 2
+					nContCM  := 1
+				Elseif alltrim(cProduto) == "0115001" .and. nContCM == 1
+					cProduto := "0128001"
+					nFator := 2            
+					nContCM  := 2
+				Else
+					nFator := 1
+					nContCM  := 0
+				endif // ate aqui 20110810
+				DbSelectArea("SB1")
+				DBSetOrder(1)
+				If !DBSeek(xFilial("SB1")+  alltrim(cProduto))
+					//cProduto := PINIITEM->CODPRODUTO
+				//Else 
+					cProduto := "PRODANILO"
+				EndIf
+
+				cLocal := posicione("SB1",1,xfilial("SB1")+cProduto,"B1_LOCPAD")
+				nQtd := PINIITEM->QTD
+				if nfator ==2  //daqui 20111107
+					if nContCM ==1
+						nValorUnitario := round(PINIITEM->VALORUNITARIO / nFator,4)
+						nValorTotal := round((nValorUnitario * nQtd),2) 
+					else 
+						nValorUnitario := round( round(PINIITEM->VALORTOTAL/nQtd,4) - round(PINIITEM->VALORUNITARIO / nFator,4) ,4)
+						nValorTotal := round((nValorUnitario * nQtd),2) 
+					endif
+				else
+					nValorUnitario := round(PINIITEM->VALORUNITARIO / nFator,4)
+					nValorTotal := round(PINIITEM->VALORTOTAL / nFator,3) 
+				endif // ate aqui 20111107
+				cDescricao := SB1->B1_DESC
+				cUnidade := SB1->B1_UM
+				cTES := SB1->B1_TS
+				cCF := posicione("SF4",1,xfilial("SF4")+cTES,"F4_CF")
+				if UPPER(ALLTRIM(JOBPINI->ESTADO)) =="SP" //regra do CFOP
+					cCF := "5" + substr(cCF,2,3)
+				elseif UPPER(ALLTRIM(JOBPINI->ESTADO)) =="EX"
+					cCF := "7" + substr(cCF,2,3)
+				else
+					cCF := "6" + substr(cCF,2,3)
+				endif
+				cRegiao := posicione("SA3",1,xfilial("SA3")+cVend1,"A3_REGIAO")
+				cTComis1 := posicione("SA3",1,xfilial("SA3")+cVend1,"A3_TIPOVEN")
+				nComis1 := iif(cTComis1 $ "OP",posicione("SZ3",1,xfilial("SZ3")+cVend1+cRegiao,"Z3_COMOTEL"),posicione("SZ3",1,xfilial("SZ3")+cVend1+cRegiao,"Z3_COMREP1"))
+				If nComis1 = 0
+					nComis1 := 0.01
+				EndIf
+				nComis2 := 0
+				nComis3 := posicione("SZ3",1,xfilial("SZ3")+cVend1+cRegiao,"Z3_COMSUP")
+				nComis4 := posicione("SZ3",1,xfilial("SZ3")+cVend1+cRegiao,"Z3_COMGLOC")
+				nComis5 := 0
+				nEdInic := iif(SB1->B1_GRUPO=="0100" .or. SB1->B1_GRUPO=="0101", PINIITEM->EDICAOINICIAL, 9999)
+				nEdFin := iif(nEdinic==9999,9999,PINIITEM->EDICAOFINAL)
+				nEdVenc := 0
+				nEdSusp := 0
+				cClasFis := Subs(SB1->B1_ORIGEM,1,1)+SF4->F4_SITTRIB
+				cRegcot := iif(SUBS(SB1->B1_COD,1,2)=="01",SUBS(SB1->B1_COD,1,4),"99")
+				If alltrim(JOBPINI->TIPOPEDIDO)=="E"
+					cSituac := "SU"
+				Else
+					cSituac := "AA"
+				EndIf
+				nDesconto := PINIITEM->DESCONTO  / nFator //20110810
+		
+				aItem := {}
+				aAdd(aItem, cNum)
+				aAdd(aItem, cItem)
+				aAdd(aItem, cProduto)
+				aAdd(aItem, cDescricao)
+				aAdd(aItem, cTES)
+				aAdd(aItem, cLocal)
+				aAdd(aItem, cCF)
+				aAdd(aItem, nQtd)
+				aAdd(aItem, nValorUnitario)
+				aAdd(aItem, nValorUnitario)
+				aAdd(aItem, nValorTotal)
+				aAdd(aItem, cUnidade)
+				aAdd(aItem, cCliente)
+				aAdd(aItem, cLoja)
+				aAdd(aItem, nComis1)
+				aAdd(aItem, nComis2)
+				aAdd(aItem, nComis3)
+				aAdd(aItem, nComis4)
+				aAdd(aItem, nComis5)
+				aadd(aItem, dEmissao)
+				aadd(aItem, dEmissao)
+				aadd(aItem, cTpOp)
+				aadd(aItem, cTipoRev)
+				aadd(aItem, nEdInic)
+				aadd(aItem, nEdFin)
+				aadd(aItem, nEdVenc)
+				aadd(aItem, nEdSusp)
+				aadd(aItem, cRegcot)
+				aadd(aItem, cTpprog)
+				aadd(aItem, cSituac)
+				aadd(aItem, cClasFis)
+				aadd(aItem, nDesconto)
+				aadd(aDetails, aItem)
+				
+				if nFator <> 2 .or. nContCM  <> 1// inserir segundo produto 0115 = 0127 + 0128: daqui 20110810
+					DbSelectArea("PINIITEM")
+					DbSkip()
+				endif // fim inserir segundo produto 0115 = 0127 + 0128: ate aqui 20110810
+			
+				nContItem  := nContItem + 1 //20110810
+			End 
+			DbSelectArea("PINIITEM")  
+			DbCloseArea()	
+	
+			//insert pedido   
+			if len(aHeader) >0 .and. len(aDetails)>0
+				bPedido := u_pinipedido(aHeader, aDetails)
+				If bPedido
+					//UPDATE NO STATUS DO PEDIDO
+					updPiniPedido(JOBPINI->IDPEDIDO, "F", cNum)
+					if JOBPINI->TIPOPEDIDO<>"E"
+						updReserva(cNumero, "D")
+					endif
+					//CONFIRMSXE()
+				Else               
+					updPiniPedido(JOBPINI->IDPEDIDO, "E", cNum) //erro ao inserir
+					//ROLLBACKSXE()
+				EndIf
+			Endif
+		ENDIF //CLIENTE NAO CONFIGURADO
+		
+		DbSelectArea("JOBPINI")
+		DbSkip()
+	End
+	dbselectarea("JOBPINI")
+	dbclosearea()
+	
+
+
+	//************************************************************************
+	//************************************************************************
+	//************************************************************************
+	//CANCELAR RESERVAS
+	cQuery := "SELECT idPedido, codUsuario, codEmpresa, numPedido, to_char(dataPedido,'yyyyMMdd') as dataPedido, codClientePini, codClienteFornecedor, nomeCliente, cpfCnpj, loteWS, numReservaPini FROM PiniPedido WHERE CODEMPRESA='"+ SM0->M0_CODIGO +"' AND CODUSUARIO="+ codUsuario +" AND STATUS='C' AND TIPOPEDIDO<>'E' ORDER BY IDPEDIDO"
+	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "JOBPINI", .T., .F. )
+	DbSelectArea("JOBPINI")
+	dbGotop()
+	While !EOF() //loop nos pedidos
+		
+		cQuery := "SELECT idItemPedido, codEmpresa, numPedido, item, codProduto, descricao, qtd FROM PiniItemPedido WHERE CODEMPRESA='"+ JOBPINI->CODEMPRESA +"' AND CODUSUARIO="+ alltrim(str(JOBPINI->CODUSUARIO)) +" AND NUMPEDIDO='"+ alltrim(JOBPINI->NUMPEDIDO) +"' ORDER BY NUMPEDIDO, ITEM"
+		DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PINIITEM", .T., .F. )
+		DbSelectArea("PINIITEM")
+		dbGotop()
+		While !EOF() //loop nos itens do pedido
+			/*aReserva
+			[1] -> [Operacao : 1 Inclui,2 Altera,3 Exclui]
+			[2] -> [Tipo da Reserva]
+			[3] -> [Documento que originou a Reserva]
+			[4] -> [Solicitante]
+			[5] -> [Filial da Reserva]
+			[6] -> [Observacao] 
+			[7] -> cNumero := "000004"
+			[8] -> cProduto	:= PADR("02021752",15) //codProduto
+			[9] -> cLocal		:= "T5"
+			[10] -> nQuant		:= 1*/
+			nAcao 		:= 3
+			cNumero		:= alltrim(JOBPINI->NUMRESERVAPINI)
+			cDoc		:= alltrim(PINIITEM->NUMPEDIDO)
+			cObs		:= "LOTEWS:"+ ALLTRIM(STR(JOBPINI->LOTEWS)) + ", IDPEDIDO:"+ ALLTRIM(STR(JOBPINI->IDPEDIDO))
+			cProduto	:= PADR(PINIITEM->CODPRODUTO,15)
+			cLocal 		:= posicione("SB1",1,xFilial("SB1")+alltrim(cProduto),"B1_LOCPAD")
+			nQuant		:= PINIITEM->QTD
+			aReserva := {nAcao, cTpReserva, cDoc, cSolicit, cFilialR, cObs, cNumero, cProduto, cLocal, nQuant}
+			u_ReservaAlmox(aReserva)
+			
+			DbSelectArea("PINIITEM")
+			DbSkip()
+		End 
+		DbSelectArea("PINIITEM")  
+		DbCloseArea()	
+
+		//UPDATE NO STATUS DO PEDIDO
+		updPiniPedido(JOBPINI->IDPEDIDO, "X","")
+		DbSelectArea("JOBPINI")
+		DbSkip()
+	End
+	dbselectarea("JOBPINI")
+	dbclosearea()
+
+	u_UpdPiniParametro("SEMAFORO_JOBPINI01","T") //liberar processamento
+EndIf
+
+If cParTipo <>"TELA"
+	RESET ENVIRONMENT
+EndIf
+Return                                                                                                                   
+                                         
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณupdPiniPedido บAutor  ณDanilo C S Pala บ Data ณ  20110621   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function updPiniPedido(idPedido, cStatus, cNumero)
+Private lRetorno := .F.
+Private cUpdate := ""
+Private nUpd := 0
+
+If cStatus=="R"
+	cUpdate := "UPDATE PiniPedido SET status='"+ cStatus +"', numReservaPini='"+ cNumero +"', dataReserva=sysdate WHERE idPedido="+ alltrim(str(idPedido))
+ElseIf cStatus=="F"
+	cUpdate := "UPDATE PiniPedido SET status='"+ cStatus +"', numPedidoPini='"+ cNumero +"', dataFinalizado=sysdate WHERE idPedido="+ alltrim(str(idPedido))
+ElseIf cStatus=="X"
+	cUpdate := "UPDATE PiniPedido SET status='"+ cStatus +"', dataCancelado=sysdate WHERE idPedido="+ alltrim(str(idPedido))
+ElseIf cStatus=="E" .or. cStatus=="B"
+	cUpdate := "UPDATE PiniPedido SET status='"+ cStatus +"' WHERE idPedido="+ alltrim(str(idPedido))
+Else
+	cUpdate := ""
+endIf  
+
+If cUpdate <> ""
+	nUpd :=	TCSQLExec(cUpdate)
+	If nUpd <=0 
+		lRetorno := .T.
+	Else
+		lRetorno := .F.
+	EndIf
+Else
+	lRetorno := .F.
+EndIf
+Return lRetorno                                 
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  |updReserva บAutor ณDanilo C S Pala     บ Data ณ  20110621   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function updReserva(cNumero, cOpcao)
+Private lRetorno := .F.
+Private cUpdate := ""
+Private nUpd := 0
+                                          
+if cOpcao =="I"
+	cUpdate := "UPDATE "+ RETSQLNAME("SC0") +" SET C0_VALIDA = '"+ dtos(dDatabase+30) +"' WHERE C0_FILIAL='"+xfilial("SC0")+"' AND C0_NUM='"+ cNumero +"' AND D_E_L_E_T_<>'*'"
+else
+	cUpdate := "UPDATE "+ RETSQLNAME("SC0") +" SET C0_VALIDA = '"+ dtos(dDatabase) +"' WHERE C0_FILIAL='"+xfilial("SC0")+"' AND C0_NUM='"+ cNumero +"' AND D_E_L_E_T_<>'*'"
+EndIf
+
+nUpd :=	TCSQLExec(cUpdate)
+If nUpd <=0 
+	lRetorno := .T.
+Else
+	lRetorno := .F.
+EndIf
+Return lRetorno
+
+               
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  CarregarClienteบAutor  ณDanilo C S Pala บ Data ณ  20110621   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function CarregarCliente()
+Private cCodCliente :=""
+Private tCodClientePini :=""
+Private cQuery := ""
+Private bInserir := .F.
+Private bUpdate := .F.
+
+cCodCliente := JOBPINI->CODCLIENTEPINI
+                                          
+if alltrim(JOBPINI->CODCLIENTEPINI) == "LOJAPI01"
+	cQuery = "SELECT A1_COD, A1_LOJA, COUNT(*) AS QTD FROM "+ RETSQLNAME("SA1") + " WHERE A1_FILIAL='"+xfilial("SA1")+"' AND A1_CGC='"+ JOBPINI->CPFCNPJ +"' AND D_E_L_E_T_<>'*' GROUP BY A1_COD, A1_LOJA"
+	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "JOBQCLI", .T., .F. )
+	DbSelectArea("JOBQCLI")
+	dbGotop()           
+	If !eof()
+		If JOBQCLI->QTD <1
+			//Inserir cliente
+			bInserir := .T.
+			bUpdate := .F.
+		ElseIf JOBQCLI->QTD = 1
+			bInserir := .F.
+			bUpdate := .T.
+			cCodCliente := JOBQCLI->A1_COD+JOBQCLI->A1_LOJA
+			//update cliente
+		Else
+			MsgAlert("ENCONTRADO MAIS DE UMA OCORRENCIA DESTE CPF/CNPJ NO PROTHEUS: "+ JOBPINI->CPFCNPJ + CHR(10)+CHR(13) +"O PEDIDO "+ JOBPINI->NUMPEDIDO +" FICARA ABERTO ATE A DEFINICAO DO CLIENTE PELO PINIPROTHEUSSERVICE")
+			bInserir := .F.
+			bUpdate := .F.
+		EndIf             
+	Else //CpfCnpj nao encontrado
+		bInserir := .T.   
+		bUpdate := .F.
+	Endif
+	DbSelectArea("JOBQCLI")
+	DbCloseArea()	
+Else
+	bUpdate := .T.
+Endif                 
+
+If bInserir
+     //inserirCliente    
+    DBSelectArea("SA1")
+	tCodClientePini := u_CliPiniParametro()
+	RECLOCK("SA1",.T.) //insert
+		SA1->A1_FILIAL  := XFILIAL("SA1")
+		SA1->A1_COD := Alltrim(tCodClientePini)
+		SA1->A1_LOJA := "01"
+		SA1->A1_CGC := JOBPINI->CPFCNPJ
+		SA1->A1_NOME := SUBSTR(JOBPINI->NOMECLIENTE,1,40)
+		SA1->A1_NREDUZ := SUBSTR(JOBPINI->NOMECLIENTE,1,20)
+		SA1->A1_CEP := JOBPINI->CEP
+		SA1->A1_END := JOBPINI->ENDERECO
+		SA1->A1_TPLOG := ""
+		SA1->A1_LOGR := JOBPINI->LOGR
+		SA1->A1_NLOGR := JOBPINI->NLOGR
+		SA1->A1_COMPL := JOBPINI->CLOGR
+		SA1->A1_COMPLEM := JOBPINI->CLOGR
+		SA1->A1_BAIRRO := JOBPINI->BAIRRO
+		SA1->A1_EST := JOBPINI->ESTADO
+		SA1->A1_MUN := JOBPINI->MUNICIPIO
+		SA1->A1_COD_MUN := SUBSTR(JOBPINI->CODMUNICIPIO,3,5) //3550308
+		SA1->A1_CODPAIS := JOBPINI->CODPAIS
+		SA1->A1_PAIS := JOBPINI->CODPAIS
+		SA1->A1_TIPO := "F" 
+		SA1->A1_PESSOA := IIF(LEN(ALLTRIM(JOBPINI->CPFCNPJ))<14, "F","J")
+		SA1->A1_TPCLI := IIF(LEN(ALLTRIM(JOBPINI->CPFCNPJ))<14, "F","J")
+		SA1->A1_NATUREZA := "0101" //?
+		SA1->A1_FLAGID := "2" //?(Contr. ICMS), NAO CONTRIBUINTE
+		SA1->A1_INSCR := JOBPINI->INSCRICAOESTADUAL
+		SA1->A1_SUFRAMA := JOBPINI->SUFRAMA
+		//SA1->A1_ATIVIDA := "" //?
+		//SA1->A1_COND := ""//?(Cond Pagto), 
+		SA1->A1_RECCOFI := "S"
+		SA1->A1_RECPIS := "S"
+		SA1->A1_ABATIMP := "1" //MODO DE ABATIMENTO DE IMPOSTO: CALCULADO PELO SISTEMA
+	MSUNLOCK()
+	cCodCliente := Alltrim(tCodClientePini)+"01"
+EndIf
+
+If bUpdate
+	//UPDATECliente
+	DBSELECTAREA("SA1")
+	DBSETORDER(1)
+	If DBSEEK(XFILIAL("SA1")+cCodCliente)
+		RECLOCK("SA1",.F.) //update
+			SA1->A1_CEP := JOBPINI->CEP
+			SA1->A1_END := JOBPINI->ENDERECO
+			SA1->A1_TPLOG := ""
+			SA1->A1_LOGR := JOBPINI->LOGR
+			SA1->A1_NLOGR := JOBPINI->NLOGR
+			SA1->A1_COMPL := JOBPINI->CLOGR
+			SA1->A1_COMPLEM := JOBPINI->CLOGR
+			SA1->A1_BAIRRO := JOBPINI->BAIRRO
+			SA1->A1_EST := JOBPINI->ESTADO             
+			SA1->A1_MUN := JOBPINI->MUNICIPIO          
+			SA1->A1_COD_MUN := SUBSTR(JOBPINI->CODMUNICIPIO,3,5) //3550308
+			SA1->A1_CODPAIS := JOBPINI->CODPAIS
+			SA1->A1_PAIS := JOBPINI->CODPAIS
+			SA1->A1_RECCOFI := "S"
+			SA1->A1_RECPIS := "S"
+			SA1->A1_ABATIMP := "1" //MODO DE ABATIMENTO DE IMPOSTO: CALCULADO PELO SISTEMA
+		MSUNLOCK() 
+		cCodCliente := SA1->A1_COD+SA1->A1_LOJA
+	ENDIF
+EndIf
+
+If bUpdate .or. bInserir
+	//update pinipedido
+	cQuery := "UPDATE PiniPedido SET codClientePini='"+ cCodCliente +"' WHERE idPedido="+ alltrim(str(JOBPINI->idPedido))
+	nUpd :=	TCSQLExec(cQuery)
+Endif
+Return cCodCliente

@@ -1,0 +1,152 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+User Function Rfat096()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Declaracao de variaveis utilizadas no programa atraves da funcao    ³
+//³ SetPrvt, que criara somente as variaveis definidas pelo usuario,    ³
+//³ identificando as variaveis publicas do sistema utilizadas no codigo ³
+//³ Incluido pelo assistente de conversao do AP5 IDE                    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+SetPrvt("CLIE_DEST,CDESC1,CDESC2,CDESC3,CDESC4,MDESCR")
+SetPrvt("CPERG,ARQUIVO,_ACAMPOS,_CNOME,MDATA,MDC")
+SetPrvt("MNUM,MLINHA,MDEBITO,MCREDITO,MVALOR,MHIST")
+SetPrvt("MCCD,MCCC,MPROCESS,MCODINV,MPRODUTO,")
+/*
+*ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+*º Programa    : CUSTO1.PRX                                                  º
+*º Descricao   : GERACAO ARQUIVO CONTABIL PARA CUSTOS                        º
+*º Programador : Solange Nalini                                              º
+*º Data        : 26/02/99                                                    º
+*ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
+*/
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Periodo Inicial                      ³
+//³ mv_par02             // Periodo Final                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+ScreenDraw("SMT050", 3, 0, 0, 0)
+SetCursor(1)
+SetColor("B/BG")
+
+CLIE_DEST:=SPACE(40)
+cDesc1 :=PADC("Este programa ira gerar o arquivo contabil para custos" ,74)
+cDesc2 :=PADC("Se a opcao for (F)echamento serao selecionados todos",74)
+cDesc3 :=PADC("os lancamentos do periodo,se (C)omplemento, somente os lancamentos",74)
+cDesc4 :=PADC("apos o fechamento, controlados pelo campo I2_CTRL",74)
+
+
+mDESCR :="  "
+
+cPerg:="CON001"
+
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas                                      ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+If .Not. PERGUNTE(cPerg)
+    Return
+Endif
+
+
+DrawAdvWin("**  GERACAO ARQUIVO CONTABIL PARA CUSTOS ***" , 8, 0, 18, 75 )
+ARQUIVO:='CUSTOS'
+_aCampos := {  {"I2_DATA"    ,"D",8, 0} ,;
+               {"I2_DC"      ,"C",1, 0} ,;
+               {"I2_NUM"     ,"C",10, 0} ,;
+               {"I2_LINHA"   ,"C",2, 0} ,;
+               {"I2_DEBITO"  ,"C",15,0} ,;
+               {"I2_CREDITO" ,"C",15,0} ,;
+               {"I2_VALOR"   ,"N",17,2} ,;
+               {"I2_HIST"    ,"C",40,0} ,;
+               {"I2_CCD"     ,"C",9, 0} ,;
+               {"I2_CCC"     ,"C",9, 0} ,;
+               {"I2_PROCESS" ,"C",3, 0} ,;
+               {"I2_CODINV"  ,"C",6, 2} ,;
+               {"I2_PRODUTO" ,"C",7 ,0},;
+               {"I2_DTVENC" ,"D",8 ,0}}
+
+_cNome := CriaTrab(_aCampos,.t.)
+dbUseArea(.T.,, _cNome,"CUSTOS",.F.,.F.)
+DBSELECTAREA('SI2')
+DBSETORDER(3)
+SET SOFTSEEK ON
+DbSeek(xFilial()+dtos(mv_par01))
+DO WHILE SI2->I2_DATA>=MV_PAR01 .AND. SI2->I2_DATA<=MV_PAR02
+   @ 10, 5 Say "   A G U A R D E  - LENDO REGISTRO SC6-> "+STR(RECNO())
+
+   IF I2_CTRL#' '
+      DBSKIP()
+      LOOP
+   ENDIF
+
+   //   IF I2_CTRL=='C' .AND. MV_PAR03=='C'
+   //     IF I2_FECHCUS#DATE()
+   //         DBSKIP()
+   //         LOOP
+   //      Endif
+   //   ENDIF
+
+   MDATA   :=I2_DATA
+   MDC     :=I2_DC
+   MNUM    :=I2_NUM
+   MLINHA  :=I2_LINHA
+   MDEBITO :=I2_DEBITO
+   MCREDITO:=I2_CREDITO
+   MVALOR  :=I2_VALOR
+   MHIST   :=I2_HIST
+   MCCD    :=I2_CCD
+   MCCC    :=I2_CCC
+   MPROCESS:=I2_PROCESS
+   MCODINV :=I2_CODINV
+   MPRODUTO:=I2_PRODUTO
+
+   //ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+   //³  GRAVA ARQUIVO TEMPORARIO                                    ³
+   //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   GRAVA_CONT()
+
+   DBSELECTAREA("SI2")
+
+     Reclock("SI2",.F.)
+        REPLACE I2_CTRL WITH mv_par03
+        REPLACE i2_fechcus with date()
+     SI2->(MSunlock())
+     DBSKIP()
+
+   ENDDO
+   DBSELECTAREA("CUSTOS")
+   COPY TO CUSTOS1.DBF
+
+DBCLOSEAREA()
+
+DbSelectArea("SI2")
+Retindex("SI2")
+
+RETURN
+
+// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==> FUNCTION GRAVA_CONT
+Static FUNCTION GRAVA_CONT()
+DBSELECTAREA("CUSTOS")
+                Reclock("CUSTOS",.t.)
+                REPLACE I2_DATA     WITH  MDATA
+                REPLACE I2_DC       WITH  MDC
+                REPLACE I2_NUM      WITH  MNUM
+                REPLACE I2_LINHA    WITH  MLINHA
+                REPLACE I2_DEBITO   WITH  MDEBITO
+                REPLACE I2_CREDITO  WITH  MCREDITO
+                REPLACE I2_VALOR    WITH  MVALOR
+                REPLACE I2_HIST     WITH  MHIST
+                REPLACE I2_CCD      WITH  MCCD
+                REPLACE I2_CCC      WITH  MCCC
+                REPLACE I2_PROCESS  WITH  MPROCESS
+                REPLACE I2_CODINV   WITH  MCODINV
+                REPLACE I2_PRODUTO  WITH  MPRODUTO
+                REPLACE I2_DTVENC   WITH  DATE()
+                CUSTOS->(msUnlock())
+RETURN
+
+

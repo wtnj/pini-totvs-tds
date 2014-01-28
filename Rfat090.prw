@@ -1,0 +1,249 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+Danilo C S Pala 20070831: se o c5_data1 < ddatabase entao c5_data1 = ddatabase 
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: LIBSZV    ³Autor: DESCONHECIDO           ³ Data:   04/02/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Efetua liberacao de pedidos, conforme arquivo SZV.         ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Release  : Roger Cangianeli - conversao/padronizacao para Windows.    ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfat090()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("_CALIAS,_NINDEX,_NREG,_CFILTRO,_CARQTRB,NINDEX")
+SetPrvt("_NQTDLIB,_CCHAVE,_NSEQ,")
+
+aArea := GetArea()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ mv_par01 Pedido de          ?                                 ³
+//³ mv_par02 Pedido ate         ?                                 ³
+//³ mv_par03 Cliente de         ?                                 ³
+//³ mv_par04 Cliente ate        ?                                 ³
+//³ mv_par05 Ano Mes Faturamento?                                 ³
+//³ mv_par06 Vendedor de        ?                                 ³
+//³ mv_par07 Vendedor ate       ?                                 ³
+//³ mv_par08 Cond. Pag.         ?                                 ³
+//³ mv_par09 Cond. Pag.         ?                                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If !Pergunte("LIBSZV",.T.)
+	return
+endif
+
+Processa({|| RF090Proc()})
+
+RestArea(aArea)
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³RF090Proc ºAutor  ³Microsiga           º Data ³  04/09/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³                                                            º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function RF090Proc()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³Verifica a quantidade a ser liberada         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+DbSelectArea("SZV")
+DbSetOrder(1)
+
+_cFiltro := "ZV_FILIAL == '"+xFilial("SZV")+"'"
+_cFiltro += " .and. Empty(ZV_NFISCAL)"
+_cFiltro += " .and. ZV_SITUAC == 'AA'"
+_cFiltro += " .and. ZV_NUMAV >= '"+MV_PAR01+"'"
+_cFiltro += " .and. ZV_NUMAV <= '"+MV_PAR02+"'"
+_cFiltro += " .and. ZV_CODCLI >= '"+MV_PAR03+"'"
+_cFiltro += " .and. ZV_CODCLI <= '"+MV_PAR04+"'"
+_cFiltro += " .and. ZV_VEND >= '"+MV_PAR06+"'"
+_cFiltro += " .and. ZV_VEND <= '"+MV_PAR07+"'"
+
+_cArqTrb := CriaTrab(nil,.f.)
+IndRegua("SZV",_cArqTrb,IndexKey(),,_cFiltro,"Selecionando Registro")
+//nIndex   := RetIndex("SZV")
+DbGoTop()
+
+_nQtdLib := 0
+dbGoTop()
+
+ProcRegua(RecCount())
+
+While !Eof()
+	// GILBERTO - 10/05/2001
+	IF MONTH(ZV_ANOMES) <>  MONTH(MV_PAR05)
+		DbSelectArea("SZV")
+		DbSkip()
+		Loop
+	ENDIF
+	IF YEAR(ZV_ANOMES) <>  YEAR(MV_PAR05)
+		DbSelectArea("SZV")
+		DbSkip()
+		Loop
+	ENDIF
+	
+	// ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	// ³ Quantidade Liberada    ³
+	// ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	_nQtdLib := 0
+	DbSelectArea("SC5")
+	DbSetOrder(1)
+	DbSeek(xFilial("SC5")+SZV->ZV_NUMAV)
+	
+	DbSelectArea("SZV")
+	_cChave  := SZV->ZV_NUMAV
+	While !eof() .and. SZV->ZV_NUMAV == _cChave
+		// GILBERTO - 10/05/2001
+		IF MONTH(ZV_ANOMES) <>  MONTH(MV_PAR05)
+			DbSelectArea("SZV")
+			DbSkip()
+			Loop
+		ENDIF
+		IF YEAR(ZV_ANOMES) <>  YEAR(MV_PAR05)
+			DbSelectArea("SZV")
+			DbSkip()
+			Loop
+		ENDIF
+		
+		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+		//³   Somar a Quantidade Liberada por item da Av e Gerar no SC6,  SC9 a liberacao        ³
+		//³   correspondente                                                                     ³
+		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+		IncProc("Processando AV "+Alltrim(SZV->ZV_NUMAV))
+		
+		dbSelectArea("SC6")
+		DbSetOrder(1)
+		dbSeek(xFilial("SC6")+SZV->ZV_NUMAV)
+		If SC5->C5_TPTRANS $ '11/12/13/14'
+			If "AA" $ (SC6->C6_SITUAC)
+				If SC5->C5_CONDPAG >= MV_PAR08 .AND. SC5->C5_CONDPAG <= MV_PAR09
+					_nQtdLib++
+				EndIf
+			Endif
+		Endif
+		dbSelectArea("SZV")
+		dbSkip()
+	End
+	if _nQtdLib <> 0
+		_Gerac9()
+		_nQtdLib := 0
+	Endif
+	dbSelectArea("SZV")
+End
+
+RetIndex("SZV")
+
+fErase(_cArqTrb+OrdBagExt())
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³_GeraSC9()ºAutor  ³Microsiga           º Data ³  04/09/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³                                                            º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function _Gerac9()
+
+_nSeq:=0
+
+// Atualiza o Empenho
+
+dbSelectArea("SC6")
+// Utilizado para que a soma quantidade entregue + quantidade empenhada
+// nao seja > que a quantidade entregue
+// Adicionado controle para que qtd.entregue nao fique negativa.- RC
+RecLock("SC6",.F.)
+SC6->C6_QTDEMP := _nQtdLib
+SC6->C6_QTDENT :=  IIf( ( _nQtdLib * -1 ) > 0, _nQtdLib * -1, 0 )
+MsUnlock()
+
+
+
+dbSelectArea("SC9")
+dbSetOrder(1)
+If dbSeek( xFilial("SC9")+SC6->C6_NUM+SC6->C6_ITEM, .F.)
+	//  NAO HA NECESSIDADE DE LOOP, O ARQUIVO E FEITO ITEM A ITEM. - RC
+	If Empty(SC9->C9_NFISCAL)
+		RecLock("SC9",.F.)
+		dbDelete()
+		msUnlock()
+	EndIf
+	
+	// ÚÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	// Ã´Reposiciona para verificar o ultimo item        ³
+	// ÀÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	dbSeek( xFilial("SC9")+SC6->C6_NUM, .T.)
+	While !Eof() .And. SC9->C9_FILIAL+SC9->C9_PEDIDO == xFilial("SC9")+SC6->C6_NUM
+		If SC9->C9_PRODUTO == SC6->C6_PRODUTO
+			_nSeq := Val(C9_SEQUEN)
+		EndIf
+		dbSkip()
+	End
+	_nSeq := _nSeq + 1
+Else
+	_nSeq := 1
+Endif        
+
+DbSelectArea("SC5") //20070831
+if SC5->C5_DATA1 < DDATABASE 
+	RecLock("SC5",.F.)
+		REPLACE C5_DATA1 WITH DDATABASE
+	SC5->(MsUnlock())    //ate aqui 20070831
+endif
+
+dbSelectArea("SC9")
+If !"DB" $ SC5->C5_TIPO
+	dbSelectArea("SA1")
+	dbSetOrder(1)
+	dbSeek(xFilial("SA1")+SC6->C6_CLI+SC6->C6_LOJA)
+EndIf
+
+// Atualiza os campos necessarios de SC9
+DbSelectArea("SC9")
+
+Begin Transaction
+
+RecLock("SC9",.T.)
+SC9->C9_PEDIDO  := SC6->C6_NUM
+SC9->C9_QTDLIB  := _nQtdLib
+SC9->C9_SEQUEN  := Strzero(_nSeq,2)
+SC9->C9_FILIAL  := xFilial("SC9")
+SC9->C9_CLIENTE := SC6->C6_CLI
+SC9->C9_LOJA    := SC6->C6_LOJA
+SC9->C9_PRODUTO := SC6->C6_PRODUTO
+SC9->C9_PRCVEN  := SC6->C6_PRCVEN
+SC9->C9_ITEM    := SC6->C6_ITEM
+SC9->C9_DATALIB := dDataBase
+SC9->C9_NUMLOTE := SC6->C6_NUMLOTE
+SC9->C9_LOTECTL := SC6->C6_LOTECTL
+SC9->C9_NUMSERI := SC6->C6_NUMSERI
+SC9->C9_DATA    := SC6->C6_DATA
+SC9->C9_LOTEFAT := SC6->C6_LOTEFAT
+SC9->C9_LOCAL   := SC6->C6_LOCAL
+SC9->C9_DATENT  := dDataBase
+msUnLock()
+
+End Transaction
+
+Return

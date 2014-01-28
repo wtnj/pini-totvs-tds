@@ -1,0 +1,465 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/ Alterador por Danilo C S Pala , 20040830                                                
+20091201 Danilo C S Pala: incluir E3_COMIS, E3_PORC -solicitado por Cidinha
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: Rfat042   ³Autor: Rosane Rodrigues       ³ Data:   22/11/99 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Relatorio de comissoes a pagar - Publicidade               ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Alterado em 17/11/99-criado flag p/estorno e3_status(at‚ nova versao) ³ ±±
+±±³Alterado em 09/05/00- Ordem alfabetica de Clientes, criado tratamento ³ ±±
+±±³via arquivo temporario para indexacao.             - Roger Cangianeli ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfat042()
+
+SetPrvt("TITULO,CDESC1,CTITULO,CCABEC1,CCABEC2,XCABEC1")
+SetPrvt("XCABEC2,NCARACTER,ARETURN,SERNF,CPROGRAMA,CPERG")
+SetPrvt("NLASTKEY,M_PAG,LCONTINUA,WNREL,NLIN,CBTXT")
+SetPrvt("CBCONT,NORDEM,ALFA,Z,M,TAMANHO")
+SetPrvt("CDESC2,CDESC3,CSTRING,_ACAMPOS,_CARQTMP,_CVEND")
+SetPrvt("_DEMISS,_DVENCTO,_DBAIXA,_CNOMCLI,LENTRADA,_CEMISSN")
+SetPrvt("_CNOMEVEND,_CREGIAO,_CEQUIPE,_NVALTOT,_NTOTBASE,_CPREF")
+SetPrvt("_CNUM,_CPARCELA,_CCODCLI,_CLOJA,_NBASE,_CPEDNUM")
+SetPrvt("_NVALBASE,_CTIPO,_CSITUAC,MCALCCOM,MCALCFGTS,MCALCDSR")
+SetPrvt("MTOTALCOM, nDivcom")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Da Regiao                            ³
+//³ mv_par02             // At‚ Regiao                           ³
+//³ mv_par03             // Data de Pagamento                    ³
+//³ mv_par04             // Mensal/Semestral                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Titulo  :=PADC("COMISSOES ",74)
+cDesc1  :=PADC("Este programa emite relatorio de Comissoes a pagar - Publicidade",74)
+cTitulo := ' **** RELATORIO DE COMISSOES **** '
+// Regua para impressao dos sub-titulos
+//                 10        20        30        40        50        60        70         80        90        100      110       120     130         140      150       160
+//          123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 12456789'
+cCabec1 := 'NUMAUT    CODIGO    LJ   NOME CLIENTE                                 DUPL      DATA      DATA        DATA             VALOR         PORC            COMIS OBSERVACAO' //20091201
+cCabec2 := '          CLIENTE                                                               EMISSAO   VENCTO      PAGTO            BASE                    '
+xCabec1 := 'DEMONSTRATIVO DE VENDAS - RESUMO'
+xCabec2 := ' '
+nCaracter := 18
+
+aReturn := { "Especial", 1,"Administracao", 1, 2, 1,"",1 }
+
+SERNF     := 'UNI'
+cPrograma := "Rfat042"
+cPerg     := "FAT009"
+nLastKey  := 0
+M_PAG     := 1
+lContinua := .T.
+wnrel     := "Rfat042"
+nLin      := 0
+CbTxt     := ""
+CbCont    := ""
+nOrdem    := 0
+Alfa      := 0
+Z         := 0
+M         := 0
+tamanho   := "G"
+cDesc2    := ""
+cDesc3    := ""
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas.                                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Pergunte(cPerg,.T.)               // Pergunta no SX1
+
+cString := "SE3"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao SETPRINT                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+wnrel  := SetPrint(cString,wnrel,cPerg,Titulo,cDesc1,cDesc2,cDesc3,.T.)
+
+If nLastKey == 27
+	Return
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica Posicao do Formulario na Impressora                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+	Return
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  Prepara Arquivo para Impressao                              ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+_aCampos := {}
+aAdd( _aCampos, { "CPREF"   , "C", 03, 0 } )
+aAdd( _aCampos, { "CNUM"    , "C", 06, 0 } )
+aAdd( _aCampos, { "CPARCELA", "C", 03, 0 } )
+aAdd( _aCampos, { "CCODCLI" , "C", 06, 0 } )
+aAdd( _aCampos, { "CLOJA"   , "C", 02, 0 } )
+aAdd( _aCampos, { "NBASE"   , "N", 12, 2 } )
+aAdd( _aCampos, { "CPEDNUM" , "C", 06, 0 } )
+aAdd( _aCampos, { "NVALBASE", "N", 12, 2 } )
+aAdd( _aCampos, { "CTIPO"   , "C", 01, 0 } )
+aAdd( _aCampos, { "CVEND"   , "C", 06, 0 } )
+aAdd( _aCampos, { "CSITUAC" , "C", 01, 0 } )
+aAdd( _aCampos, { "CEMISSN" , "C", 01, 0 } )
+aAdd( _aCampos, { "CNOMEVEND","C", 30, 0 } )
+aAdd( _aCampos, { "CREGIAO" , "C", 03, 0 } )
+aAdd( _aCampos, { "CEQUIPE" , "C", 15, 0 } )
+aAdd( _aCampos, { "DEMISS"  , "D", 08, 0 } )
+aAdd( _aCampos, { "DVENCTO" , "D", 08, 0 } )
+aAdd( _aCampos, { "DBAIXA"  , "D", 08, 0 } )
+aAdd( _aCampos, { "CNOMCLI" , "C", 40, 0 } )
+aAdd( _aCampos, { "NCOMIS"  , "N", 12, 2 } ) //20091201
+aAdd( _aCampos, { "NPORC"   , "N", 05, 2 } ) //20091201
+
+If Select("TRB") <> 0
+	DbSelectArea("TRB")
+	DbCloseArea()
+EndIf
+
+_cArqTmp := CriaTrab(_aCampos, .T.)
+dbUseArea( .T.,, _cArqTmp, "TRB", .F., .F.)
+MsAguarde({|| IndRegua("TRB",_cArqTmp, "CREGIAO+CVEND+CNOMCLI",,,"Indexando Arq.Trabalho...")},"Aguarde","Gerando Indice Temporario (TRB)...")
+
+Processa({|| R042Proc()})
+
+Return
+
+Static Function R042Proc()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  Seleciona dados a gravar no Arquivo                         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea("SE3")
+dbSetOrder(4)
+dbSeek(xFilial("SE3")+DTOS(MV_PAR03)+MV_PAR01,.T.)
+ProcRegua(RecCount())
+While SE3->E3_FILIAL == xFilial("SE3") .and. DTOS(SE3->E3_DATA)==DTOS(MV_PAR03) .AND. !EOF()
+	
+	If SE3->E3_REGIAO < MV_PAR01 .OR. SE3->E3_REGIAO > MV_PAR02
+		DBSKIP()
+		LOOP
+	Endif
+	
+	dbSelectArea("SA3")
+	If dbSeek(xFilial("SA3")+SE3->E3_VEND, .F.)
+		If SA3->A3_EMISSN=='N' .OR. SA3->A3_TIPOVEN <> 'CT'
+			dbSelectArea("SE3")
+			dbskip()
+			Loop
+		Endif
+	Endif
+	
+	_cVend  := SE3->E3_VEND
+	dbSelectArea("SE3")
+	While _cVend == SE3->E3_VEND
+		If SE3->E3_PER #MV_PAR04
+			dbSkip()
+			Loop
+		Endif
+		
+		IncProc("Lendo Nota: "+SE3->E3_PREFIXO+SE3->E3_NUM)
+		
+		If Val(SE3->E3_SITUAC) == 0
+			dbSelectArea("SE1")
+			If dbSeek( xFilial("SE1")+SE3->E3_PREFIXO+SE3->E3_NUM+SE3->E3_PARCELA, .F. )
+				_dEmiss   := SE1->E1_EMISSAO
+				_dVencto  := SE1->E1_VENCTO
+				_dBaixa   := SE1->E1_BAIXA  
+				if !EMPTY(SE1->E1_VEND1) .AND. !EMPTY(SE1->E1_VEND2) //20040827 Dividir comissao qdo 2 vendedores
+					nDivcom := 2
+				else
+					nDivCom := 1
+				end if // ateh aki20040827
+			Endif
+		Else
+			_dEmiss := ''
+			_dVencto:= ''
+			_dBaixa := ''       
+			nDivCom := 1
+		Endif
+		
+		dbSelectArea("SA1")
+		If dbSeek(xFilial("SA1")+SE3->E3_CODCLI+SE3->E3_LOJA, .F.)
+			_cNomCli := SA1->A1_NOME
+		Else
+			_cNomCli := ""
+		Endif
+		
+		RecLock("TRB", .T.)
+		TRB->CPREF      := SE3->E3_PREFIXO
+		TRB->CNUM       := SE3->E3_NUM
+		TRB->CPARCELA   := SE3->E3_PARCELA
+		TRB->CCODCLI    := SE3->E3_CODCLI
+		TRB->CLOJA      := SE3->E3_LOJA
+		TRB->NBASE      := (SE3->E3_BASE/ nDivCom) //20040830
+		TRB->CPEDNUM    := SE3->E3_PEDIDO
+		TRB->NVALBASE   := (SE3->E3_BASE / nDivCom) //20040827
+		TRB->CTIPO      := SE3->E3_TIPO
+		TRB->CVEND      := SE3->E3_VEND
+		TRB->CSITUAC    := SE3->E3_SITUAC
+		TRB->CEMISSN    := SA3->A3_EMISSN
+		TRB->CNOMEVEND  := SA3->A3_NOME
+		TRB->CREGIAO    := SA3->A3_REGIAO
+		TRB->CEQUIPE    := SA3->A3_EQUIPE
+		TRB->DEMISS     := SE1->E1_EMISSAO
+		TRB->DVENCTO    := SE1->E1_VENCTO
+		TRB->DBAIXA     := SE1->E1_BAIXA
+		TRB->CVEND      := SE3->E3_VEND
+		TRB->CNOMCLI    := SA1->A1_NOME
+		TRB->NCOMIS     := SE3->E3_COMIS //20091201
+		TRB->NPORC      := SE3->E3_PORC  //20091201
+		msUnlock()
+		
+		dbSelectArea("SE3")
+		dbSkip()
+	End
+End
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  Prepara regua de impressÆo                                  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea("TRB")
+dbGoTop()
+ProcRegua(RecCount())
+lentrada := "T"
+While !EOF()
+	
+	If lentrada == "T" .and. TRB->CEMISSN == "P"
+		nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+		nLin := nLin + 2
+		@ nLin,001 PSAY  'REPRES.....:  ' + TRB->CVEND +' ' +TRB->CNOMEVEND +' '+'REGIAO: '+TRB->CREGIAO+' ' +'EQUIPE: ' + TRB->CEQUIPE
+		nLin := nLin + 2
+	EndIf
+	
+	lentrada := "F"
+	IncProc("Imprimindo: "+TRB->CNUM+TRB->CPREF)
+	
+	_cVend     := TRB->CVEND
+	_cEmissn   := TRB->CEMISSN
+	_cNomeVend := TRB->CNOMEVEND
+	_cRegiao   := TRB->CREGIAO
+	_cEquipe   := TRB->CEQUIPE
+	_nValTot   := 0
+	_nTotBase  := 0
+	
+	While _cVend == TRB->CVEND .and. !EOF()
+		_cPref      := TRB->CPREF
+		_cNum       := TRB->CNUM
+		_cParcela   := TRB->CPARCELA
+		_cCodCli    := TRB->CCODCLI
+		_cLoja      := TRB->CLOJA
+		_nBase      := TRB->NBASE
+		_cPedNum    := TRB->CPEDNUM
+		_nValBase   := TRB->NVALBASE
+		_cTipo      := TRB->CTIPO
+		_cVend      := TRB->CVEND
+		_cSituac    := TRB->CSITUAC
+		_dEmiss     := TRB->DEMISS
+		_dVencto    := TRB->DVENCTO
+		_dBaixa     := TRB->DBAIXA
+		_cNomCli    := TRB->CNOMCLI
+		
+		_cEmissn    := TRB->CEMISSN
+		If _cEmissn == 'P'
+			IMPPLAN()
+		ElseIf _cEmissn == 'R'
+			IMPRECI()
+		EndIf
+		
+		dbSelectArea("TRB")
+		dbSkip()
+		
+	Enddo
+	
+	If _cEmissn == "P"
+		If nLin >= 53
+			Roda(0,"",tamanho)
+			nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+			nLin := nLin + 2
+			//			@ nLin,001 PSAY  'REPRES.....:  ' + TRB->CVEND +' ' +TRB->CNOMEVEND +' '+'REGIAO: '+TRB->CREGIAO+' ' +'EQUIPE: ' + TRB->CEQUIPE
+			@ nLin,001 PSAY  'REPRES.....:  ' + _CVEND +' ' + _CNOMEVEND +' '+'REGIAO: '+ _CREGIAO+' ' +'EQUIPE: ' + _CEQUIPE
+			nLin := nLin + 2
+		EndIf
+		nLin := nLin + 1
+		@ nLin,00  PSAY 'TOTAL===========> '
+		@ nLin,114 PSAY STR(_nTotBase,10,2)
+		nLin := 60
+		
+	ElseIf _cEmissn == 'R'
+		If VAL(TRB->CVEND) #10
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			
+			nLin := nLin + 1
+			@ nLin,05 PSAY ' TOTAL DA PRODUCAO : '+STR(_nTotBase,10,2)
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			nLin := nLin + 1
+			@ nLin,05 PSAY ' TOTAL DE COMISSOES: '+STR(MVALCOM,10,2)
+			nLin := nLin + 2
+			
+			@ nLin + 05,05 PSAY '                      =========='
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			
+		Else
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			
+			MCALCCOM    := _nTotBase * .7915   / 100
+			MCALCFGTS   := _nTotBase * .074084 / 100
+			MCALCDSR    := _nTotBase * .134555 / 100
+			MTOTALCOM   := MCALCCOM  + MCALCFGTS+MCALCDSR
+			nLin := nLin + 1
+			@ nLin,10 PSAY 'TOTAL DA PRODUCAO......: ' + STR(_nTotBase,10,2)
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			
+			@ nLin,10 PSAY 'VALOR DE COMISSOES ....: ' + STR(MCALCCOM,10,2)
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			@ nLin,10 PSAY 'VALOR FGTS ............: ' + STR(MCALCFGTS,10,2)
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			@ nLin,10 PSAY 'VALOR DSR  ............: ' + STR(MCALCDSR,10,2)
+			nLin := nLin + 2
+			
+			If nLin >= 55
+				Roda(0,"",tamanho)
+				nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+				nLin := nLin + 2
+			EndIf
+			nLin := nLin + 1
+			@ nLin,10 PSAY 'TOTAL DE COMISSOES.....: ' + STR(MTOTALCOM,10,2)
+			nLin := nLin + 2
+			
+		EndIf
+		
+	EndIf
+	
+End
+
+Roda(0,"",tamanho)
+
+dbSelectArea("TRB")
+dbCloseArea()
+fErase( _cArqTmp + ".DBF" )
+fErase( _cArqTmp + OrdBagExt() )
+
+SET DEVICE TO SCREEN
+IF aRETURN[5] == 1
+	Set Printer to
+	dbcommitAll()
+	ourspool(WNREL)
+ENDIF
+
+MS_FLUSH()
+
+Static FUNCTION IMPPLAN()
+
+If nLin >= 55
+	Roda(0,"",tamanho)
+	nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+	nLin := nLin + 2
+	@ nLin,001 PSAY  'REPRES.....:  ' + TRB->CVEND +' ' +TRB->CNOMEVEND +' '+'REGIAO: '+TRB->CREGIAO+' ' +'EQUIPE: ' + TRB->CEQUIPE
+	nLin := nLin + 2
+EndIf
+
+@ nLin,001 PSAY  TRB->CPEDNUM    //_cPedNum
+@ nLin,010 PSAY  TRB->CCODCLI    //_cCodCli
+@ nLin,020 PSAY  TRB->CLOJA      //_cLoja
+@ nLin,025 PSAY  TRB->CNOMCLI    //_cNomCli
+@ nLin,070 PSAY  TRB->CNUM       //_cNum
+@ nLin,077 PSAY  TRB->CPARCELA   //_cParcela
+@ nLin,080 PSAY  TRB->DEMISS     //_dEmiss
+@ nLin,090 PSAY  TRB->DVENCTO    //_dVencto
+@ nLin,102 PSAY  TRB->DBAIXA     //_dBaixa
+@ nLin,114 PSAY  STR(TRB->NVALBASE,10,2)   //STR(_nValBase,10,2)
+@ nLin,132 PSAY  TRANSFORM(TRB->NPORC, "@E 999.99") //20091201
+@ nLin,140 PSAY  TRANSFORM(TRB->NCOMIS, "@E 999,999,999.99") //20091201
+
+DO CASE
+	CASE TRB->CSITUAC =='1'
+		@ nLin,155 PSAY 'FATURAMENTO CANCELADO'
+	CASE TRB->CSITUAC=='2'
+		@ nLin,155 PSAY 'ESTORNO DE VENDEDOR'
+	CASE TRB->CSITUAC=='3'
+		@ nLin,155 PSAY 'ESTORNO DE PRODUTO'
+	CASE TRB->CSITUAC=='4'
+		@ nLin,155 PSAY 'ESTORNO DE CLIENTE'
+	CASE TRB->CSITUAC=='5'
+		@ nLin,155 PSAY 'COMISSAO PGA EM DUPLICIDADE'
+	CASE TRB->CSITUAC=='6'
+		@ nLin,155 PSAY 'ESTORNO PARA ACERTO DE VALOR'
+ENDCASE
+
+IF VAL(TRB->CSITUAC) > 0
+	_nTotBase := _nTotBase - TRB->NVALBASE
+ELSE
+	_nTotBase := _nTotBase + TRB->NVALBASE
+ENDIF
+
+nLin := nLin + 1
+If nLin >= 55
+	Roda(0,"",tamanho)
+	nLin := CABEC(cTitulo,cCabec1,cCabec2,cPrograma,tamanho)
+	nLin := nLin + 2
+EndIf
+
+RETURN
+
+// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==> FUNCTION IMPRECI
+Static FUNCTION IMPRECI()
+IF nLin >= 55
+	nLin := CABEC(cTitulo,xCabec1,xCabec2,cPrograma,tamanho)
+	nLin := nLin + 2
+	@ nLin,001 PSAY  'REPRES.....:  ' + TRB->CVEND +' ' + TRB->CNOMEVEND +' '+'REGIAO: '+ TRB->CREGIAO +' ' +'EQUIPE: ' + TRB->CEQUIPE
+	nLin:=nLin+2
+ENDIF
+
+IF VAL(TRB->CSITUAC) > 0
+	_nTotBase := _nTotBase - TRB->NVALBASE
+ELSE
+	_nTotBase := _nTotBase + TRB->NVALBASE
+ENDIF
+
+Return

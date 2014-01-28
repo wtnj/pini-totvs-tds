@@ -1,0 +1,71 @@
+#include "rwmake.ch"     
+#include "protheus.ch"
+
+/* 
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³Ptemp2    ºAutor  ³Danilo C S Pala     º Data ³  20090105   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³ 		  º±±
+±±º			 |	  													      º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ PINI                                                       º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+
+User Function PTEMP2
+//if no rateio (d1_rateio) == "1"
+//u_pcom001('00042P', 'A  ', '001668','01', 5000.01)
+
+
+u_AjusteVencto('SEN', '002887   ', '437850', '01')      
+
+/*Local prefixo := "1  "
+Local numero := "035065   "
+Local cliente := "331958"
+Local loja:= "01"
+Local parcela :=" "             
+Local historico :="SMARTPAG"
+Local juros:=0             
+Local desconto := 0
+Local mBanco := "CX1"
+Local mAgencia := space(5)
+Local mConta := space(10)
+Local aVetor := {}
+lMsErroAuto := .F.
+    
+
+	dbSelectArea("SE1")
+	dbSetOrder(2)
+	//If dbSeek(xFilial("SE1")+SF2->F2_CLIENTE+SF2->F2_LOJA+SF2->F2_SERIE+SF2->F2_DOC,.T.)
+	If dbSeek(xFilial("SE1")+cliente+loja+prefixo+numero,.T.)
+		aVetor := {{"E1_PREFIXO"	 ,prefixo             ,Nil},;
+				{"E1_NUM"		 ,numero           ,Nil},;
+				{"E1_PARCELA"	 ,parcela               ,Nil},;
+				{"E1_TIPO"	    ,"NF "             ,Nil},;
+				{"AUTMOTBX"	    ,"NOR"             ,Nil},;
+				{"AUTDTBAIXA"	 ,dDataBase         ,Nil},;
+				{"AUTDTCREDITO" ,dDataBase         ,Nil},;
+				{"AUTHIST"	    ,historico,Nil},; 
+				{"AUTBANCO"	    ,mBanco,Nil},;
+				{"AUTAGENCIA"	,mAgencia,Nil},;
+				{"AUTCONTA"	    ,mConta,Nil},;
+				{"AUTDESCONT"	,desconto    ,Nil },;
+				{"AUTJUROS"	    ,juros    ,Nil },;
+				{"AUTVALREC"	,SE1->E1_SALDO ,Nil }}
+
+	MSExecAuto({|x,y| fina070(x,y)},aVetor,3) //Inclusao
+
+	If lMsErroAuto
+		MOSTRAERRO()
+	Endif
+Endif
+
+      */
+
+
+return

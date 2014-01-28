@@ -1,0 +1,487 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Programa  ³    CARTA ³ Autor ³  Luiz Carlos Vieira   ³ Data ³ 07/07/97 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Emissao de carta de correcao                               ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Especifico para clientes Microsiga                         ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Release  ³ Adaptacoes para empresa Editora PINI .       - 06/02/99    ³±±
+±±³          ³ Retirada do CGC impresso - Roger Cangianeli. - 06/03/99    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfis001()        // incluido pelo assistente de conversao do AP5 IDE em 26/02/02
+
+SetPrvt("CBTXT,CDESC1,CDESC2,CDESC3,CSTRING,IMPRIME")
+SetPrvt("CPICT,AORD,CTEXTO,J,TAMANHO,LIMITE")
+SetPrvt("NOMEPROG,MV_TABPR,NTIPO,NLASTKEY,AIND,TITULO")
+SetPrvt("NLIN,LI,CPERG,NPAG,LCONTINUA,I")
+SetPrvt("ACOL1,ACOL2,ACOL3,AMESES,NDIA,NANO")
+SetPrvt("CMES,CBCONT,CONTFL,M_PAG,ARETURN,WNREL")
+SetPrvt("ADRIVER,AMARCA1,AMARCA2,AMARCA3,ACOD,NPERG")
+SetPrvt("CAUX,XCOD,CAUX1,CAUX2,CAUX3,XDESC")
+SetPrvt("CCOD,CNOME,CEND,CBAIRRO,CMUN,CCEP")
+SetPrvt("CEST,NQTDVIAS,NVIA,")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Define Variaveis                                             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Pergunte("CARTA",.T.)
+
+CbTxt        := ""
+cDesc1       := "Este programa tem como objetivo imprimir a carta de corre‡„o"
+cDesc2       := "da "+AllTrim(SM0->M0_NOMECOM)
+cDesc3       := ""
+cString      := "SF2"
+imprime      := .T.
+cPict        := ""
+aOrd         := {}
+cTexto       := ""
+j            := 0
+tamanho      := "P"
+limite       := 80
+nomeprog     := "CARTA"
+mv_tabpr     := ""
+nTipo        := 15
+nLastKey     := 0
+aInd         := {}
+titulo       := "Emiss„o de carta de corre‡„o"
+nlin         := 0
+li           := 0
+cPerg        := "CARTA"
+nPag         := 1
+lContinua    := .T.
+i            := 1
+aCol1        := {"Razao Social","Endereco/Faturamento","Municipio","Estado","No. Insc. CNPJ/CPF",;
+				"No. Insc. Est.","Natureza de Operacao","Codigo Fiscal Operacao","Via de Transporte",;
+				"Data de Emissao","Data de Saida","Unidade (produto)"}
+aCol2        := {"Quant. (produto)","Descr. dos Prod./Servicos","Preco Unitario","Valor do Produto",;
+				"Class. Fiscal","Aliquota do IPI","Valor do IPI","Base de Calc. IPI","Valor Total Nota",;
+				"Aliquota do ICMS","Valor do ICMS","Base de Calc. ICMS"}
+aCol3        := {"Nome Transportador","End. Transportador","Termo Isencao IPI","Termo Isencao ICMS",;
+				"Peso-Bruto/Liquid.","Vol-Marcas/Nun/Quant.","Rasuras","Codigo do(s) Produto(s)","Condicoes de Pagamentos",;
+				"Endereco de Cobranca","Data de Vencto da Parcela A","Outras Especif."}
+aMeses       := {"Janeiro","Fevereiro","Marco","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"}
+nDia         := Day(dDataBase)
+nAno         := Year(dDataBase)
+cMes         := aMeses[Month(dDataBase)]
+cbtxt        := Space(10)
+cbcont       := 00
+CONTFL       := 01
+m_pag        := 1
+imprime      := .T.
+
+aReturn      := { "Zebrado", 1,"Administra‡„o", 1, 2, 1, "",1}
+wnrel        := "CARTA"
+wnrel        := SetPrint(cString,wnrel,cPerg,titulo,cDesc1,cDesc2,cDesc3,.F.)
+
+If nLastKey == 27
+	Return
+Endif
+
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+	Return
+Endif
+
+Pergunte(cPerg,.f.)
+
+//aDriver      := ReadDriver()
+
+lEnd         := .f.
+
+IF mv_par04 == 1
+	Processa({|lEnd| CartaSai(@lEnd)})// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==> 	   RptStatus({|| Execute(CartaSai)})
+Else
+	Processa({|lEnd| CartaEnt(@lEnd)})// Substituido pelo assistente de conversao do AP5 IDE em 26/02/02 ==> 	   RptStatus({|| Execute(CartaEnt)})
+Endif
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Programa  ³ CARTASAI ³ Autor ³  Luiz Carlos Vieira   ³ Data ³ 07/07/97 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Emissao de carta de correcao                               ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Especifico para clientes Microsiga                         ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function CartaSAI()
+
+dbSelectArea("SF2")
+dbSetOrder(1)
+dbSeek(xFilial("SF2")+mv_par01,.T.)
+
+ProcRegua(Val(mv_par02)-Val(mv_par01))
+
+While !Eof() .And. xFilial("SF2")==SF2->F2_FILIAL .And. SF2->F2_DOC <= mv_par02 .And. lContinua .and. !lEnd
+	
+	IF SF2->F2_SERIE #mv_par03
+		dbSkip()
+		Loop
+	Endif
+	
+	IncProc("Nota: "+SF2->F2_SERIE+SF2->F2_DOC)
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Prepara a impressao de acordo com as perguntas...            ³
+	//ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	//³ Monta o array com as marcas nos codigos selecionados atraves ³
+	//³ das perguntas. Um array para cada coluna. Cada coluna com 12 ³
+	//³ codigos no maximo.                                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	aMarca1   := aFill(Array(12),".")
+	aMarca2   := aFill(Array(12),".")
+	aMarca3   := aFill(Array(12),".")
+	
+	aCod  := {}
+	nPerg := 05
+	While nPerg < 22
+		cAux  := "mv_par"+StrZero(nPerg,2)
+		xCod  := &cAux
+		xCod  := Val(xCod)
+		cAux1 := "mv_par"+StrZero(nPerg+1,2)
+		cAux2 := "mv_par"+StrZero(nPerg+2,2)
+		cAux3 := "mv_par"+StrZero(nPerg+3,2)
+		nPerg := nPerg + 4
+		xDesc := &cAux1 + &cAux2 + &cAux3
+		If xCod >= 01 .And. xCod <= 12
+			aMarca1[xCod]   := "X"
+		Elseif xCod >= 13 .And. xCod <= 24
+			aMarca2[xCod-12] := "X"
+		Elseif xCod >= 25 .And. xCod <= 36
+			aMarca3[xCod-24] := "X"
+		Endif
+		xCod := If(xCod==0,"99",STRZERO(xCod,2))
+		aAdd(aCod,{xCod,xDesc})
+	End
+	
+	If SF2->F2_TIPO $"DB"
+		dbSelectArea("SA2")                   // Cadastro de Fornecedores
+		dbSetOrder(1)
+		dbSeek(xFilial()+SF2->F2_CLIENTE+SF2->F2_LOJA)
+		cCod    := SA2->A2_COD + "/" + SA2->A2_LOJA
+		cNome   := SA2->A2_NOME
+		cEnd    := SA2->A2_END
+		cBairro := SA2->A2_BAIRRO
+		cMun    := SA2->A2_MUN
+		cCep    := SA2->A2_CEP
+		cEst    := SA2->A2_EST
+		
+	Else
+		dbSelectArea("SA1")                // Cadastro de Clientes
+		dbSetOrder(1)
+		dbSeek(xFilial()+SF2->F2_CLIENTE+SF2->F2_LOJA)
+		cCod    := SA1->A1_COD + "/" + SA1->A1_LOJA
+		cNome   := SA1->A1_NOME
+		cEnd    := SA1->A1_END
+		cBairro := SA1->A1_BAIRRO
+		cMun    := SA1->A1_MUN
+		cCep    := SA1->A1_CEP
+		cEst    := SA1->A1_EST
+		
+		// Verifica endereco de cobranca, cfe.solicitacao Sr.Cicero em
+		// 25/10/2000 por Roger Cangianeli.
+		If AllTrim(SA1->A1_ENDCOB) == "S"
+			dbSelectArea("SZ5")
+			dbSetOrder(1)
+			If dbSeek( xFilial("SZ5")+SA1->A1_COD+SA1->A1_LOJA, .F. )
+				cEnd    := SZ5->Z5_END
+				cBairro := SZ5->Z5_BAIRRO
+				cMun    := SZ5->Z5_CIDADE
+				cCep    := SZ5->Z5_CEP
+				cEst    := SZ5->Z5_ESTADO
+			EndIf
+		EndIf
+		
+	EndIf
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Impressao                                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	nQtdVias := IIF(mv_par25 > 0, mv_par25, 3 )
+	@ 00,00 PSAY "." //&(aDriver[1])
+	For nVia := 1 To nQtdVias
+		//@00,70 PSAY OemToAnsi(CHR(015) + " ")
+		@00,00 PSAY OemToAnsi(AllTrim(SM0->M0_CIDCOB)+", "+StrZero(nDia,2)+" de "+cMes+" de "+StrZero(nAno,4))
+		@00,90 PSAY OemToAnsi("Carimbo Padronizado do CNPJ")
+		@01,90 PSAY OemToAnsi("ÚÄ                                Ä¿")         // Local do carimbo
+		@02,00 PSAY OemToAnsi("A")
+		@02,90 PSAY OemToAnsi("³                                  ³")         // Local do carimbo
+		@03,00 PSAY OemToAnsi(cNOME + " - " +  cCod)
+		@04,00 PSAY OemToAnsi(AllTrim(cEND)+If(!Empty(cBAIRRO),"  -  "+cBAIRRO,""))
+		@05,00 PSAY OemToAnsi("CEP: "+cCEP +" - "+AllTrim(cMUN)+" - "+cEST)
+		@06,00 PSAY OemToAnsi("Prezado(s) Senhor(es)")
+		@08,20 PSAY OemToAnsi("Ref.: CONFERENCIA DE DOCUMENTO FISCAL E COMUNICACAO DE INCORRECOES.")
+		// Removida a serie, cfe.solicitacao do Sr.Cicero em 24/08/00 - By RC
+		@09,20 PSAY OemToAnsi("[ ] S/ Nota Fiscal No.        de")  // "Serie     de          "
+		@10,20 PSAY OemToAnsi("[X] N/ Nota Fiscal No. "+SF2->F2_DOC+" de "+DTOC(SF2->F2_EMISSAO)) //" Serie "+SF2->F2_SERIE+" de "+DTOC(SF2->F2_EMISSAO)
+		@10,90 PSAY OemToAnsi("³                                  ³")         // Local do carimbo
+		@11,90 PSAY OemToAnsi("ÀÄ                                ÄÙ")         // Local do carimbo
+		@12,15 PSAY OemToAnsi("Em face do que determina a legislacao fiscal vigente, vimos pela presente comunicar-lhe que a Nota Fiscal em")
+		@13,00 PSAY OemToAnsi("referencia contem a(s) irregularidade(s) que abaixo apontamos, cuja correcao solicitamos seja providenciada imediatamente.")
+		
+		//               0         1         2         3         4         5         6         7         8         9         10        11        12        13
+		//               0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+		@15,00 PSAY OemToAnsi("   ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿       ")
+		@16,00 PSAY OemToAnsi("   ³ Codigo ³      Especificacao      ³      ³ Codigo ³      Especificacao      ³      ³ Codigo ³      Especificacao      ³       ")
+		@17,00 PSAY OemToAnsi("   ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´      ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´      ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´       ")
+		nLin := 18
+		For nLin := 18 To 29
+			@nLin,00 PSAY OemToAnsi("   ³"+PADC(aMarca1[nLin-17],3)+"³"+PADC(StrZero(nLin-17,2),4)+"³"+PADR(aCol1[nLin-17],25)+"³")
+			@nLin,45 PSAY OemToAnsi("³"+PADC(aMarca2[nLin-17],3)+"³"+PADC(StrZero(nLin-5,2),4)+"³"+PADR(aCol2[nLin-17],25)+"³")
+			@nLin,87 PSAY OemToAnsi("³"+PADC(aMarca3[nLin-17],3)+"³"+PADC(StrZero(nLin+7,2),4)+"³"+PADR(aCol3[nLin-17],25)+"³")
+		Next nLin
+		@30,00 PSAY OemToAnsi("   ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ       ")
+		@32,00 PSAY OemToAnsi("ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿")
+		@33,00 PSAY OemToAnsi("³      Codigos com      ³                           Retificacoes a serem consideradas                                       ³")
+		@34,00 PSAY OemToAnsi("³    Irregularidades    ³                                                                                                   ³")
+		@35,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		For nLin := 36 To 40
+			@nLin,00 PSAY OemToAnsi("³"+PADC(If(aCod[nLin-35,1]!="99",aCod[nLin-35,1],"  "),23)+"³"+PADR(aCod[nLin-35,2],99)+"³")
+		Next nLin
+		@41,00 PSAY OemToAnsi("ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ")
+		
+		@44,15 PSAY OemToAnsi("Para evitar-se qualquer sancao fiscal, solicitamos acusarem o recebimento desta, na copia que a acompanha,")
+		@45,00 PSAY OemToAnsi("devendo a via de V. S(as) ficar arquivada juntamente com a Nota Fiscal em questao.")
+		@47,75 PSAY OemToAnsi("Sem outro motivo para o momento, subscrevemo-nos")
+		@48,75 PSAY OemToAnsi("atenciosamente")
+		@49,00 PSAY OemToAnsi("ÚÄÄÄÄÄÄÄÄÄÄÄÄÄ Acusamos recebimento da "+STR(nVia,1)+".a via ÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿")
+		@50,00 PSAY OemToAnsi("³                                                            ³")
+		@51,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		@52,00 PSAY OemToAnsi("³                      (local e data)                        ³")
+		@53,00 PSAY OemToAnsi("³                                                            ³            ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ")
+		@54,00 PSAY OemToAnsi("³                                                            ³            "+PADC(AllTrim(SM0->M0_NOMECOM),40))
+		@55,00 PSAY OemToAnsi("³                                                            ³")
+		@56,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		@57,00 PSAY OemToAnsi("³                  (carimbo e assinatura)                    ³")
+		@58,00 PSAY OemToAnsi("ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ")
+		If nVia == 1
+			@58,75 PSAY OemToAnsi("1a.Via Cliente")
+		Elseif nVia == 2
+			@58,75 PSAY OemToAnsi("2a.Via Cliente")
+		Elseif nVia == 3
+			@58,75 PSAY OemToAnsi("3a.Via Fiscal")
+			//*        Elseif nVia == 4
+			//*           @58,75 PSAY "4a.Via Contas Receber"
+		Endif
+		@ 61,00 PSAY OemToAnsi(Repl("Ä",125))
+		@ 62,00 PSAY OemToAnsi("EDITORA  PINI LTDA. Rua Anhaia 964 e Rua dos Italianos 967 - Bom Retiro - Sao Paulo - SP CEP: 01130-900")
+		@ 63,00 PSAY OemToAnsi("PINI SISTEMAS LTDA. Rua Anhaia 964 Casa 1                  - Bom Retiro - Sao Paulo - SP CEP: 01130-900")
+		Eject
+		//      @00,00 PSAY ""
+	Next nVia
+	
+	dbSelectArea("SF2")
+	dbSkip()
+End
+
+SetPrc(0,0)
+
+Set Device to Screen
+
+If aReturn[5]==1
+	Set Printer to
+	dbCommitAll()
+	OurSpool(wnrel)
+endif
+
+MS_FLUSH()
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Programa  ³ CARTAENT ³ Autor ³  Luiz Carlos Vieira   ³ Data ³ 07/07/97 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Emissao de carta de correcao                               ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Especifico para clientes Microsiga                         ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function CartaENT()
+
+dbSelectArea("SF1")
+dbSetOrder(1)
+//dbSeek(xFilial("SF1")+mv_par01+mv_par03+mv_fornec+mv_loja,.T.)
+dbSeek(xFilial("SF1")+mv_par01,.T.)
+ProcRegua(Val(mv_par02)-Val(mv_par01))
+
+While !Eof() .And. xFilial("SF1")==SF1->F1_FILIAL .And. SF1->F1_DOC <= mv_par02 .And. lContinua
+	
+	IF SF1->F1_SERIE #mv_par03
+		dbSkip()
+		Loop
+	Endif
+	
+	IncProc("Nota: "+SF1->F1_SERIE+SF1->F1_DOC)
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Prepara a impressao de acordo com as perguntas...            ³
+	//ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	//³ Monta o array com as marcas nos codigos selecionados atraves ³
+	//³ das perguntas. Um array para cada coluna. Cada coluna com 12 ³
+	//³ codigos no maximo.                                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	aMarca1   := aFill(Array(12),".")
+	aMarca2   := aFill(Array(12),".")
+	aMarca3   := aFill(Array(12),".")
+	
+	aCod  := {}
+	nPerg := 05
+	While nPerg < 22
+		cAux  := "mv_par"+StrZero(nPerg,2)
+		xCod  := &cAux
+		xCod  := Val(xCod)
+		cAux1 := "mv_par"+StrZero(nPerg+1,2)
+		cAux2 := "mv_par"+StrZero(nPerg+2,2)
+		cAux3 := "mv_par"+StrZero(nPerg+3,2)
+		nPerg := nPerg + 4
+		xDesc := &cAux1 + &cAux2 + &cAux3
+		If xCod >= 01 .And. xCod <= 12
+			aMarca1[xCod]   := "X"
+		Elseif xCod >= 13 .And. xCod <= 24
+			aMarca2[xCod-12] := "X"
+		Elseif xCod >= 25 .And. xCod <= 36
+			aMarca3[xCod-24] := "X"
+		Endif
+		xCod := If(xCod==0,"99",STRZERO(xCod,2))
+		aAdd(aCod,{xCod,xDesc})
+	End
+	
+	cNome   := ""
+	cEnd    := ""
+	cBairro := ""
+	cMun    := ""
+	cCep    := ""
+	If SF1->F1_TIPO $"DB"
+		dbSelectArea("SA1")                // Cadastro de Clientes
+		dbSetOrder(1)
+		dbSeek(xFilial()+SF1->F1_FORNECE+SF1->F1_LOJA)
+		cNome   := SA1->A1_NOME
+		cEnd    := SA1->A1_END
+		cBairro := SA1->A1_BAIRRO
+		cMun    := SA1->A1_MUN
+		cCep    := SA1->A1_CEP
+		cEst    := SA1->A1_EST
+	Else
+		dbSelectArea("SA2")                   // Cadastro de Fornecedores
+		dbSetOrder(1)
+		dbSeek(xFilial()+SF1->F1_FORNECE+SF1->F1_LOJA)
+		cNome   := SA2->A2_NOME
+		cEnd    := SA2->A2_END
+		cBairro := SA2->A2_BAIRRO
+		cMun    := SA2->A2_MUN
+		cCep    := SA2->A2_CEP
+		cEst    := SA2->A2_EST
+	EndIf
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Impressao                                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	nQtdVias := IIF( mv_par25 > 0 .and. mv_par25 < 4, mv_par25, 3 )
+	@00,00 PSAY "." // &(aDriver[1])
+	For nVia := 1 To nQtdVias
+		//*       @00,00 PSAY &(aDriver[1])
+		@00,00 PSAY OemToAnsi(AllTrim(SM0->M0_CIDCOB)+", "+StrZero(nDia,2)+" de "+cMes+" de "+StrZero(nAno,4))
+		@00,90 PSAY OemToAnsi("Carimbo Padronizado do CNPJ")
+		//*       @01,90 PSAY Chr(014) + TransForm(SM0->M0_CGC,"@R XX.XXX.XXX/XXXX-XX")
+		@01,90 PSAY OemToAnsi("ÚÄ                                Ä¿")         // Local do carimbo
+		//@02,00 PSAY Chr(015) + " "
+		@02,00 PSAY OemToAnsi("A")
+		//*       @02,90 PSAY SM0->M0_NOMECOM
+		@02,90 PSAY OemToAnsi("³                                  ³")         // Local do carimbo
+		@03,00 PSAY OemToAnsi(cNOME)
+		//*       @03,90 PSAY Alltrim(SM0->M0_ENDCOB) + " " + SM0->M0_BAIRCOB
+		@04,00 PSAY OemToAnsi(AllTrim(cEND)+If(!Empty(cBAIRRO),"  -  "+cBAIRRO,""))
+		//*       @04,90 PSAY TransForm(SM0->M0_CEPCOB,"@R XXXXX-XXX") + " " + Alltrim(SM0->M0_CIDCOB) + " " + SM0->M0_ESTENT
+		@05,00 PSAY OemToAnsi("CEP: "+cCEP +" - "+AllTrim(cMUN)+" - "+cEST)
+		@07,00 PSAY OemToAnsi("Prezado(s) Senhor(es)")
+		@07,20 PSAY OemToAnsi("Ref.: Conferencia de documento fiscal e comunicacao de incorrecoes.")
+		@09,20 PSAY OemToAnsi("[ ] N/ Nota Fiscal No.        Serie     de          ")
+		@10,20 PSAY OemToAnsi("[X] S/ Nota Fiscal No. "+SF1->F1_DOC+" Serie "+SF1->F1_SERIE+" de "+DTOC(SF1->F1_EMISSAO))
+		@10,90 PSAY OemToAnsi("³                                  ³")         // Local do carimbo
+		@11,90 PSAY OemToAnsi("ÀÄ                                ÄÙ")         // Local do carimbo
+		@12,15 PSAY OemToAnsi("Em face do que determina a legislacao fiscal vigente, vimos pela presente comunicar-lhe que a Nota Fiscal em")
+		@13,00 PSAY OemToAnsi("referencia contem a(s) irregularidade(s) que abaixo apontamos,  cuja correcao solicitamos seja providenciada imediatamente.")
+		
+		//               0         1         2         3         4         5         6         7         8         9         10        11        12        13
+		//               0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+		@15,00 PSAY OemToAnsi("   ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿       ")
+		@16,00 PSAY OemToAnsi("   ³ Codigo ³      Especificacao      ³      ³ Codigo ³      Especificacao      ³      ³ Codigo ³      Especificacao      ³       ")
+		@17,00 PSAY OemToAnsi("   ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´      ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´      ÃÄÄÄÂÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´       ")
+		nLin := 18
+		For nLin := 18 To 29
+			@nLin,00 PSAY OemToAnsi("   ³"+PADC(aMarca1[nLin-17],3)+"³"+PADC(StrZero(nLin-17,2),4)+"³"+PADR(aCol1[nLin-17],25)+"³")
+			@nLin,45 PSAY OemToAnsi("³"+PADC(aMarca2[nLin-17],3)+"³"+PADC(StrZero(nLin-5,2),4)+"³"+PADR(aCol2[nLin-17],25)+"³")
+			@nLin,87 PSAY OemToAnsi("³"+PADC(aMarca3[nLin-17],3)+"³"+PADC(StrZero(nLin+7,2),4)+"³"+PADR(aCol3[nLin-17],25)+"³")
+		Next nLin
+		@30,00 PSAY OemToAnsi("   ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      ÀÄÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ       ")
+		@32,00 PSAY OemToAnsi("ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿")
+		@33,00 PSAY OemToAnsi("³      Codigos com      ³                           Retificacoes a serem consideradas                                       ³")
+		@34,00 PSAY OemToAnsi("³    Irregularidades    ³                                                                                                   ³")
+		@35,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		For nLin := 36 To 40
+			@nLin,00 PSAY OemToAnsi("³"+PADC(If(aCod[nLin-35,1]!="99",aCod[nLin-35,1],"  "),23)+"³"+PADR(aCod[nLin-35,2],99)+"³")
+		Next nLin
+		@41,00 PSAY OemToAnsi("ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ")
+		@44,15 PSAY OemToAnsi("Para evitar-se qualquer sancao fiscal, solicitamos acusarem o recebimento desta, na copia que a acompanha,")
+		@45,00 PSAY OemToAnsi("devendo a via de V. S(as) ficar arquivada juntamente com a Nota Fiscal em questao.")
+		@47,75 PSAY OemToAnsi("Sem outro motivo para o momento, subscrevemo-nos")
+		@48,75 PSAY OemToAnsi("atenciosamente")
+		@49,00 PSAY OemToAnsi("ÚÄÄÄÄÄÄÄÄÄÄÄÄÄ Acusamos recebimento da "+STR(nVia,1)+".a via ÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿")
+		@50,00 PSAY OemToAnsi("³                                                            ³")
+		@51,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		@52,00 PSAY OemToAnsi("³                      (local e data)                        ³")
+		@53,00 PSAY OemToAnsi("³                                                            ³            ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ")
+		@54,00 PSAY OemToAnsi("³                                                            ³            "+PADC(AllTrim(SM0->M0_NOMECOM),40))
+		@55,00 PSAY OemToAnsi("³                                                            ³")
+		@56,00 PSAY OemToAnsi("ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´")
+		@57,00 PSAY OemToAnsi("³                  (carimbo e assinatura)                    ³")
+		@58,00 PSAY OemToAnsi("ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ") 
+		//*        @58,70 PSAY CHR(18)
+		If nVia == 1                                                                                           
+			@58,75 PSAY OemToAnsi("1a.Via Cliente")
+		Elseif nVia == 2
+			@58,75 PSAY OemToAnsi("2a.Via Cliente")
+		Elseif nVia == 3
+			@58,75 PSAY OemToAnsi("3a.Via Fiscal")
+			//*        Elseif nVia == 4
+			//*           @58,75 PSAY "4a.Via Contas Receber"
+		Endif
+		@ 61,00 PSAY OemToAnsi(Repl("Ä",125))
+		@ 62,00 PSAY OemToAnsi("EDITORA  PINI LTDA. Rua Anhaia 964 e Rua dos Italianos 967 - Bom Retiro - Sao Paulo - SP CEP: 01130-900")
+		@ 63,00 PSAY OemToAnsi("PINI SISTEMAS LTDA. Rua Anhaia 964 Casa 1                  - Bom Retiro - Sao Paulo - SP CEP: 01130-900")
+		Eject
+	Next nVia
+	
+	dbSelectArea("SF1")
+	dbSkip()
+	
+End
+
+SetPrc(0,0)
+
+Set Device to Screen
+
+If aReturn[5]==1
+	Set Printer to
+	dbCommitAll()
+	OurSpool(wnrel)
+endif
+
+MS_FLUSH()
+
+Return

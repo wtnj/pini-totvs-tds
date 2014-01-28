@@ -1,0 +1,2264 @@
+Group Nova Pini Srv
+   Version=7.0
+   VSSDB=
+   HasProperties=1
+   Properties
+      BeforeApply=
+      AfterApply=
+      Icon=
+      ID=
+      Version=
+      PalmName=
+      OutPut=
+   End
+   ProjectsCount=10
+   Project Faturamento
+      FoldersCount=6
+      Folder Relatorios
+         VSSPath=Relatorios
+         FilesCount=182
+         File \PROTHEUS10\RDMAKE_Srv\Rfat002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfat004.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat005.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat006.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat007.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat008.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat009.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat011.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat014.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat015.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat016.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat017.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat018.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat019.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat020.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat021.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat022.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat023.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat024.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat026.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT027.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat028.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat029.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat030.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat031.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat032.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat033.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat034.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat036.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat037.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat038.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat039.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat040.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat041.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat042.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat044.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat045.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat046.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat047.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat048.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat049.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat050.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat051.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat052.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat053.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat054.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat055.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat056.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat057.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat058.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat059.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat060.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat061.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat062.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat063.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat064.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat065.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat066.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat067.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat068.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfat069.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat070.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat070a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat072.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat073.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat077.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat078.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat079.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat080.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat081.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat082.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat083.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat084.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat085.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat086.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat087.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat088.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat089.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat090.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat091.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat092.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat093.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat094.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat095.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat096.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat097.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat099.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfat109.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat302.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata03.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFATA04.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata05.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFATA06.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata07.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata08.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata10.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfata11.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatdbg.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatgil.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatm01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatm02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr03.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr04.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr05.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr06.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr07.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr08.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr09.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr09a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr10.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr11.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr12.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr13.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr14.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr15.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr16.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr17.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr18.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr19.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr20.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr21.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr22.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr24.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr25.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr25a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr26.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr27.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr28.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr29.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr30.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr30a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr30b.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr30c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr32a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr33.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr34.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfatr35.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfatr50.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFATR51.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFATR51A.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\fa60tran.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\ETIQ_PS.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\ETIQAV.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\FA070CA4.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\fa200pos.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\CRIAN5.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat108.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFat110.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat111.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat112.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFATR52.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat114.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfat115.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat161.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT163.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SZ5CEP.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT166.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat167.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\rfat116.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT117.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT118.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT119.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT120.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT121.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFAT122.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT123.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT124.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT125.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT126.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfat127.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT128.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFAT129.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfat130.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfat131.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfat132.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfat133.prw
+             Type=T
+         End
+      End
+      Folder Consultas
+         VSSPath=Consultas
+         FilesCount=42
+         File \PROTHEUS10\RDMAKE_Srv\axfat032.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat005.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat006.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat008.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat009.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat010.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat011.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat012.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat013.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat014.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat015.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat016.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat017.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat018.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat019.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat020.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat021.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat022.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat023.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat024.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat025.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat026.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat027.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat028.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat029.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat030.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat031.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Axfat001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Cfat003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\cfat001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT033.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat151.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT034.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\QueryTool.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT038.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT039.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT037.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Axfat040.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Axfat041.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Axtemp.prw
+             Type=T
+         End
+      End
+      Folder Atualização
+         VSSPath=Atualização
+         FilesCount=122
+         File \PROTHEUS10\RDMAKE_Srv\PFAT400A.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pcup002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pcup003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat004.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat009.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat012.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat015.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat017.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat018.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat019.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat019a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat021.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat027.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat028.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat034.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat035.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat037.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfat037a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat037b.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat038.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT039.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat045.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat046.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat047.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat055.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat055a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat057.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat058.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat059.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat062.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat064.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT064A.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat066.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat067.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat069.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat071.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat071a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfat071b.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat071c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat072.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat105.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat106r.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat107.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat108.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat110.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat114.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat116.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat117.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat121.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat121c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat125.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat126.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat127.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat128.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat129.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat130.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat131.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat132.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat135.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat136i.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat137.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat138.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat139.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat140.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat142.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat143.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT144.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat145.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat146.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat147.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat148.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat149.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat149A.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfat150.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat200.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat210.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfat220.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat230.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat232.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat233.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT300.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT301.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT400.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pcup001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AtuPremio.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AjBord.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AJDIFSC6.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\a400det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\LP61001D.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\recdeb.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\reccred.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\recbxvl.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\NOSSONUM.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat156.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat160.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat160E.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat160R.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT164.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\AXFAT035.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT165.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat240.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat168.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat169.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat170.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat171.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat172.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat241.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat176.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat177.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat178.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT173.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFAT174.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat242.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat245.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFat246.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat179.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat180.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pfat248.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\pfat181.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\PFAT249.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Faturamento\ATPINI02.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\pfat250.prw
+             Type=T
+         End
+      End
+      Folder Diferimento
+         VSSPath=Diferimento
+         FilesCount=10
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\PFAT402.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\CTBASS.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\CTBPUBL.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\CTBrel.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\Difto.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\Lp99801c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\Lp99901c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\PFAT401.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Diferimento\acertac6.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfat162.prw
+             Type=T
+         End
+      End
+      Folder Lançamento padrão
+         VSSPath=Lançamento padrão
+         FilesCount=7
+         File \PROTHEUS10\RDMAKE_Srv\Lp62001d.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Lp61002c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Lp61003c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Lp61003d.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Lp61003v.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\lp52701.prw
+             Type=T
+         End
+      End
+      Folder TESTE
+         VSSPath=Nova Pasta6
+         FilesCount=5
+         File \PROTHEUS10\RDMAKE_Srv\RTESTE.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\temp\PTEMP1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\temp\PTEMP2.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\temp\Axfatsc6.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\EmailTeste.prw
+             Type=T
+         End
+      End
+   End
+   Project Financeiro
+      FoldersCount=3
+      Folder Relatorios
+         VSSPath=Relatorios
+         FilesCount=11
+         File \PROTHEUS10\RDMAKE_Srv\Rfin003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Rfin002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFin017.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfin021.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFIN020.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\WAFATR02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFIN004.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin023.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\RFIN005.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\PFIN027.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\PFIN028.prw
+             Type=T
+         End
+      End
+      Folder Consulta
+         VSSPath=Consulta
+         FilesCount=2
+         File \Protheus10\RDMAKE_Srv\AXFIN001.prw
+             Type=T
+         End
+      End
+      Folder Atualização
+         VSSPath=Atualização
+         FilesCount=11
+         File \PROTHEUS10\RDMAKE_Srv\Pfin006.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin007.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin010.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\pfin011.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin011a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFIN019.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin022.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin024.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pfin025.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pfin026.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\pfin029.prw
+             Type=T
+         End
+      End
+   End
+   Project Acertos
+      FoldersCount=1
+      Folder Vários
+         VSSPath=Várrios
+         FilesCount=5
+         File \PROTHEUS10\RDMAKE_Srv\Acertos\ATSD2.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Acertos\RATASA1.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Acertos\RATASB1.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Acertos\RAASS.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PSSiga.PRW
+             Type=T
+         End
+      End
+   End
+   Project Contabilidade
+      FoldersCount=3
+      Folder Relatorios
+         VSSPath=Relatorios
+         FilesCount=0
+      End
+      Folder Consultas
+         VSSPath=Consultas
+         FilesCount=0
+      End
+      Folder Atualização
+         VSSPath=Atualização
+         FilesCount=0
+      End
+   End
+   Project Execblocks
+      FoldersCount=1
+      Folder Execblocks
+         VSSPath=Execblocks
+         FilesCount=156
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\vcb09.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A130det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A200det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A210det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A230det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A300det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Axfat024.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Axfat026.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Axfat028.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Calmod10.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Calmod11.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Clicont.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Cnna210.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Contfat.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ctacred.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Diraut.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Diraut1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\edicao.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Eicpo1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Endcobr.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Etmka01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Etmka02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Etmka03.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Etmka04.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\exec6001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\exec6002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Exec6003.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Exec6004.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\EXED3EDI.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vc1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg3.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg4.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg5.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat11vg6.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vc01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vc02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vg01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vg02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vg03.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vg04.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fat9vg05.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fatc01a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fatc01b.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fatc01c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Fatc01d.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\fathist2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Ficvol.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\GATSUP2.PRw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\lp527s0.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\lp527s1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\lp527s2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\lp527s3.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Noturno.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Obsped.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pest002.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat100.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat101.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\PFAT130A.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat200a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat210a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat230a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Pfat300a.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\possb1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Possb1_1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\possb1_2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\rechist.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Relaut.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Rfata09.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Valcmv.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Valcof.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\valpis.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb01.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb02.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb03.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb04.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb05.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Vcb06.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\A116det.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Exed3pro.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\acse1.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\LPSZ903.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\LPSZ901.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\lpsz902.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\LPSZ904.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\NOTURNO2.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\Exec6005.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\LPSA601.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\LPSZ905.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValRetPis.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValRetCSLL.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValRetCof.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValRetIRRF.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\NumSerasa.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\HIST_SI5.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SISDEB.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SERIE_SI5.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\HIST_MOV.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SUDACGC.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValSldAlmox.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SldAlmox.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValidaTES.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\CNAB2.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\NOVONN.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValFORNFE.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\CONTADDEV.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\CONTACDEV.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\VALNFEIRRF.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\VALCXADTO.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\VALNFEPARC.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\VALNFETRIB.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\pcom001.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\tmata260.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\SEMAIL.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValidaSE2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\ValISS.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\HISTBXAT.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\VALBXAT.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Execblocks\HISTRF.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\SAFRACOD.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\LPSEH03.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\LPSEH01.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\LPSEH02.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\EndBP.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\HISTBXPG.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\CGCREALBP.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\GATPLIQ.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\ReservaAlmox.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PiniPedido.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PiniParametro.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALPODER3.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\CONTAPODER3.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\HISTPODER3.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALNFEITEM.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\SendMailSSL.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\LoadPCli.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\CONTACMV.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALORCMV.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\HISTCMV.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\AjusteVencto.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PINIRLP3.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PINILOGP3.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\ValTipoOp.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\ValSmartpag.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALNFSABAT.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VenctoPiniPedido.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\CONTAGPE.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PiniFRead.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\LPSZ9CTA.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALNFCOMPRA.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALCCITAU.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALDEVCONSIG.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\VALCODBAR.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\PINILOGCONS.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Execblocks\ValDigPed.prw
+             Type=T
+         End
+      End
+   End
+   Project Pontos de Entrada
+      FoldersCount=1
+      Folder Pontos de Entrada
+         VSSPath=Pontos de Entrada
+         FilesCount=59
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Tmkvped.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Ca050grv.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Dipient.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Dipisai.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\F200TIT.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\f200var.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\FA070BXL.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Fa070ca2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Fa070mdb.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\FA070TIT.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\FA090SE5.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\FA200FIL.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Fa330exc.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Fa330se1.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Fina200.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Impfator.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Linokloc.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Lj040x.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Lj10d2.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Ljtm001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\M140bar.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\M241bar.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\M460fim.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\M460IREN.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\M460NUM.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Md2linok.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Md2tudok.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Md2valid.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Md2vlcli.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Msd2460.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mt440fil.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\MT440LIB.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mta010ok.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mta410.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mta410br.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\MTA410E.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mta410i.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Mta410t.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Saci008.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Sd1100i.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Se5fi070.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Se5fi70e.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\sf1100i.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Sf2460i.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Sf2520e.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\tmkvhi.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\Ca050alt.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\FIN150_1.PRX
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Pontos de Entrada\F060POR2.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\Fa040b01.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\M461impf.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\MS520VLD.PRX
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\REDUCAO.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\LEITURA.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Folha de Pagamento\LPF0102D.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Folha de Pagamento\ValRatFolha.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\F040BLQ.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Pontos de Entrada\FC010LIST.prw
+             Type=T
+         End
+      End
+   End
+   Project Folha
+      FoldersCount=3
+      Folder Lançamento Padrão
+         VSSPath=Lançamento Padrão
+         FilesCount=74
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAC401C.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0301d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0601d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0901d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1301d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1401d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1601d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA1901d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA2001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA2101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA2701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3601d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3801d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA3901d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4301d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4401d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4601d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4801d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA4901d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5301d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5401d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA5701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA6001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA6101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA6801d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA6901d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA7401d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA7501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA7601d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA7701d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA7801d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA8001C.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA8601c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA8801c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA8901c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9401c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9501C.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9601c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9701c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9801c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA9901c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpaa001c.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAA401c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAA501C.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAAV01d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAAX01c.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB001d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB301d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB401d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAB501d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpAC201d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\lpA0101d.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\LPF0101D.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Folha de Pagamento\LPGPERCC.prw
+             Type=T
+         End
+      End
+      Folder Atualização
+         VSSPath=Atualização
+         FilesCount=4
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\ADTJORN.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\Saljorn.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\TOTSAL.PRX
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Folha de Pagamento\PGPE001.prw
+             Type=T
+         End
+      End
+      Folder Relatorios
+         VSSPath=Nova Pasta3
+         FilesCount=2
+         File \PROTHEUS10\RDMAKE_Srv\Folha de Pagamento\RGPE001.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Folha de Pagamento\GPER030Pini.PRX
+             Type=T
+         End
+      End
+   End
+   Project Jobs
+      FoldersCount=1
+      Folder Jobs
+         VSSPath=Jobs
+         FilesCount=3
+         File \PROTHEUS10\RDMAKE_Srv\Jobs\RCFGA01.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\Jobs\PFINJ01.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Jobs\JOBPINI01.prw
+             Type=T
+         End
+      End
+   End
+   Project Fiscal
+      FoldersCount=2
+      Folder Relatorios
+         VSSPath=Relatorios
+         FilesCount=4
+         File \PROTHEUS10\RDMAKE_Srv\Rfis001.prw
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFIS002.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\RFIS003.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\Rfis004.prw
+             Type=T
+         End
+      End
+      Folder Atualização
+         VSSPath=Atualização
+         FilesCount=3
+         File \PROTHEUS10\RDMAKE_Srv\ATCFSD2.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\ATSF301.PRW
+             Type=T
+         End
+         File \PROTHEUS10\RDMAKE_Srv\PFIS001.prw
+             Type=T
+         End
+      End
+   End
+   Project SPED
+      FoldersCount=2
+      Folder NFE
+         VSSPath=Nova Pasta1
+         FilesCount=3
+         File \Protheus10\RDMAKE_Srv\SPED\danfeii.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\SPED\nfesefaz.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\SPED\danfeIII.prw
+             Type=T
+         End
+      End
+      Folder NFSE
+         VSSPath=Nova Pasta2
+         FilesCount=4
+         File \Protheus10\RDMAKE_Srv\SPED\NFSEXml102.PRW
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\SPED\NFSEXml001.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\SPED\NFSEXml002.prw
+             Type=T
+         End
+         File \Protheus10\RDMAKE_Srv\SPED\NFSEXml003.PRW
+             Type=T
+         End
+      End
+   End
+   BatchBuild_Item0=Faturamento · TEMP
+   BatchBuild_Item1=Financeiro · TEMP
+   BatchBuild_Item2=Contabilidade · TEMP
+   BatchBuild_Item3=Execblocks · TEMP
+   BatchBuild_Item4=Pontos de Entrada · TEMP
+   BatchBuild_Item5=Folha · TEMP
+   BatchBuild_Item6=Jobs · TEMP
+   BatchBuild_Item7=Fiscal · TEMP
+   BatchBuild_Item8=SPED · TEMP
+End

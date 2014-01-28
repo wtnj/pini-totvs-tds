@@ -1,0 +1,443 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+#IFNDEF WINDOWS
+   #DEFINE PSAY SAY
+#ENDIF
+
+User Function Pfat072()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Declaracao de variaveis utilizadas no programa atraves da funcao    ³
+//³ SetPrvt, que criara somente as variaveis definidas pelo usuario,    ³
+//³ identificando as variaveis publicas do sistema utilizadas no codigo ³
+//³ Incluido pelo assistente de conversao do AP5 IDE                    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+SetPrvt("CSTRING,CDESC1,CDESC2,CDESC3,TAMANHO,ARETURN")
+SetPrvt("NOMEPROG,ALINHA,NLASTKEY,ADRIVER,NTIPO,LEND")
+SetPrvt("CCANCEL,M_PAG,WNREL,CPERG,TITULO,CABEC1")
+SetPrvt("CABEC2,_ATOTSIT,_CREGIAO,_CVENDEDOR,_CREVISTA,_CCLIENTE")
+SetPrvt("_LPRIMEIRO,_NTOTREN,_NTOTNREN,LI,_LMUDAPAG,_LMUDAREG")
+SetPrvt("_CQUEBRA,_AINFOPEDANT,_AINFOPEDREN,_NVOLTAPED,_CC6SITUAC,_CPEDREN")
+SetPrvt("_CSITUACAO,_N,_CSTRING,_CSTRING1,_NTOTRPER,_NTOTNPER")
+SetPrvt("X,_SALIAS,AREGS,I,J,_CARQPATH")
+SetPrvt("_CARQNOME,CINDEX,CFILTER1,CFILTER2,CFILTER3,CFILTER4")
+SetPrvt("CFILTER,CARQTMP,")
+
+#IFNDEF WINDOWS
+// Movido para o inicio do arquivo pelo assistente de conversao do AP5 IDE em 25/02/02 ==>    #DEFINE PSAY SAY
+#ENDIF
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³RDMAKE    ³PFAT072   ³ Autor ³ Gilberto A. Oliveira  ³ Data ³ 30.09.00 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³Relatorio para acompanhamento das renovacoes/recuperacoes.  ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+cString := "SC6"
+cDesc1  := OemToAnsi("Este programa tem como objetivo, imprimir um relatorio  ")
+cDesc2  := OemToAnsi("de acompanhamento das renovacoes/recuperacoes com base  ")
+cDesc3  := OemToAnsi("nos arquivos gerados pelo Relatorio de Assinantes.      ")
+tamanho := "M"
+aReturn := { "Zebrado", 1,"Administracao", 2, 2, 1, "",1 }
+nomeprog:= "PFAT072"
+aLinha  := {}
+nLastKey:= 0
+aDriver := ReadDriver()
+nTipo   := IIF(aReturn[4]==1,15,18)
+lEnd    := .F.
+cCancel := "***** CANCELADO PELO OPERADOR *****"
+m_pag   := 1                    // Variavel que acumula numero da pagina
+wnrel   := "PFAT072"            // Nome Default do relatorio em Disco
+cPerg   := "PF072"
+titulo  := "Acompanhamento das Renovacoes/Recuperacoes - Arquivo: "
+
+cabec1  := "                                                                                              ---------- RENOVACAO ------------     "
+cabec2  := "REVISTA                                           CLIENTE                       ASSINATURA    PEDIDO  ED.INI. ED.FIN. ED.VENCTO  SIT"
+
+          //0123456789012345 - XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FEVEREIRO
+          //           050436 - VALNER JOSE SAIA     RENOVADA     123456      9999       9999     9999      AA
+          //01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+          //          10        20        30        40        50        60        70        80        90        100       110
+
+//ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ MV_PAR01 ³ Arquivo Renov./Rec.  ?                         ³
+//³ MV_PAR02 ³ Regiao De            ?                         ³
+//³ MV_PAR03 ³ Regiao Ate           ?                         ³
+//³ MV_PAR04 ³ Vendedor De          ?                         ³
+//³ MV_PAR05 ³ Vendedor Ate         ?                         ³
+//³ MV_PAR06 ³ Tipo de Pedido       ?                         ³
+//³ MV_PAR07 ³ Do Cep               ?                         ³
+//³ MV_PAR08 ³ At‚ Cep              ?                         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+_ValidPerg()
+Pergunte(cPerg,.F.)
+wnRel:=SetPrint(cString,wnRel,cPerg,@titulo,cDesc1,cDesc2,cDesc3,.F.,"",,tamanho)
+
+If nLastKey == 27
+   Set Filter To
+   Return
+Endif
+
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+   Set Filter To
+   Return
+Endif
+
+titulo:= titulo+UPPER(alltrim(MV_PAR01))+".DBF"
+
+_aTotSit:= { {"AA","ATIVOS                       ",0,0},;
+             {"SI","SUSPENSO POR INADIMPLENCIA   ",0,0},;
+             {"SA","SUSPENSO POR ATRASO          ",0,0},;
+             {"SU","SUSPENSO                     ",0,0},;
+             {"LP","LUCROS E PERDAS              ",0,0},;
+             {"CA","SOLICITACAO INTERNA DE CANCE.",0,0},;
+             {"SC","SOLICITACAO INTERNA DE CANCE.",0,0},;
+             {"CP","CANCELADO A PEDIDO DO CLIENTE",0,0}}
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³  ABERTURA DO ARQUIVO DE RENOVACOES/RECUPERACOES.             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+#IFDEF WINDOWS
+   Prepara_Arquivo()// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==>    Execute(Prepara_Arquivo)
+#ELSE
+   Prepara_Arquivo()
+#ENDIF
+
+#IFDEF WINDOWS
+    SetWFirstPage(.T.)  // testar.
+    RptStatus({|| RptDetail()})// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==>     RptStatus({|| Execute(RptDetail)})
+    Return
+// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==>     Function RptDetail
+Static Function RptDetail()
+#ELSE
+    SetFirstPage(.T.)
+#ENDIF
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o    ³RptDetail ³ Autor ³ Ary Medeiros          ³ Data ³ 15.02.96 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³Impressao do corpo do relatorio                             ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+dbSelectArea("ARQREN")
+dbSetorder(1)
+dbGotop()
+
+SetRegua(Reccount())                            //Ajusta numero de elementos da regua de relatorios
+
+_cRegiao  := ""
+_cVendedor:= ""
+_cRevista := ""
+_cCliente := ""
+_lPrimeiro:= .T.
+_nTotRen  := 0
+_nTotNRen := 0
+li        := 80
+_lMudaPag := .T.
+_lMudaReg := .T.
+
+While ARQREN->( !Eof() )
+
+
+      IncRegua()
+
+      //ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      //³ Verifica se o usuario interrompeu o relatorio                ³
+      //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+      #IFDEF WINDOWS
+      If lAbortPrint
+      #ELSE
+
+      Inkey()
+
+      If  LastKey() == 286
+      #ENDIF
+          @Prow()+1,001 PSAY "CANCELADO PELO OPERADOR"
+          Exit
+      Endif
+
+      If lEnd
+         Exit
+      Endif
+
+      If Li > 55 .or. _cRegiao != ARQREN->NOVAREG
+
+         Cabec(Titulo,Cabec1,Cabec2,NomeProg,Tamanho,nTipo)
+
+         If ( _cRegiao != ARQREN->NOVAREG ) .or. _lPrimeiro
+
+            ZZ9->( DbSeek(xfilial("ZZ9")+ARQREN->NOVAREG ) )
+            _cQuebra:= "REGIAO : "+ARQREN->NOVAREG+" - "+ALLTRIM(ZZ9->ZZ9_NOME)
+             @ li, ((132-LEN(_cQuebra))/2) PSAY _cQuebra
+            li := li + 1
+
+            _cRegiao  := ARQREN->NOVAREG
+            _lPrimeiro:= .F.
+            _lMudaReg := .T.   // Mudou de regiao.
+
+         Else
+           _lMudaPag := .T.   // Mudou de pagina.
+         Endif
+
+
+      EndIf
+
+      _aInfoPedAnt:= {}
+      _aInfoPedRen:= {}
+      _nVoltaPed:= 0
+
+      DbSelectArea("SC6")
+      DbSetOrder(1)
+      DbSeek( xFilial("SC6")+ARQREN->NUMPED+ARQREN->ITEM )
+
+      If Found()
+
+         _nVoltaPed:= Recno()
+         _cC6Situac:= SC6->C6_SITUAC
+
+         If !Empty( SC6->C6_PEDREN )
+            _cPedRen    := SC6->C6_PEDREN
+            _cSituacao  := "RENOVADA"
+            _aInfoPedAnt:= { SC6->C6_NUM,SC6->C6_EDINIC,SC6->C6_EDFIN,SC6->C6_EDVENC }
+            DbSeek(xFilial("SC6")+_cPedRen)
+            If Found()
+               _cC6Situac    := SC6->C6_SITUAC
+               _n            := Ascan( _aTotSit,{|x| Alltrim(x[1])==_cC6Situac} )
+               _aTotSit[_n,3]:= _aTotSit[_n,3] + 1
+               _nTotRen      := _nTotRen + 1
+               _aInfoPedRen  := { SC6->C6_NUM,SC6->C6_EDINIC,SC6->C6_EDFIN,SC6->C6_EDVENC }
+            EndIf
+            DbGoto(_nVoltaPed)
+         Else
+
+//          If !(_cC6Situac $ "AA / SI / SA / SU / CP / LP / SC")
+//             Alert(_cC6Situac)
+//          Endif
+
+            _n            := Ascan( _aTotSit,{|x| Alltrim(x[1])==_cC6Situac} )
+            _aTotSit[_n,4]:= _aTotSit[_n,4] + 1
+            _nTotNRen     := _nTotNRen + 1
+            _cSituacao    := "NAO RENOVADA"
+            _aInfoPedAnt  := { SC6->C6_NUM,SC6->C6_EDINIC,SC6->C6_EDFIN,SC6->C6_EDVENC }
+         Endif
+
+      EndIf
+
+      DbSelectArea("ArqRen")
+
+      If  ( _cVendedor != ArqRen->NOVOVEND ) .or. _lMudaReg .or. _lMudaPag
+
+          li:= li + 1
+          @ li, 00 PSAY Repl("-",132)
+          li:= li + 1
+
+          SA3->( DbSeek(xFilial("SA3")+SUBS(ArqRen->NOVOVEND,3)) )
+          _cString:= "VENDEDOR : "+ArqRen->NOVOVEND+" "+ALLTRIM(SA3->A3_NOME)
+          _cString1:="             Do Cep..: " +Alltrim(mv_par07)+"  At‚  "+Alltrim(mv_par08)
+          _cString:= _cString+_cString1 
+          
+          if _lMudaPag .and. m_pag > 2
+             _cString:= _cString+"     (  c o n t i n u a c a o  ) "
+          endif
+
+          _lMudaPag:= .F.
+          _lMudaReg:= .F.
+
+          @ li, 00 PSAY _cString
+          li:= li + 1
+          @ li, 00 PSAY Repl("-",132)
+          li:= li + 2
+          _cVendedor:= ARQREN->NOVOVEND
+
+
+      Endif
+
+      DbSelectArea("SB1")
+      DbSetOrder(1)
+      DbSeek(xFilial("SB1")+ArqRen->CODPROD)
+
+      DbSelectArea("SA1")
+      DbSetOrder(1)
+      DbSeek(xFilial("SA1")+SC6->C6_CLI)
+      DbSelectArea("SC6")
+
+      @ li, 00 PSAY rtrim(ArqRen->CODPROD)+" "+rtrim(SB1->B1_DESC)
+      @ li, 50 PSAY rtrim(SC6->C6_CLI)+"  "+SA1->A1_NREDUZ
+      @ li, 80 PSAY _cSituacao
+
+      If Len(_aInfoPedRen) != 0
+         @ li, 094 PSAY _aInfoPedRen[1]
+         @ li, 105 PSAY STRZERO(_aInfoPedRen[2],4)
+         @ li, 113 PSAY STRZERO(_aInfoPedRen[3],4)
+         @ li, 123 PSAY STRZERO(_aInfoPedRen[4],4)
+      EndIf
+
+      @ li, 130 PSAY _cC6SITUAC
+
+      li:= li + 1
+
+      DbSelectArea("ARQREN")
+      DbSkip()
+
+End-While
+
+If li > 49
+   Cabec(Titulo,Cabec1,Cabec2,NomeProg,Tamanho,nTipo)
+EndIf
+
+_nTotRPer:= 0
+_nTotNPer:= 0
+
+li:= li + 1
+@ li,00 PSAY "                             R  E  S  U  M  O                             "
+li:= li + 2
+@ li,00 PSAY "SITUACAO                           RENOVADOS  ( % )   NAO RENOVADOS  ( % )"
+li:= li + 1
+@ li,00 PSAY "---------------------------------- --------- ------   ------------- ------"
+li:= li + 1
+For x:=1 to Len(_aTotSit)
+    @ li, 00 PSAY _aTotSit[x,1]+" - "+_aTotSit[x,2]
+    @ li, 38 PSAY _aTotSit[x,3] Picture "@e 999999"
+    @ li, 45 PSAY str((_aTotSit[x,3]*100)/_nTotRen,6,2)
+    @ li, 61 PSAY _aTotSit[x,4] Picture "@e 999999"
+    @ li, 68 PSAY str((_aTotSit[x,4]*100)/_nTotNRen,6,2)
+    li:= li + 1
+    _nTotRPer:= _nTotRPer + ((_aTotSit[x,3]*100)/_nTotRen )
+    _nTotNPer:= _nTotNPer + ((_aTotSit[x,4]*100)/_nTotNRen )
+Next
+@ li,00 PSAY "TOTAL"
+@ li,37 PSAY _nTotRen  Picture "9999999"
+@ li,45 PSAY str(_nTotRPer,6,2)
+@ li,60 PSAY _nTotNRen Picture "9999999"
+@ li,68 PSAY str(_nTotNPer,6,2)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Apresenta relatorio na tela                                  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Roda(0,"","M")
+#IFNDEF WINDOWS
+   Set Device To Screen
+#ENDIF
+If aReturn[5] == 1
+   Set Printer TO
+   dbcommitall()
+   ourspool(wnRel)
+Endif
+Ms_Flush()
+
+dbSelectArea("ARQREN")
+dbCloseArea()
+
+Return
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³VALIDPERG ³ Autor ³  Luiz Carlos Vieira   ³ Data ³ 16/07/97 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Verifica as perguntas inclu¡ndo-as caso n„o existam        ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Uso       ³ Espec¡fico para clientes Microsiga                         ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==> Function _ValidPerg
+Static Function _ValidPerg()
+
+         _sAlias := Alias()
+         DbSelectArea("SX1")
+         DbSetOrder(1)
+         cPerg := PADR(cPerg,6)
+         aRegs:={}
+
+         // Grupo/Ordem/Pergunta/Variavel/Tipo/Tamanho/Decimal/Presel/GSC/Valid/Var01/Def01/Cnt01/Var02/Def02/Cnt02/Var03/Def03/Cnt03/Var04/Def04/Cnt04/Var05/Def05/Cnt05/F3
+
+         AADD(aRegs,{cPerg,"01","Arquivo Renov./Rec.  ?","mv_ch1","C",8,0,0,"G","","mv_par01","","","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"02","Vendedor De          ?","mv_ch2","C",5,0,0,"G","","mv_par02","","","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"03","Vendedor Ate         ?","mv_ch3","C",5,0,0,"G","","mv_par03","","","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"04","Regiao De            ?","mv_ch4","C",3,0,0,"G","","mv_par04","","","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"05","Regiado Ate          ?","mv_ch5","C",3,0,0,"G","","mv_par05","","","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"06","Tipo do Pedido       ?","mv_ch6","C",01,0,3,"C","","mv_par06","Pagos","","","Cortesias","","","Ambos","","",""})
+         AADD(aRegs,{cPerg,"07","Do Cep               ?","mv_ch7","C",08,0,0,"G","","mv_par07","","12000000","","","","","","","","","","","","",""})
+         AADD(aRegs,{cPerg,"08","At‚ Cep              ?","mv_ch8","C",08,0,0,"G","","mv_par08","","12999999","","","","","","","","","","","","",""})
+
+         For i:=1 to Len(aRegs)
+             If !dbSeek(cPerg+aRegs[i,2])
+                 RecLock("SX1",.T.)
+                 For j:=1 to FCount()
+                     If j <= Len(aRegs[i])
+                         FieldPut(j,aRegs[i,j])
+                     Endif
+                 Next
+                 SX1->(MsUnlock())
+             Endif
+         Next
+
+         DbSelectArea(_sAlias)
+
+Return
+
+
+// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==> Function Prepara_Arquivo
+Static Function Prepara_Arquivo()
+
+_cArqPath:= GETMV("MV_PATHASS")
+_cArqNome:= _cArqPath+MV_PAR01
+
+dbUseArea(.T.,,_cArqNome,"ARQREN",.T.,.F.)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Filtra arquivo de Itens do Pedidos de Vendas.                ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea("ARQREN")
+cIndex  := "NOVAREG + NOVOVEND + CODPROD"
+If MV_PAR06==1
+   cFilter1:= 'NOVAREG>="'+MV_PAR02+'".And.NOVAREG<="'+MV_PAR03+'"'
+   cFilter2:='.And.NOVOVEND>="'+MV_PAR04+'".And.NOVOVEND<="'+MV_PAR05+'"'
+   cFilter3:='.And.SUBS(CF,2,2)<>"99+"'
+   cFilter4:='.And.CEP>="'+MV_PAR07+'".And.CEP<="'+MV_PAR08+'"' 
+   cFilter:= cFilter1+cFilter2+cFilter3+cFilter4
+EndIf
+
+If MV_PAR06==2
+   cFilter1:= 'NOVAREG>="'+MV_PAR02+'".And.NOVAREG<="'+MV_PAR03+'"'
+   cFilter2:='.And.NOVOVEND>="'+MV_PAR04+'".And.NOVOVEND<="'+MV_PAR05+'"'
+   cFilter3:='.And.SUBS(CF,2,2)=="99+"'
+   cFilter4:='.And.CEP>="'+MV_PAR07+'".AND.CEP<="'+MV_PAR08+'"' 
+   cFilter:= cFilter1+cFilter2+cFilter3+cFilter4
+EndIf
+
+If MV_PAR06==3
+   cFilter1:= 'NOVAREG>="'+MV_PAR02+'".And.NOVAREG<="'+MV_PAR03+'"'
+   cFilter2:='.And.NOVOVEND>="'+MV_PAR04+'".And.NOVOVEND<="'+MV_PAR05+'"'
+   cFilter3:='.And.CEP>="'+MV_PAR07+'".And.CEP<="'+MV_PAR08+'"' 
+   cFilter:= cFilter1+cFilter2+cFilter3
+EndIf
+
+cArqTmp := CriaTrab(NIL,.F.)
+IndRegua("ARQREN",cArqTmp,cIndex,,cFilter,"Selecionando Registros ...")
+#IFNDEF TOP
+   dbSetIndex( cArqTmp + OrdBagExt())
+   dbSetOrder(1)
+#ENDIF
+
+Return
+

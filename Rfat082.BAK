@@ -1,0 +1,361 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: RFAT082   ³Autor: Solange Nalini         ³ Data:   11/07/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Geracao da Tiragem                                         ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfat082()
+
+SetPrvt("CLIE_DEST,CDESC1,CDESC2,CDESC3,MDESCR,CPERG")
+SetPrvt("LCONTINUA,MV_PAR01,MAMPL,CANC,DIV,TOTETIQ")
+SetPrvt("TOTGER,_CFILTRO,CINDEX,CKEY,XCONT,NPARC")
+SetPrvt("NPARCVV,NPARCPG,NPARCAV,MPRODUTO,RESTO,MREVISTA")
+SetPrvt("MNOTA,MSERIE,MPEDIDO,MNAO,MD,NEX")
+SetPrvt("ACHOU,MMOTIVO,MEDSUSP,EXSUSP,X,cMsgFim,mGrat")
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Cod.da Revista                       ³
+//³ mv_par02             // Edicao                               ³
+//³ mv_par03             // Ampliada                             ³
+//³ mv_par04             // Au Mais                              ³
+//³ mv_par05             // Paga   Cortesia                      ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+CLIE_DEST:=SPACE(40)
+cDesc1 :=PADC("Este programa ira informar a Tiragem " ,74)
+cDesc2 :="  "
+cDesc3 :=""
+
+mDESCR :="  "
+cPerg:="SAN015"
+lContinua := .T.
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas                                      ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If !Pergunte(cPerg)
+	Return
+Endif
+
+DBSelectArea("SZJ")
+DBSetOrder(1)
+If !DBSeek(XFILIAL("SZJ")+MV_PAR01+STR(MV_PAR02,4))
+	Return
+Endif
+
+If Dtos(SZJ->ZJ_DTCIRC) < Dtos(dDataBase)
+	ALERT(" ATENCAO ! A DATA DA CIRCULACAO E MENOR QUE A DATA ATUAL")
+	If !PERGUNTE(cPerg)
+		Return
+	Endif
+ENDIF
+
+Processa({|| R082Proc()},"Selecionando Registros","Aguarde, Selecionando Registros...")
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: R082proc  ³Autor: Solange Nalini         ³ Data:   11/07/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: processamento                                              ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function R082Proc()
+
+mv_par01 := mv_par01+space(11)
+MAMPL    := SZJ->ZJ_REVAMPL
+CANC     := 0
+DIV      := 0
+TOTETIQ  := 0
+TOTGER   := 0
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Seleciona no SC6 s¢ assinaturas ativas (ed.inicial e final)             ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+DBSelectArea('SC6')
+
+_cFiltro := "C6_FILIAL == '"+xFilial("SC6")+"'"
+_cFiltro += ".and.MV_PAR01 == C6_REGCOT"
+_cFiltro += ".and.MV_PAR02 >= C6_EDINIC .AND. MV_PAR02 <= C6_EDVENC"
+
+cIndex := CriaTrab(NIL,.F.)
+cKey   := "C6_FILIAL+C6_REGCOT"
+INDREGUA("SC6",CINDEX,CKEY,,_cFiltro,"SELECIONANDO REGISTROS DO ARQ")
+
+DBSEEK(XFILIAL()+MV_PAR01,.T.)   // Soft Seek on (.T.)
+
+ProcRegua(RECCOUNT())
+xcont:=0
+WHILE !Eof() .and. SC6->C6_FILIAL == xFilial("SC6") .and. MV_PAR01 == SC6->C6_REGCOT
+	xcont++
+	IncProc("Processando pedido " + Alltrim(SC6->C6_NUM))
+	nparc    := 0
+	nparcvv  := 0
+	nparcpg  := 0
+	nparcav  := 0 
+	mGrat    :=""
+	mproduto := SC6->C6_PRODUTO      
+	
+
+	//@ 12,10 Say " REGISTROS LIDOS "+ALLTRIM(STR(xcont,6,0))
+	
+	RESTO:=MOD(MV_PAR02,2)
+	IF RESTO == 0
+		MREVISTA := 'PAR'
+	ELSE
+		MREVISTA := 'IMPAR'
+	ENDIF
+	
+	IF MREVISTA == 'IMPAR' .AND. SC6->C6_TIPOREV == '1' .OR. MREVISTA == 'PAR' .AND. SC6->C6_TIPOREV == '2'
+		DBSKIP()
+		LOOP
+	ENDIF
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Tratamento das ampliadas pelo parametro no SZJ - ZJ_REVAMPL             ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	IF MAMPL == 'N' .OR. MAMPL == ' '
+		IF SUBS(SC6->C6_PRODUTO,5,3) == '008' .OR. SUBS(SC6->C6_PRODUTO,5,3) == '009' ;
+			.OR. SUBS(SC6->C6_PRODUTO,5,3) == '010'.OR. SUBS(SC6->C6_PRODUTO,5,3) == '011'
+			DBSKIP()
+			LOOP
+		ENDIF
+	ENDIF
+	
+	MNOTA    := SC6->C6_NOTA
+	MSERIE   := SC6->C6_SERIE
+	MPRODUTO := SC6->C6_PRODUTO
+	MPEDIDO  := SC6->C6_NUM
+	
+	DbSelectArea("SF4")
+	DbSetOrder(1)
+	DbGoTop()
+	DbSeek(xFilial("SF4")+SC6->C6_TES)
+	If SF4->F4_DUPLIC=='N' .OR. 'CORTESIA' $(SF4->F4_TEXTO) .OR. 'DOACAO' $(SF4->F4_TEXTO) 
+		mGrat:='S'
+	EndIf          
+	
+	If MV_PAR05==2 .and. mGrat<>'S' 
+		DBSELECTAREA("SC6")
+	    DBSKIP()
+		LOOP
+	ENDIF
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³  Verifica se a assinatura ‚ gratuita e se nÆo esta suspensa  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	DBSELECTAREA("SC6")
+	MNAO := ' '
+	IF '599' $(SC6->C6_TES) .OR. '699'$(SC6->C6_TES) .OR. '799' $(SC6->C6_TES) .OR.'599' $(SC6->C6_TES) .OR. SC6->C6_ORIGEM == 'ED'
+		IF SC6->C6_EDSUSP # 0 .AND. SC6->C6_EDSUSP <= MV_PAR02 .AND. SC6->C6_EDSUSP < SC6->C6_EDVENC
+			SO_SUSPDIV()
+			DBSELECTAREA("SC6")
+			DBSKIP()
+			LOOP
+		ELSE
+			SO_ETIQ()
+			DBSELECTAREA("SC6")
+			DBSKIP()
+			LOOP
+		ENDIF
+	ENDIF
+	
+	IF SC6->C6_SITUAC == 'CP' .OR. SC6->C6_SITUAC == 'SE' .OR. SC6->C6_SITUAC == 'SU' .OR. SC6->C6_SITUAC == 'SC'
+		IF SC6->C6_EDSUSP # 0 .AND. SC6->C6_EDSUSP <= MV_PAR02 .AND. SC6->C6_EDSUSP < SC6->C6_EDVENC
+			SO_SUSPDIV()
+			DBSELECTAREA("SC6")
+			DBSKIP()
+			LOOP
+		ENDIF
+		SO_ETIQ()
+		DBSELECTAREA("SC6")
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	MD := dDataBase-22
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³  Verifica no B1 quantos exemplares corresponde a revista     ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	DBSELECTAREA("SB1")
+	If DBSeek(XFILIAL()+MPRODUTO)
+		nex:=SB1->B1_QTDEEX
+	ENDIF
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³  Verifica se h  titulos vencidos h  mais de 22 dias ou se    ³
+	//³  h  pagamentos que reabilitem assinaturas suspensas.         ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	DBSELECTAREA("SE1")
+dbSetOrder(22)  ///dbSetOrder(15) AP5 //20090114 era(21)
+	If !DBSeek(XFILIAL()+MPEDIDO)
+		IF SC6->C6_EDSUSP # 0 .AND. SC6->C6_EDSUSP <= MV_PAR02 .AND. SC6->C6_EDSUSP < SC6->C6_EDVENC
+			SO_SUSPDIV()
+			DBSELECTAREA("SC6")
+			DBSKIP()
+			LOOP
+		ENDIF
+		SO_ETIQ()
+		DBSELECTAREA("SC6")
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	DBSELECTAREA("SE1")
+	WHILE MPEDIDO == SE1->E1_PEDIDO
+		IF SC6->C6_NOTA # SE1->E1_NUM .AND. SC6->C6_SERIE # SE1->E1_SERIE
+			DBSKIP()
+			LOOP
+		ENDIF
+		NPARC := NPARC+1
+		IF !EMPTY(SE1->E1_BAIXA)
+			//Verifica no E5 o motivo da baixa
+			DBSELECTAREA("SE5")
+			DBSETORDER(7)
+			If DBSEEK(XFILIAL()+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA+SE1->E1_TIPO)
+				//.................................................................
+				//NO SE5 pode repetir o numero e a parcela porque nÆo grava a serie,
+				//entÆo comparo o cliente do E1 com o CLIFOR do E5.
+				//.................................................................
+				Achou:=.T.
+				While !Eof() .and. SE1->E1_FILIAL == xFilial("SE1") .and. ACHOU
+					// 27/07/2000: O PROGRAMA ENTRAVA EM LOOP AQUI
+					IF SE1->E1_CLIENTE # SE5->E5_CLIFOR
+						DBSkip()
+						IF SE1->E1_NUM == E5_NUMERO
+							Loop
+						EndIf
+					EndIf
+					If SE1->E1_CLIENTE == SE5->E5_CLIFOR
+						If SE5->E5_RECPAG == 'R'
+							MMOTIVO := TRIM(SE5->E5_MOTBX)
+						ELSE
+							MMOTIVO := TRIM(SE1->E1_MOTIVO)
+						ENDIF
+					ELSE
+						MMOTIVO := TRIM(SE1->E1_MOTIVO)
+					ENDIF
+					Achou:=.F.
+				End
+			Else
+				// pode nao encontrar o SE5 porque nem todos os LP e CAN estao no E5
+				// ai considera-se o motivo do E1
+				MMOTIVO := TRIM(SE1->E1_MOTIVO)
+			EndIf
+			
+			IF MMOTIVO == 'DEV' .OR. MMOTIVO == 'CAN' .OR. MMOTIVO == 'LP'
+				NPARCVV++
+			ELSE
+				NPARCPG++
+			ENDIF
+		ELSE
+			IF SE1->E1_VENCTO <= MD
+				NPARCVV++
+			ELSE
+				NPARCAV++
+			ENDIF
+		ENDIF
+		DBSelectArea("SE1")
+		DBSkip()
+	END
+	
+	IF NPARCPG == NPARC .OR. NPARCAV == NPARC
+		MEDSUSP := 0
+	ELSE
+		EXSUSP  := NEX/NPARC
+		EXSUSP  := EXSUSP*NPARCPG
+		MEDSUSP := SC6->C6_EDINIC + EXSUSP
+		MEDSUSP := INT(MEDSUSP)
+	ENDIF
+	
+	// se edicao de suspensao for maior que a edicao atual desprezar
+	
+	If MEDSUSP >= mv_par02  .OR. MEDSUSP == 0
+		SO_ETIQ()
+	ELSE
+		SO_INADIM()
+	ENDIF
+	
+	dbselectarea("SC6")
+	DBSkip()
+END
+
+DbSelectArea("SC6")
+Retindex("SC6")
+DbSelectarea("SE1")
+Retindex("SE1")
+
+MsgStop("Registros lidos: "+Alltrim(Str(xCont,6,0)),"Resumo da Tiragem",)
+
+cMsgFim := 'TOTAL DE ETIQUETAS............: ' + STR(TOTETIQ,6,0) + Chr(10) + Chr(13)
+cMsgFim += 'TOTAL DE INADIMPLENTES........: ' + STR(CANC,6,0) + Chr(10) + Chr(13)
+cMsgFim += 'TOTAL DO SUSPENSOS DIVERSOS...: ' + STR(DIV,6,0) + Chr(10) + Chr(13)
+cMsgFim += 'TOTAL GERAL ..................: ' + STR(TOTGER,6,0) + Chr(10) + Chr(13)
+
+MsgAlert(cMsgFim,"Resumo da Tiragem")
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: SO_ETIQ   ³Autor: Solange Nalini         ³ Data:   11/07/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Incrementa ttl de etiquetas                                ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function SO_ETIQ()
+TOTETIQ++
+TOTGER++
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: SO_SUSPDIV³Autor: Solange Nalini         ³ Data:   11/07/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Incrementa ttl de DIV                                      ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function SO_SUSPDIV()
+DIV++
+TOTGER++
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: SO_SUSPDIV³Autor: Solange Nalini         ³ Data:   11/07/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Incrementa ttl de DIV                                      ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function SO_INADIM()
+CANC++
+TOTGER++
+Return

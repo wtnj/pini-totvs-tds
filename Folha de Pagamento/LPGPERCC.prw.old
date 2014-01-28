@@ -1,0 +1,47 @@
+#INCLUDE "RWMAKE.CH"
+#INCLUDE "TOPCONN.CH"  //consulta SQL
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Programa  ³ LPGPERCC ³ Autor ³ Danilo C S Pala       ³ Data ³ 20120104 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ LANCAMENTO PADRAO DE RATEIO FUNCIONARIO VS ATIVIDADES      ³±±
+±±³ POR CENTRO DE CUSTOS PERCENTUAL      								  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Uso       ³ Pini                                                       ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function LPGPERCC(cTipo, cSeq) //cTipo=[C:conta,V:valor, G:Centro de Custo(grupo)]
+Local mcta := ''   
+Local nValor := 0
+Local mCC := ''
+
+
+DbSelectArea("ZY7")
+DbSetOrder(1)
+If DbSeek(xFilial("ZY7")+SRZ->RZ_MAT+transform(cSeq,"@E 9"))
+	nValor := (ZY7->ZY7_PERC * SRZ->RZ_VAL)/100
+	mCC := ZY7->ZY7_CC
+	//MCTA := U_LPF0101D
+	DbSelectArea("ZZR")
+	DbSetOrder(2)
+	If DbSeek(xFilial("ZZR")+SRZ->RZ_PD+ZY7->ZY7_CC)
+		MCTA := ZZR->ZZR_CONTAD
+	Else
+		MCTA := "CC INVALIDO"
+	ENDIF
+Else
+	if cSeq = 1 
+		if cTipo =="C"
+			MCTA := U_LPF0101D()	
+		else
+			nValor := SRZ->RZ_VAL
+			mCC := SRZ->RZ_CC
+		endif
+	endif
+ENDIF
+
+RETURN iif(cTipo=="C",mCta, iif(cTipo=="V",nValor, mCC))

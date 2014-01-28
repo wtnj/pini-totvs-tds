@@ -1,0 +1,95 @@
+#include "rwmake.ch"        
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: RFAT117   ³Autor: DANILO CESAR SESTARI PALA ³ Data: 20070521³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo: Relatorio de CONSIGNACAO                                   ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rfat117()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("CPERG,_StringArq, cquery, MHORA, aRegs")
+SetPrvt("")
+MHORA      := TIME()
+_StringArq := "\SIGA\ARQTEMP\"+ SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2) +".DBF"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Vari veis utilizadas para parametros     ³
+//³ mv_par01             //Cliente           ³
+//³ mv_par02             //Faturado de       ³
+//³ mv_par03             //Faturado ate      ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cPerg    := "FAT117"
+ValidPerg()
+If !Pergunte(cPerg)
+   Return
+Endif
+
+If Select("RELCONSIG") <> 0
+	DbSelectArea("RELCONSIG")
+	DbCloseArea()
+EndIf
+      
+bBloco:= { |lEnd| RptDetail()  }
+MsAguarde( bBloco, "Aguarde" ,"Processando...", .T. )
+
+RETURN
+
+
+Static Function RptDetail()
+cQuery := "select c6_cli AS CLIENTE, c6_num AS PEDIDO, c6_item as ITEM, c6_produto AS PRODUTO,  c6_descri AS DESCRICAO, c6_qtdven AS QTD, c6_serie AS SERIE, c6_nota AS NOTA, c6_datfat AS DTFAT"
+cQuery := cQuery + " from "+ RetSqlName("SC6") +" C6"
+cQuery := cQuery + " where c6_filial='01' and c6_cli='"+ MV_PAR01 +"' and c6_datfat>='"+ DTOS(MV_PAR02) +"' and c6_datfat<='"+ DTOS(MV_PAR03) +"' and d_e_l_e_t_<>'*'"
+MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "RELCONS", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
+
+TcSetField("RELCONS","DTFAT"   ,"D")
+
+
+COPY TO &_StringArq
+DBCLOSEAREA()   
+MsgInfo(_StringArq)
+
+RETURN
+
+
+/*/
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±
+±³Funcao    ³VALIDPERG³ Autor ³ Jose Renato July ³ Data ³ 25.01.99 ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±
+±³Descricao ³ Verifica perguntas, incluindo-as caso nao existam.   ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±
+±³Uso       ³ SX1                                                  ³±
+±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±
+±³Release   ³ 3.0i - Roger Cangianeli - 12/05/99.                  ³±
+±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+/*/
+Static Function VALIDPERG()
+
+cPerg    := PADR(cPerg,10) //mp10 x1_grupo char(10)
+aRegs    := {}
+dbSelectArea("SX1")
+dbSetOrder(1)
+AADD(aRegs,{cPerg,"01","Cliente.............:","mv_ch1","C",6,0,0,"G","","mv_par01","","","","","","","","","","","","","","","SA1"})
+aAdd(aRegs,{cPerg,"02","Cons.Pedidos De     ?","mv_ch2","D",08,0,2,"G","","mv_par02","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"03","Cons.Pedidos Ate    ?","mv_ch3","D",08,0,2,"G","","mv_par03","","","","","","","","","","","","","","",""})
+For i := 1 to Len(aRegs)
+	If !dbSeek(cPerg+aRegs[i,2])
+		RecLock("SX1",.T.)
+		For j := 1 to FCount()
+			If j <= Len(aRegs[i])
+				FieldPut(j,aRegs[i,j])
+			Endif
+		Next
+		SX1->(MsUnlock())
+	Endif
+Next
+
+Return

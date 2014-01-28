@@ -1,0 +1,206 @@
+#include "rwmake.ch"
+/*/ 
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ ฑฑ
+ฑฑณPrograma: PFAT180   ณAutor: Danilo C S Pala        ณ Data:   20081204 ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณDescriฦo: Comparar o arquivo de assinantes ativos e recuperacao ou   ณ ฑฑ
+ฑฑณrenovacao excluindo onde encontrar o mesmo cliente e produto          | ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณUso      : Mขdulo de Faturamento  Liberado para Usu rio em:           ณ ฑฑ
+ฑฑภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู ฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+User Function Pfat180()
+SetPrvt("lEnd, cArqAss, cArqRecup")
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Vari veis utilizadas para parametros     ณ
+//ณ mv_par01             //arq ass ativo     ณ
+//ณ mv_par02             //arq recup/renov   ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+
+CPERG := 'PFT180'
+ValidPerg()
+IF !PERGUNTE(CPERG)
+	RETURN
+ENDIF                            
+
+cArqAss   := mv_par01
+cArqRecup := mv_par02
+
+lEnd := .F.
+Processa({|lEnd| ProcArq(@lEnd)})
+Return
+                
+
+Static Function ProcArq()
+SetPrvt("_aCampos, _cNome, cArq, cIndex, ckey, cCODCLI, cCODDEST, cCODPROD")
+Private nQTD_ENT    := 0
+PRIVATE MHORA     := TIME()
+Private cString   := SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,4,2)
+Private cArqPath  := GetMv("MV_PATHTMP")
+Private _cString  := cArqPath+cString+".DBF"
+
+_aCampos := {  {"NUMPED"        ,"C"    ,6      ,0} ,;
+{"ITEM"         ,"C"    ,2      ,0},;
+{"TES"          ,"C"    ,3      ,0},;
+{"CF "          ,"C"    ,5      ,0},;
+{"DUPL"         ,"C"    ,1      ,0},;
+{"SITUAC"       ,"C"    ,2      ,0},;
+{"CODCLI"       ,"C"    ,6      ,0},;
+{"CODPROD"      ,"C"    ,15     ,0},;
+{"DESCR"        ,"C"    ,40      ,0},;
+{"CODVEND"      ,"C"    ,6      ,0},;
+{"NOVOVEND"     ,"C"    ,6      ,0},;
+{"EDIN"         ,"N"    ,4      ,0},;
+{"EDFIN"        ,"N"    ,4      ,0},;
+{"EDVENC"       ,"N"    ,4      ,0},;
+{"EDSUSP"       ,"N"    ,4      ,0},;
+{"NOME"         ,"C"    ,40     ,0},;
+{"EQUIPE"       ,"C"    ,15     ,0},;
+{"CEP"          ,"C"    ,8      ,0},;
+{"EST"          ,"C"    ,2      ,0},;
+{"REGIAO"       ,"C"    ,3      ,0},;
+{"NOVAREG"      ,"C"    ,3      ,0},;
+{"VALOR"        ,"N"    ,12     ,2},;
+{"CODREV"       ,"C"    ,4      ,0},;
+{"REGREN"       ,"C"    ,1      ,0},;
+{"CODATIV"      ,"C"    ,7      ,0},;
+{"PORTE"        ,"C"    ,1      ,0},;
+{"PEDRENOV"     ,"C"    ,6      ,0},;
+{"CODDEST"      ,"C"    ,6      ,0},;
+{"INCLUSAO"     ,"D"    ,8      ,0},;
+{"NOTA"     	,"C"    ,6      ,0},;
+{"SERIE"      	,"C"    ,6      ,0}}
+
+_cNome := CriaTrab(_aCampos,.t.)
+dbUseArea(.T.,, _cNome,"PFAT180",.F.,.F.)
+
+cIndex := CriaTrab(Nil,.F.)
+cKey   := "CODCLI+CODDEST+CODPROD"
+Indregua("PFAT180",cIndex,ckey,,,"Selecionando Registros do Arq")
+dbGotop()
+                              
+//ABRE ARQUIVO DE ASSINANTES
+dbUseArea( .T.,, cArqAss,"ARQASS", if(.F. .OR. .F., !.F., NIL), .F. )
+dbSelectArea("ARQASS")
+
+cIndex := CriaTrab(Nil,.F.)
+cKey   := "CODCLI+CODDEST+CODPROD"
+Indregua("ARQASS",cIndex,ckey,,,"Indexando ArqASS")
+DbSetOrder(1)
+dbGotop()
+
+
+//ABRE ARQUIVO DE RECUP OU RENOV
+dbUseArea( .T.,, cArqRecup,"ARQRECUP", if(.F. .OR. .F., !.F., NIL), .F. )
+dbSelectArea("ARQRECUP")
+
+cIndex := CriaTrab(Nil,.F.)
+cKey   := "CODCLI+CODDEST+CODPROD"
+Indregua("ARQRECUP",cIndex,ckey,,,"Indexando ArqRecup")
+DbSetOrder(1)
+dbGotop()
+
+
+While !EOF() 
+	cCODCLI   := ARQRECUP->CODCLI
+	cCODDEST  := ARQRECUP->CODDEST
+	cCODPROD  := ARQRECUP->CODPROD
+                            
+	DbSelectArea("ARQASS")
+	DbSetOrder(1)
+	If DBSEEK(cCODCLI+cCODDEST+cCODPROD)
+	   //MSGINFO("Encontrado: "+ cCODCLI+cCODDEST+cCODPROD)
+	else
+		DbSelectArea("PFAT180")
+		RECLOCK("PFAT180",.T.)            
+		NUMPED	:= ARQRECUP->NUMPED
+		ITEM	:= ARQRECUP->ITEM
+		TES	:= ARQRECUP->TES
+		CF	:= ARQRECUP->CF
+		DUPL	:= ARQRECUP->DUPL
+		SITUAC	:= ARQRECUP->SITUAC
+		CODCLI	:= ARQRECUP->CODCLI
+		CODPROD	:= ARQRECUP->CODPROD
+		DESCR	:= ARQRECUP->DESCR
+		CODVEND	:= ARQRECUP->CODVEND
+		NOVOVEND:= ARQRECUP->NOVOVEND
+		EDIN	:= ARQRECUP->EDIN
+		EDFIN	:= ARQRECUP->EDFIN
+		EDVENC	:= ARQRECUP->EDVENC
+		EDSUSP	:= ARQRECUP->EDSUSP
+		NOME	:= ARQRECUP->NOME
+		EQUIPE	:= ARQRECUP->EQUIPE
+		CEP	:= ARQRECUP->CEP
+		EST	:= ARQRECUP->EST
+		REGIAO	:= ARQRECUP->REGIAO
+		NOVAREG	:= ARQRECUP->NOVAREG
+		VALOR	:= ARQRECUP->VALOR
+		CODREV	:= ARQRECUP->CODREV
+		REGREN	:= ARQRECUP->REGREN
+		CODATIV	:= ARQRECUP->CODATIV
+		PORTE	:= ARQRECUP->PORTE
+		PEDRENOV:= ARQRECUP->PEDRENOV
+		CODDEST	:= ARQRECUP->CODDEST
+		INCLUSAO:= ARQRECUP->INCLUSAO
+		NOTA	:= ARQRECUP->NOTA
+		SERIE	:= ARQRECUP->SERIE
+		MsUnlock()
+	endif
+    DbSelectArea("ARQRECUP")
+	dbSkip()
+	Loop
+end
+
+DbSelectArea("PFAT180")
+COPY TO &_cString
+MsgInfo(_cString)
+
+DbSelectArea("ARQASS")
+DBCloseArea()
+DbSelectArea("ARQRECUP")
+DBCloseArea()
+DbSelectArea("PFAT180")
+DBCloseArea()
+Return
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณValidPerg บAutor  ณDANILO C S PALA     บ Data ณ  20080919   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณCria parametros no SX1 nao existir os parametros.           บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function ValidPerg()
+_sAlias := Alias()
+dbSelectArea("SX1")
+dbSetOrder(1)
+cPerg := PADR(cPerg,6)
+aRegs := {}
+aAdd(aRegs,{cPerg,"01","Arq Ass Ativos?","Arq Ass Ativos?","Arq Ass Ativos?","mv_ch1","C",40,0,0,"G","","MV_PAR01","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+aAdd(aRegs,{cPerg,"02","Arq Recup/Reno?","Arq Recup/Reno?","Arq Recup/Reno?","mv_ch2","C",40,0,0,"G","","MV_PAR02","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""})
+
+_nLimite := If(Len(aRegs[1])<FCount(),Len(aRegs[1]),FCount())
+For i := 1 To Len(aRegs)
+	If !DbSeek(cPerg + aRegs[i,2])
+		Reclock("SX1", .T.)
+		For j := 1 to _nLimite
+			FieldPut(j, aRegs[i,j])
+		Next
+		MsUnlock()
+	Endif
+Next
+DbSelectArea(_sAlias)
+Return(.T.)
+

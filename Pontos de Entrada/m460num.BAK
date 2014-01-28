@@ -1,0 +1,310 @@
+#INCLUDE "RWMAKE.CH"
+//Alterado por Danilo C S Pala em 20070906 para tentar solucionar problema com o TRB
+User Function M460NUM()
+
+Local   CCONDANT, CISSANT, NRECANT, LRETBEMA, CPORTA
+Local   CNUMCUPFIS, CNUMNOTA, CAGREGANT, NREG, LFIM
+Local   LJUNTAESTE, LMUDOUPED, CALIQUOTA, NALIQUOTA
+local   I, NEL, CPROD, CQUANT, CUNIT
+Local   CIMPRESSORA, NDESCONTO, NTOTAL, NTOTDESC, AICMS
+Local   CGRUPOANT, CPEDANT, CTIPANT, CCLIANT, CREAJANT, CVENDANT
+Local   AAREA,	AAREASC9, AAREATRB, LFIMBACK, _CCONDSC9,_LJUNTA
+Local   CDESCONTO, CPEDIDO, CMENSAGEM, CNUMPDV
+Local   iRetorno
+Local   cRetorno
+Private cLista, nHdlECF
+
+//+-----------------------------------------------------------------+
+//| Caso a serie NAO SEJA DO CUPOM FISCAL, processa nota normalmente|
+//+-----------------------------------------------------------------+
+iRetorno   := 0
+cRetorno   := ' '
+
+IF mv_par16 == 1 .Or. !Alltrim(cSerie)$Alltrim(GETMV("MV_SERCUP"))
+	Return(.T.) //({cNumero,.T.})
+EndIf
+
+//+-------------------------------------------------+
+//| Salva ambiente atual                            |
+//+-------------------------------------------------+
+aArea    := GetArea()
+dbSelectArea("SC9")
+aAreaSC9 := GetArea()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³SC9 esta filtrado neste momento³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+DbSelectArea("SC9")
+DbGoTop()
+
+DbSelectArea("SC5")
+DbSetOrder(1)
+DbSeek(xFilial("SC5")+SC9->C9_PEDIDO)
+
+//+-------------------------------------------------+
+//| Salva variavel lfim                             |
+//+-------------------------------------------------+
+lFimBack	:= lFim
+//_cCondSC9	:= cCondSC9
+_lJunta		:= IIF(mv_par11 == 1, .t.,.f.)
+_lJunta		:= .f. //20070906 daqui
+/*If _lJunta 
+	dbSelectArea("TRB")
+	aAreaTRB :=GetArea()
+EndIf */            //20070906 ate daqui
+cGrupoAnt	:= SC9->C9_GRUPO
+cPedAnt	    := SC9->C9_PEDIDO
+cTipAnt	    := SC5->C5_TIPO
+cCliAnt	    := SC5->C5_CLIENTE+SC5->C5_LOJACLI
+cReajant 	:= SC5->C5_REAJUST
+cVendant 	:= SC5->C5_VEND1+SC5->C5_VEND2+SC5->C5_VEND3+SC5->C5_VEND4+SC5->C5_VEND5
+cCondAnt 	:= SC5->C5_CONDPAG
+cIssAnt	    := SC5->C5_INCISS
+nRecAnt	    := SC5->(Recno())
+cNumCupFis  := Space(6)
+cNumPdv	    := Space(10)
+lRetBema 	:= .T.
+cPorta   	:= GetMv("MV_PORTFIS")
+cImpressora := GetMv("MV_IMPFIS")
+nDesconto	:=	0
+nTotal   	:=	0
+nTotDesc 	:=	0
+nHdlECF   	:=	0
+aIcms    	:=	{}
+nRet		:=	0
+cLista      := ""
+
+nRet    := IFListar(@cLista)
+nHdlECF := IFAbrir(cImpressora,cPorta)
+nRet    := IfAbrECF(nHdlECF)
+
+If nRet <> 0
+	MsgStop("Falha na comunicação com o ECF - o cupom nao sera gerado")
+	Return(.t.) //({cNumero,.T.})
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³se exitir cupom aberto, faz o cancelamento e abre um novo.          ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+iRet     := IFStatus(nHdlECF,'5',@cRetorno)
+
+if iRet == 7
+	iRet := IFCancCup(nHdlECF)
+	Inkey(8)   // dá um tempo para a impressora fazer a impressao do cancelamento
+Endif
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Abre o cupom fiscal                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+iRetorno := IFAbreCup(nHdlECF)
+If iRetorno <> 0
+	Return({cNumero,.T.})
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Tenta pegar o n£mero do cupom       ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cNumCupFis  := Space(6)
+iRetorno    := IFPegCupom( nHdlECF,@cNumCupFis)
+cNumCupFis  := StrZero(Val(cNumCupFis),6)
+cNumNota    := cNumCupFis
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Tenta pegar o n£mero do PDV         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cNumPdv    := Space(6)
+iRetorno   := IFPegPDV(nHdlECF,@cNumPdv)
+
+// Seta os indices das areas utilizadas
+dbSelectArea("SB1")
+dbSetOrder(1)
+
+dbSelectArea("SC5")
+dbSetOrder(1)
+
+dbSelectArea("SC6")
+dbSetOrder(2)
+
+dbSelectArea("SF4")
+dbSetOrder(1)
+
+cAgregAnt	:= SC9->C9_AGREG
+If !_lJunta
+	dbSelectArea("SC9")
+Else
+	dbSelectArea("TRB")
+EndIf
+
+While !Eof() .And. lRetBema .And. IIf(_lJunta,((TRB->C5CLIENTE+TRB->C5LOJACLI) == cCliAnt),.T.)//.And. &_cCondSC9 .And. If(_lJunta,((TRB->C5CLIENTE+TRB->C5LOJACLI) == cCliAnt),.T.)
+	//If _lJunta
+	//	dbSelectArea("SC9")
+	//	dbGoto(TRB->C9NUMREG)
+	//	dbSelectArea("SC5")
+	//	dbSeek(xFilial()+SC9->C9_PEDIDO)
+	//Endif
+	//If !_lJunta
+	//	dbSelectArea("SC9")
+	//	dbSkip()
+	//	nReg  := Recno()
+	//	lFim  := IIf(Eof(),.T.,.F.)
+	//	dbSkip(-1)
+	//Else
+	//	dbSelectArea("TRB")
+	//	dbSkip()
+    //	nReg := Recno()
+	//	lFim := IIf(Eof(),.T.,.F.)
+	//	dbSkip(-1)
+	//	dbSelectArea("SC9")
+	//Endif
+	lJuntaEste := _lJunta
+	If (SC9->C9_PEDIDO <> cPedAnt .or. SC9->C9_AGREG <> cAgregAnt) .and. !_lJunta
+		dbSelectarea("SC9")
+		lMudouPed := .T.
+		lFim	  := .F.
+		Exit
+	Endif
+	If (SC5->C5_TIPO <> cTipAnt) .Or. (SC5->C5_CLIENTE+SC5->C5_LOJACLI) <> cCliAnt .Or. (SC5->C5_REAJUST <> cReajant) .Or. (SC5->C5_CONDPAG <> cCondAnt) .Or.;
+	   (SC5->C5_VEND1+SC5->C5_VEND2+SC5->C5_VEND3+SC5->C5_VEND4+SC5->C5_VEND5 <> cVendant) .Or. SC5->C5_INCISS <> cIssAnt
+		lJuntaEste := .F.
+	Endif
+	If SC9->C9_PEDIDO <> cPedAnt
+		dbSelectArea("SE4")
+		dbSeek(xFilial("SE4")+SC5->C5_CONDPAG)
+		If SE4->E4_TIPO == "9"
+			lJuntaEste :=.F.
+		Endif
+	Endif
+	If SC9->C9_PEDIDO <> cPedAnt .and. !lJuntaEste
+		dbSelectarea("SC9")
+		lMudouPed := .T.
+		lFim:=.F.
+		Exit
+	Endif
+	If SC9->C9_PEDIDO <> cPedAnt
+		dbSelectArea("SC5")
+		dbSeek(xFilial("SC5")+SC9->C9_PEDIDO)
+	Endif
+	// Posiciona produto
+	DbSelectArea("SB1")
+	SB1->(dbSeek(xFilial("SB1")+SC9->C9_PRODUTO))
+	// Insere e verifica Aliquota de ICMS
+	DbSelectArea("SC6")
+	If SC6->(dbSeek(xFilial("SC6")+SC9->C9_PRODUTO+SC9->C9_PEDIDO+SC9->C9_ITEM)) .And. SC5->(dbSeek(xFilial("SC5")+SC9->C9_PEDIDO))
+		DbSelectArea("SF4")
+		If SF4->(dbSeek(xFilial("SF4")+SC6->C6_TES))
+			If SF4->F4_LFICM == "I"
+				cAliquota:= "I"    // Isento
+			Elseif SF4->F4_LFICM == "N" .or. SF4->F4_LFICM == "O"
+				cAliquota:= "N"    // Nao sujeito a ICMS ou coluna OUTROS do livro
+			ElseIf SB1->B1_PICMRET > 0 .And. SC5->C5_TIPOCLI == "S"
+				cAliquota:= "F"     // Substituicao tributaria (Icms Solidario)
+			Else
+				nAliquota := AliqIcms(SC5->C5_TIPO,'S',SC5->C5_TIPOCLI)
+				If SF4->F4_BASEICM > 0 .And. SF4->F4_BASEICM < 100	 // com reducao de Icms na Base
+					nAliquota:= NoRound(nAliquota*(SF4->F4_BASEICM/100),2)
+				EndIf
+				cAliquota := StrZero(nAliquota,5,2)
+				cAliquota := Subs(cAliquota,1,2) + Subs(cAliquota,4,2)
+				nAliquota := Val(StrZero(Val(cAliquota)/1000*10,5,2))
+				If Len(aIcms) == 0
+					nRet := IfLeAliq(nHdlECF,@cAliquota)
+					For i := 1 to Len(cAliquota)
+						nEl := At("|",cAliquota)
+						If !(nEl > 0)
+							Exit
+						EndIf
+						Aadd(aIcms,Val(Substr(cAliquota,1,nEl-1)))
+						cAliquota := Subs(cAliquota,nEl+1,len(cAliquota)-nEl)
+					Next
+				EndIf
+				nEl := Ascan(aIcms, nAliquota)
+				If nEl == 0
+					If Len(aIcms) >= 16
+						Help(" ",1,"LJ250LIMIT")
+						lRetBema:=.F.
+						Exit
+					Else
+						Aadd(aIcms, {nAliquota ,StrZero(Len(aIcms)+1,2)})
+						nRet := IfAdicAliq(nHdlECF,cAliquota,"1")
+					EndIf
+				EndIf
+				// Posicao da aliquota do ICMS
+				cAliquota:= "T"+Alltrim(Str(nAliquota,5,2))
+			EndIf
+		EndIf
+	EndIf
+    cProd 	:= SC9->C9_PRODUTO
+	cQuant	:= StrZero(SC9->C9_QTDLIB,8,3)
+	// Valor Unitario
+	If SF4->F4_INCIDE == "S"
+		nTotal	:= nTotal+(Round(SC9->C9_PRCVEN*(1+SB1->B1_IPI/100),2)*SC9->C9_QTDLIB)
+		cUnit 	:= Str(SC9->C9_PRCVEN*(1+SB1->B1_IPI/100),9,2)
+	Else
+		nTotal	:= nTotal+Round(SC9->C9_PRCVEN*SC9->C9_QTDLIB,2)
+		cUnit 	:= Str(SC9->C9_PRCVEN,9,2)
+	EndIf
+	// Valor Unitario Desconto
+	cDesconto:= Str(nDesconto,8,2)
+	// Verifica se impressora esta ativa. para continuar e envia os comandos
+	iRetorno := IFRegItem(nHdlECF,cProd,Subs(SB1->B1_DESC,1,29),cQuant,cUnit,cDesconto,cAliquota)
+	//If !_lJunta .and. !lFim
+	//	dbSelectArea("SC9")
+		//dbGoTo(nReg)
+	//ElseIf !lFim
+		//dbSelectArea("TRB")
+		//dbGoto(nReg)
+	//EndIf
+	cGrupoAnt := SC9->C9_GRUPO
+    If !_lJunta
+    	DbSelectArea("SC9")
+    	DbSkip()
+    Else
+    	DbSelectArea("TRB")
+    	DbSkip()
+    EndIf
+End
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica o Desconto e o Acrescimo   ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+//If _nTxJuros > 0
+//_nAcrescimo := _nValorTotal * _nTxJuros
+//cAcrescimo := Alltrim(Str(_nAcrescimo,14,2))
+//iRetorno := IFAcresTot( nHdlECF, cAcrescimo )
+//EndIf
+
+cDesconto := Alltrim(Str(nTotDesc,14,2))
+nRet      := IfDescTot(nHdlECF,cDesconto)
+
+cPagoTotal := 'VALOR PAGO|'+Alltrim(Str(nTotal - nTotDesc,14,2))+ '|'
+
+iRet := IFPagto(nHdlECF,cPagoTotal)
+
+//+-------------------------------------------------+
+//| Obtem a Mensagem padrao a ser impressa no Cupom |
+//+-------------------------------------------------+
+cPedido   := "Pedido: " + SC5->C5_NUM + CHR(10)
+cMensagem := GetMv("MV_LJFISMS")
+cMensagem := cPedido + Substr(cMensagem,1,480)
+
+//+-------------------------------------------------+
+//| Fecha o cupom e imprime a mensagem promocional  |
+//+-------------------------------------------------+
+If IFFechaCup(nHdlECF,cMensagem) == 0
+	//+-------------------------------------------------+
+	//| Restaura ambiente anterior                      |
+	//+-------------------------------------------------+
+	RestArea(aAreaSC9)
+	If _lJunta
+		RestArea(aAreaTRB)
+	EndIf
+	RestArea(aArea)
+	//+-------------------------------------------------+
+	//| Restaura variavel lfim                          |
+	//+-------------------------------------------------+
+	lFim  := lFimBack
+	nRet  := IFFechar(nHdlECF, cPorta)
+	cNumero := cNumNota
+	Return         // ({cNumNota,lRetBema,cNumPdv})
+EndIf
+
+Return // {cNumero,.F.}

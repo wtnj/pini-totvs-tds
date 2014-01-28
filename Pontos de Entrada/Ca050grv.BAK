@@ -1,0 +1,119 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 13/03/02
+/*/ //20041124 Danilo C S Pala, nao alterar para baixas cientes: Andre e Andrea
+// erro na migracao do 7.10: substr do produto
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡Æo    ³ A050GRV  ³ Autor ³ Desconhecido          ³ Data ³ ??/??/??    ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ponto de Entrada na gravacao do lancamento contabil utilizado ³±±
+±±³          ³ em todos os modulos que utilizam contabilizacao               ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Gen‚rico                                                      ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ 29/08/01 - Inclusao de Tratamento para o Programa MATA330 ( Recalculo    ³±±
+±±³            Custo Medio ). Mauricio Mendes                                ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Ca050grv()        // incluido pelo assistente de conversao do AP5 IDE em 13/03/02
+Local aArea := GetArea()
+SetPrvt("_CPAR,MORIGEM,MCCUSTO,MPROCESS,MPRODUTO,MSEQ")
+
+
+
+_cpar:=Str(PARAMIXB[1])
+
+IF EMPTY(SI2->I2_ORIGEM)
+   MORIGEM:=SUBS(CUSUARIO,7,15)
+ELSE
+   MORIGEM:=I2_ORIGEM
+ENDIF
+
+/*If AllTrim(FUNNAME())=="FINA040" .OR. AllTrim(FUNNAME())=="FINA070"
+   MCCUSTO:='001' //20041124
+   MPROCESS:=SI2->I2_PROCESS
+   MPRODUTO:=SUBS(SE1->E1_GRPROD,1,2)+'00000'
+   DO CASE
+      CASE SE1->E1_GRPROD=='01' .OR. SE1->E1_GRPROD=='02' .OR. SE1->E1_GRPROD='0700'
+           MPROCESS:='060'
+      CASE SE1->E1_GRPROD=='03' .OR. SE1->E1_GRPROD=='08'
+           MPROCESS:='040'
+      CASE SUBS(SE1->E1_GRPROD,1,2)=='04'
+           MPROCESS:='070'
+      CASE SUBS(SE1->E1_GRPROD,1,2)=='05'
+           MPROCESS:='080'
+      CASE SUBS(SE1->E1_GRPROD,1,2)=='10'
+           MPROCESS:='060'
+      CASE SUBS(SE1->E1_GRPROD,1,2) $'11/12/13/14/15/16/17/18/19/20'
+           MPRODUTO:='1100000'
+           MPROCESS:='090'
+      CASE SUBS(SE1->E1_GRPROD,1,2)=='03' .OR. 'P' $(SE1->E1_PEDIDO)
+           MPROCESS:='040'
+      CASE SUBS(SE1->E1_GRPROD,1,2) $'01/02/07'
+           MPROCESS:='060'
+   ENDCASE
+   RECLOCK("SI2",.F.)
+     IF SE1->E1_REAB=='S'
+        SI2->I2_CCC:=MCCUSTO
+     ELSE
+        SI2->I2_CCD:=MCCUSTO
+     ENDIF
+     SI2->I2_PROCESS:=MPROCESS
+     SI2->I2_PRODUTO:=MPRODUTO
+   MSUNLOCK()
+ENDIF  20041124*/
+
+If AllTrim(FUNNAME())=="MATA460" .OR. AllTrim(FUNNAME())=="MATA520"
+  // MPRODUTO:=RIGHT(SI2->I2_HIST,7)
+
+   DBSELECTAREA("SB1")
+   DBSETORDER(1)
+   DBSEEK(XFILIAL()+SD2->D2_COD)
+   IF FOUND()
+      DBSELECTAREA("SI2")
+      RECLOCK("SI2",.F.)
+         SI2->I2_PROCESS := SB1->B1_PROCESSO
+         SI2->I2_CCC     := SB1->B1_CCUSTO
+         SI2->I2_PRODUTO := substr(SB1->B1_COD,1,7)
+//       SI2->I2_HIST    :=LEFT(SI2->I2_HIST)
+      MSUNLOCK()
+   ENDIF
+ENDIF
+
+// Rotina abaixo Incluida por Mauricio em 29/08/01
+If AllTrim(FUNNAME())=="MATA330"
+   MSEQ     :=SUBSTR(SI2->I2_ORIGEM,21,6)
+   // Indice 4 do SD3 Filial + Numseq
+   DBSELECTAREA("SD3")
+   DBSETORDER(4)
+   DBSEEK(XFILIAL("SD3")+MSEQ)
+   IF FOUND()
+      DBSELECTAREA("SI2")
+      RECLOCK("SI2",.F.)
+         SI2->I2_PROCESS := SD3->D3_PROCESS
+         SI2->I2_CCC     := SD3->D3_CC
+         SI2->I2_PRODUTO := substr(SD3->D3_PRODUTO,1,7)
+      MSUNLOCK()
+   ENDIF
+ENDIF
+
+// FOR€AR A GRAVACAO DA ORIGEM NO I2 - PARA QUALQUER LANCAMENTO
+//RECLOCK("SI2",.F.)
+//SI2->I2_ORIGEM  := MORIGEM
+//MSUNLOCK()
+
+// GILBERTO - 19/12/2000 PARA FORCAR GRAVACAO DO I2_FECHCUS COM BRANCOS.
+IF AllTrim(FUNNAME())=="CONA050"
+   IF INCLUI
+      DBSELECTAREA("SI2")
+      RECLOCK("SI2",.F.)
+      SI2->I2_FECHCUS := CTOD("  /  /  ")
+      MSUNLOCK()
+   ENDIF
+ENDIF
+
+RestArea(aArea)
+
+Return(.t.)

@@ -1,0 +1,330 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ ฑฑ
+ฑฑณPrograma: ETIQPUB   ณAutor: Solange Nalini         ณ Data:   12/12/99 ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณDescriao: Etiquetas de Publicidade                                   ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณUso      : Especifico PINI                                            ณ ฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด ฑฑ
+ฑฑณAlteracao: Alteracao para considerar Transacao 12 igual 04.RC.16/03/00ณ ฑฑ
+ฑฑภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู ฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+User Function Rfat019()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("_CALIAS,_NINDEX,_NREG,LI,LIN,CBTXT")
+SetPrvt("CBCONT,NORDEM,ALFA,Z,M,TAMANHO")
+SetPrvt("LIMITE,TITULO,CDESC1,CDESC2,CDESC3,CNATUREZA")
+SetPrvt("ARETURN,SERNF,NOMEPROG,CPERG,NLASTKEY,LCONTINUA")
+SetPrvt("NLIN,WNREL,CSTRING,TREGS,M_MULT,P_ANT")
+SetPrvt("P_ATU,P_CNT,M_SAV20,M_SAV7,_ACAMPOS,_CNOME")
+SetPrvt("XNOTA,MAGENCIA,XSERIE,XPEDIDO,MTPTRANS,XCLIENTE")
+SetPrvt("XLOJA,XCODAG,MNOME,MEND,MBAIR,MMUNI")
+SetPrvt("MESTA,MCEP,")
+
+_cAlias := Alias()
+_nIndex := IndexOrd()
+_nReg   := Recno()
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Variaveis utilizadas para parametros                         ณ
+//ณ mv_par01             // NF_inicial                           ณ
+//ณ mv_par02             // NF_Final                             ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+li        := 0
+LIN       := 0
+CbTxt     := ""
+CbCont    := ""
+nOrdem    := 0
+Alfa      := 0
+Z         := 0
+M         := 0
+tamanho   := "G"
+limite    := 220
+titulo    := PADC("ETIQUETAS  ",74)
+cDesc1    := PADC("Este programa ira emitir as Etiquetas p/N.Fiscais",74)
+cDesc2    := ""
+cDesc3    := ""
+cNatureza := ""
+
+aReturn   := { "Especial", 1,"Administracao", 1, 2, 1,"",1 }
+SERNF     := 'UNI'
+nomeprog  := "etiq"
+
+cPerg     := "FAT004"
+nLastKey  := 0
+
+lContinua := .T.
+nLin      := 0
+wnrel     := "ETIQPUB"
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Verifica as perguntas selecionadas                                      ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+Pergunte(cPerg,.T.)               // Pergunta no SX1
+CSTRING := 'SF2'
+
+Processa({|| R019Proc()})
+
+Return
+
+Static Function R019Proc()
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Envia controle para a funcao SETPRINT                        ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+While lContinua
+	wnrel := SetPrint(cString,wnrel,cPerg,Titulo,cDesc1,cDesc2,cDesc3,.T.)
+	
+    If nLastKey == 27
+		Return
+    EndIf
+	
+	//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+	//ณ Verifica Posicao do Formulario na Impressora                 ณ
+	//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	SetDefault(aReturn,cString)
+	
+    If nLastKey == 27
+		Return
+    EndIf
+    lContinua:=.T.
+	
+	//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+	//ณ  Prepara regua de impressฦo                                  ณ
+	//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	tregs := LastRec()-Recno()+1
+
+    _aCampos := {   {"NOME"     ,"C",40, 0} ,;
+                    {"AGENCIA"  ,"C",40, 0} ,;
+                    {"v_End"    ,"C",40, 0} ,;
+                    {"BAIRRO"   ,"C",20, 0} ,;
+                    {"MUN"      ,"C",20, 0} ,;
+                    {"CEP"      ,"C",8 , 0} ,;
+                    {"EST"      ,"C",2 , 2}}
+	
+	_cNome := CriaTrab(_aCampos,.t.)
+	dbUseArea(.T.,, _cNome,"ETIQP",.F.,.F.)
+	
+    dbSelectArea('SF2')
+    dbSetOrder(1)
+    If !dbSeek(xFilial("SF2")+MV_PAR01, .F.)
+		Return
+    EndIf
+	
+	ProcRegua(RecCount())
+	
+    While !Eof() .and. SF2->F2_FILIAL == xFilial("SF2") .and. SF2->F2_DOC >= MV_PAR01 .and. SF2->F2_DOC <= MV_PAR02
+		
+		IncProc("Gerando Etiqueta da Nota "+SF2->F2_SERIE+SF2->F2_DOC)
+		
+		XNOTA    := SF2->F2_DOC
+		MAGENCIA := ' '
+		XSERIE   := SF2->F2_SERIE
+		
+        dbSelectArea("SD2")
+        dbSetOrder(3)
+        dbSeek(xFilial("SD2")+XNOTA+XSERIE)
+        If SUBS(SD2->D2_PEDIDO,6,1)#'P'
+            dbSelectArea("SF2")
+            dbSkip()
+            Loop
+        EndIf
+		XPEDIDO := SD2->D2_PEDIDO
+		
+        dbSelectArea("SC5")
+        dbSetOrder(1)
+        dbSeek(xFilial("SC5")+XPEDIDO)
+		MTPTRANS := SC5->C5_TPTRANS
+		XCLIENTE := SC5->C5_CLIENTE
+		XLOJA    := SC5->C5_LOJACLI
+		XCODAG   := SC5->C5_CODAG
+		
+        dbSelectArea("SA1")
+        dbSetOrder(1)
+        dbSeek(xFilial("SA1")+XCLIENTE+XLOJA)
+		MNOME  := SA1->A1_NOME
+        MEnd   := SA1->A1_End
+		MBAIR  := SA1->A1_BAIRRO
+		MMUNI  := SA1->A1_MUN
+		MESTA  := SA1->A1_EST
+		MCEP   := SA1->A1_CEP
+		
+        If SUBS(SA1->A1_EndCOB,1,1) == 'S'
+            dbSelectArea("SZ5")
+            dbSetOrder(1)
+            If dbSeek(xFilial("SZ5")+XCLIENTE+XLOJA, .F.)
+                MEnd   := SZ5->Z5_END
+				MBAIR  := SZ5->Z5_BAIRRO
+				MMUNI  := SZ5->Z5_CIDADE
+				MESTA  := SZ5->Z5_ESTADO
+				MCEP   := SZ5->Z5_CEP
+            EndIf
+        EndIf
+		
+        If MTPTrans $ "04/12"
+        //If MTPTrans == "04"       - Alterado em 16/03/00 - By RC
+            dbSelectArea("SA1")
+            If dbSeek(xFilial("SA1")+XCODAG,.f.)    // +_clojaag) - ACRESCENTAR
+				MAGENCIA := SA1->A1_NOME
+            EndIf
+            MEnd   := SA1->A1_End
+			MBAIR  := SA1->A1_BAIRRO
+			MMUNI  := SA1->A1_MUN
+			MESTA  := SA1->A1_EST
+			MCEP   := SA1->A1_CEP
+			
+        EndIf
+		
+        If MTPTRANS == '05' .OR. MTPTRANS == '09'
+            dbSelectArea("SA1")
+            If dbSeek(xFilial("SA1")+XCODAG, .F.)
+				MAGENCIA := ' '
+            EndIf
+        EndIf
+		
+		GRAVA_TEMP()
+        dbSelectArea("SF2")
+        dbSkip()
+    End
+	IMPETIQ()
+End
+
+dbSelectArea("SC6")
+Retindex("SC6")
+dbSelectArea("SC5")
+Retindex("SC5")
+dbSelectArea("SA1")
+Retindex("SA1")
+dbSelectArea("SZ5")
+Retindex("SZ5")
+
+set devi to screen
+If aRETURN[5] == 1
+	Set Printer to
+	dbcommitAll()
+	ourspool(WNREL)
+EndIf
+MS_FLUSH()
+
+dbSelectArea("ETIQP")
+dbCloseArea()
+fErase(_cNome+".DBF")
+
+dbSelectArea(_cAlias)
+dbSetOrder(_nIndex)
+dbGoTo(_nReg)
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณGravaTemp()Autor  ณMicrosiga           บ Data ณ  04/09/02   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP5                                                        บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function Grava_Temp()
+
+dbSelectArea("ETIQP")
+Reclock("ETIQP",.t.)
+ETIQP->NOME     :=  MNOME
+ETIQP->AGENCIA  :=  MAGENCIA
+ETIQP->v_End    :=  MEnd
+ETIQP->BAIRRO   :=  MBAIR
+ETIQP->MUN      :=  MMUNI
+ETIQP->EST      :=  MESTA
+ETIQP->CEP      :=  MCEP
+msUnlock()
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpetiq() บAutor  ณMicrosiga           บ Data ณ  04/09/02   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP5                                                        บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function Impetiq()
+
+Set Device to Printer
+
+dbSelectArea("ETIQP")
+dbGoTop()
+SetPrc(0,0)
+While !EOF()
+	@ LIN+LI,001 PSAY NOME
+    dbSkip()
+	@ LIN+LI,045 PSAY NOME
+    dbSkip()
+	@ LIN+LI,089 PSAY NOME
+    dbSkip(-2)
+	LI++
+	
+	@ LIN+LI,001 PSAY AGENCIA
+    dbSkip()
+	@ LIN+LI,045 PSAY AGENCIA
+    dbSkip()
+	@ LIN+LI,089 PSAY AGENCIA
+    dbSkip(-2)
+	LI++
+	
+    @ LIN+LI,001 PSAY v_End
+    dbSkip()
+    @ LIN+LI,045 PSAY v_End
+    dbSkip()
+    @ LIN+LI,089 PSAY v_End
+    dbSkip(-2)
+	LI++
+	
+	@ LIN+LI,001 PSAY BAIRRO
+    dbSkip()
+	@ LIN+LI,045 PSAY BAIRRO
+    dbSkip()
+	@ LIN+LI,089 PSAY BAIRRO
+    dbSkip(-2)
+	LI++
+	
+	@ LIN+LI,001 PSAY SUBS(CEP,1,5)+'-'+SUBS(CEP,6,3)+'   ' +MUN+' ' +EST
+    dbSkip()
+	@ LIN+LI,045 PSAY SUBS(CEP,1,5)+'-'+SUBS(CEP,6,3)+'   ' +MUN+' ' +EST
+    dbSkip()     
+	@ LIN+LI,089 PSAY SUBS(CEP,1,5)+'-'+SUBS(CEP,6,3)+'   ' +MUN+' ' +EST
+	LI++
+    dbSkip()
+	LI := 2
+	setprc(0,0)
+	lin := prow()
+End
+
+Set Device to Screen
+
+If aRETURN[5] == 1
+	Set Printer to
+	dbcommitAll()
+	ourspool(WNREL)
+EndIf
+
+Ms_Flush()
+
+dbSelectArea("ETIQP")
+dbCloseArea()
+
+return
