@@ -1,0 +1,48 @@
+/*
+//Alterado por Danilo C S Pala em 20070315: CFE
+//Alterado por Danilo C S Pala em 20070328: NFS
+//Alterado por Danilo C S Pala em 20080220: SEM 
+//Alterado por Danilo C S Pala em 20081031: STD
+//Alterado por Danilo C S Pala em 20100507: ECF
+//Alterado por Danilo C S Pala em 201000803: 1
+//Alterado por Danilo C S Pala em 20110719: centralizar as series da contabilizacao para despesa de remessa do SF2 e da valor do SD2
+//Alterado por Danilo C S Pala em 20110722: Pis e cofins apuracao
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³SERIE_SI5 ºAutor  ³DANILO C S PALA     º Data ³  20050131   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³ RETORNA O VALOR DO ITEM DA NOTA FISCAL A SER CONTABILIZADO º±±
+±±º          ³ CONFORME A SERIE CORRETA									  º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+User Function SERIE_SI5(cTipo) //D=despesa de remessa. '' ou V = valor do item da nota ou P=PIS apuracao ou C=COFINS apuracao
+Local n_serie  := 0
+Local aArea := GetArea()    
+
+//IF(SF4->F4_DUPLIC=="S" .AND.Trim(SD2->D2_SERIE) $'UNI%D1%CUP%CF%PUB',SD2->D2_TOTAL,0)     
+
+//VERIFICAR O TES
+DbSelectArea("SF4")
+DbSetOrder(1)
+DbSeek(xFilial("SF4")+SD2->D2_TES)    
+IF SF4->F4_DUPLIC=='S' .AND. (SD2->D2_SERIE=='UNI' .OR. TRIM(SD2->D2_SERIE)=='D1' .OR. SD2->D2_SERIE=='CUP' .OR. SD2->D2_SERIE=='CFS' .OR.SD2->D2_SERIE=='CFA' .OR. SD2->D2_SERIE=='PUB' .OR. SD2->D2_SERIE=='CFB' .OR. SD2->D2_SERIE=='CFC' .OR. SD2->D2_SERIE=='CFD' .OR. SD2->D2_SERIE=='ANG' .OR. SD2->D2_SERIE=='CFE' .OR. SD2->D2_SERIE=='NFS' .OR. SD2->D2_SERIE=='SEN' .OR. SD2->D2_SERIE=='STD' .OR. SD2->D2_SERIE=='ECF' .OR. SD2->D2_SERIE=='1  ' .OR. SD2->D2_SERIE=='8  ') /* 'UNI%D1%CUP%CFS%CFA%PUB%CFB%CFC%CFD%ANG')  //20060313 CFD //20061031 ANG*/ //20061107  //20070315 CFE  //20070328 NFS //20080220 SEN //20081031 STD //20100507 ECF //20100803 1
+	if alltrim(upper(cTipo)) == "D" //despesa de remessa
+		n_serie := SD2->D2_DESPREM
+	elseif alltrim(upper(cTipo)) == "P"//Pis apuracao 20110722
+		n_serie := SD2->D2_VALIMP6
+	elseif alltrim(upper(cTipo)) == "C" //COFINS apuracao 20110722
+		n_serie := SD2->D2_VALIMP5
+	else 
+		n_serie := SD2->D2_TOTAL
+	endif
+ELSE
+	n_serie := 0
+ENDIF //TES
+
+RestArea(aArea)
+RETURN(n_serie)

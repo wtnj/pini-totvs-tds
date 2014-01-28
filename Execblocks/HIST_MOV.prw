@@ -1,0 +1,34 @@
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³HIST_MOV  ºAutor  ³DANILO C S PALA     º Data ³  20060223   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³ RETORNAR O HISTORICO DO LANCAMENTO CONTABIL, DIFERENCIANDO º±±
+±±º          ³ SE HOUVER CGC NO MOVIMENTO BANCARIO OU NAO                 º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+User Function HIST_MOV()
+Local s_hist  := space(40)
+Local aArea := GetArea()   
+//IF SM0->M0_CODIGO=="01" 
+	If Empty(SE5->E5_CGC) 
+		//s_hist := "DEPOSITOS EFETUADOS" +SA6->A6_NREDUZ    
+		IF ALLTRIM(SE5->E5_NATUREZ)=="0102"
+			s_hist := "AVS CREDITO REF DEPOSITO EM CC " +SA6->A6_NREDUZ    
+		ELSE
+			s_hist := "DEPOSITOS EFETUADOS " +SA6->A6_NREDUZ    
+		END
+	Else
+		s_hist := "DEP CC "+ alltrim(SA6->A6_NREDUZ)  +"/ " +SE5->E5_CGC
+	Endif
+/*ELSE
+	s_hist := "DEPOSITOS EFETUADOS" +SA6->A6_NREDUZ    
+ENDIF */
+RestArea(aArea)
+
+RETURN(s_hist)

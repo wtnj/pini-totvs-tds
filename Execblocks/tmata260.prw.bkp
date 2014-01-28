@@ -1,0 +1,136 @@
+#INCLUDE "rwmake.ch"                       
+#include "topconn.ch"
+
+// Transferencia entre almoxarifados / localizacoes          
+User function Tmata260()
+setprvt("cQuery, nTotal, nQtd, cTrans, nTotTrans")
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Pega a variavel que identifica se o calculo do custo e' :    ³
+//³               O = On-Line                                    ³
+//³               M = Mensal                                     ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+PRIVATE cCusMed  := GetMv("MV_CUSMED")
+//PRIVATE cCadastro:= OemToAnsi(STR0001)	//"Transferˆncias"
+PRIVATE aRegSD3  := {}
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica se o custo medio e' calculado On-Line               ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If cCusMed == "O"
+	PRIVATE nHdlPrv // Endereco do arquivo de contra prova dos lanctos cont.
+	PRIVATE lCriaHeader := .T. // Para criar o header do arquivo Contra Prova
+	PRIVATE cLoteEst 	// Numero do lote para lancamentos do estoque
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Posiciona numero do Lote para Lancamentos do Faturamento     ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	dbSelectArea("SX5")
+	dbSeek(xFilial()+"09EST")
+	cLoteEst:=IIF(Found(),Trim(X5Descri()),"EST ")
+EndIf
+/*
+//para estorno passar o 15o. parâmetro com .T.
+//Function a260Processa(cCodOrig,cLocOrig,nQuant260,cDocto,dEmis260,nQuant260D,cNumLote,cLoteDigi,dDtValid,cNumSerie,cLoclzOrig,cCodDest,cLocDest,cLocLzDest,lEstorno,nRecOrig,nRecDest,cPrograma,cEstFis,cServico,cTarefa,cAtividade,cAnomalia,cEstDest,cEndDest,cHrInicio,cAtuEst,cCarga,cUnitiza,cOrdTar,cOrdAti,cRHumano,cRFisico,nPotencia,cLoteDest)
+
+/*
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³A260Processa  ³ Eveli Morasco             ³ Data ³ 16/01/92 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Processamento da inclusao                                  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Parametros³ExpC01: Codigo do Produto Origem - Obrigatorio              ³±±
+±±³          ³ExpC02: Almox Origem             - Obrigatorio              ³±±
+±±³          ³ExpN01: Quantidade 1a UM         - Obrigatorio              ³±±
+±±³          ³ExpC03: Documento                - Obrigatorio              ³±±
+±±³          ³ExpD01: Data                     - Obrigatorio              ³±±
+±±³          ³ExpN02: Quantidade 2a UM                                    ³±±
+±±³          ³ExpC04: Sub-Lote                 - Obrigatorio se Rastro "S"³±±
+±±³          ³ExpC05: Lote                     - Obrigatorio se usa Rastro³±±
+±±³          ³ExpD02: Validade                 - Obrigatorio se usa Rastro³±±
+±±³          ³ExpC06: Numero de Serie                                     ³±±
+±±³          ³ExpC07: Localizacao Origem                                  ³±±
+±±³          ³ExpC08: Codigo do Produto Destino- Obrigatorio              ³±±
+±±³          ³ExpC09: Almox Destino            - Obrigatorio              ³±±
+±±³          ³ExpC10: Localizacao Destino                                 ³±±
+±±³          ³ExpL01: Indica se movimento e estorno                       ³±±
+±±³          ³ExpN03: Numero do registro original (utilizado estorno)     ³±±
+±±³          ³ExpN04: Numero do registro destino (utilizado estorno)      ³±±
+±±³          ³ExpC11: Indicacao do programa que originou os lancamentos   ³±±
+±±³          ³ExpC12: cEstFis    - Estrutura Fisica          (APDL)       ³±±
+±±³          ³ExpC13: cServico   - Servico                   (APDL)       ³±±
+±±³          ³ExpC14: cTarefa    - Tarefa                    (APDL)       ³±±
+±±³          ³ExpC15: cAtividade - Atividade                 (APDL)       ³±±
+±±³          ³ExpC16: cAnomalia  - Houve Anomalia? (S/N)     (APDL)       ³±±
+±±³          ³ExpC17: cEstDest   - Estrututa Fisica Destino  (APDL)       ³±±
+±±³          ³ExpC18: cEndDest   - Endereco Destino          (APDL)       ³±±
+±±³          ³ExpC19: cHrInicio  - Hora Inicio               (APDL)       ³±±
+±±³          ³ExpC20: cAtuEst    - Atualiza Estoque? (S/N)   (APDL)       ³±±
+±±³          ³ExpC21: cCarga     - Numero da Carga           (APDL)       ³±±
+±±³          ³ExpC22: cUnitiza   - Numero do Unitizador      (APDL)       ³±±
+±±³          ³ExpC23: cOrdTar    - Ordem da Tarefa           (APDL)       ³±±
+±±³          ³ExpC24: cOrdAti    - Ordem da Atividade        (APDL)       ³±±
+±±³          ³ExpC25: cRHumano   - Recurso Humano            (APDL)       ³±±
+±±³          ³ExpC26: cRFisico   - Recurso Fisico            (APDL)       ³±±
+±±³          ³ExpN05: nPotencia  - Potencia do Lote                       ³±±
+±±³          ³ExpC27: cLoteDest  - Lote Destino da Transferencia          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Transferencia                                              ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+
+
+
+DbSelectArea("SB1")  
+cQuery :=  "select b1_cod, b1_desc, b1_locpad, to_char(f_saldo_almox(b1_cod,b1_locpad)) as saldo, b1_medsite, b1_flagsit, to_char(f_saldo_almox(b1_cod,'LS')) as saldoLS from sb1010 where b1_filial='  ' and b1_flagsit='T' and sb1010.d_e_l_e_t_<>'*'"
+
+DbUseArea(.T., "TOPCONN", TCGenQry(,,cQuery), 'PRODSITE', .F., .T.)
+//TcSetField("PRODSITE","SALDO"   ,"N",9)
+//TcSetField("PRODSITE","SALDOLS" ,"N",9)
+dbselectarea("PRODSITE")
+dbGoTop()              
+             
+nTotal := 0
+nQtd := 0
+cTrans := "N"
+nTotTrans := 0
+
+/*Regra:
+0) Se M > E(LS) então:
+1) Se S(T5 ou T6) >= M então E(LS) = (M - E(LS))
+2) Senao E(LS)= S(T5 ou T6) - E(LS)*/
+
+while !eof() 
+	nQtd := 0
+	nTotal := nTotal + 1
+	if PRODSITE->B1_MEDSITE > val(PRODSITE->SALDOLS)
+		if val(PRODSITE->SALDO) >= PRODSITE->B1_MEDSITE //PRODSITE->B1_MEDSITE >=3 .and. 
+			nQtd :=	(PRODSITE->B1_MEDSITE - val(PRODSITE->SALDOLS))
+			cTrans := "S"
+		else //if PRODSITE->B1_MEDSITE >val(PRODSITE->SALDO) //.and. val(PRODSITE->SALDO) <= 2
+			nQtd :=	(val(PRODSITE->SALDO) - val(PRODSITE->SALDOLS))
+			cTrans := "S"
+    	/*else        
+    		nQtd :=	0
+    		cTrans := "N"*/
+		endif
+	else             
+		nQtd :=	0
+		cTrans := "N"
+	endif		
+      
+	if cTrans == "S" .and. nQtd > 0
+		nTotTrans := nTotTrans + 1
+	  //a260Processa(cCodOrig         ,cLocOrig             ,nQuant260,cDocto  ,dEmis260  ,nQuant260D,cNumLote,cLoteDigi,dDtValid,cNumSerie,cLoclzOrig,cCodDest          ,cLocDest,cLocLzDest,lEstorno,nRecOrig,nRecDest,cPrograma  ,cEstFis,cServico,cTarefa,cAtividade,cAnomalia,cEstDest,cEndDest,cHrInicio,cAtuEst,cCarga,cUnitiza,cOrdTar,cOrdAti,cRHumano,cRFisico,nPotencia,cLoteDest)	
+	  //a260Processa("02021752       ","T5"                 ,1        ,space(6), ddatabase,0         ,""     ,""       ,ddatabase,""      ,""        ,"02021752       "  ,"T6"    ,""       ,.F.      ,0      ,0      ,       ""    ,""     ,""      ,""     ,""        ,""       ,""      ,""      ,""       ,"N"    ,""    ,""      ,""     ,""     ,""      ,""      ,0        ,"")
+		a260Processa(PRODSITE->B1_COD ,PRODSITE->B1_LOCPAD ,NQTD     ,space(6), ddatabase,0         ,""     ,""       ,ddatabase,""      ,""        ,PRODSITE->B1_COD,"LS"    ,""       ,.F.      ,0      ,0      , "U_TMATA260",""     ,""      ,""     ,""       ,""       ,""      ,""      ,""       ,"N"    ,""    ,""     ,""     ,""     ,""      ,""      ,0        ,"")
+	endif		
+	dbselectarea("PRODSITE")
+	dbskip()
+end
+       
+DBCloseArea("PRODSITE")
+Public cbody := "Atualizacao de saldos no almoxarifado LS. Processados: "+ alltrim(str(nTotal)) + ".  Transferidos de almoxarifados: " + alltrim(str(nTotTrans))
+u_semail(cbody, "TMATA260", "dpala@pini.com.br")
+return

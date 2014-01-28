@@ -1,0 +1,82 @@
+#include "rwmake.ch"
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³VALNFETRIBºAutor  ³Danilo C S Pala     º Data ³  20081208   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³ LOCALIZAR O TITULO DO TRIBUTO ESPECIFICADO IR/PIS/COFINS/CSLLº±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ COMPRAS                                                    º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+                 
+//E2_FILIAL + E2_PREFIXO + E2_NUM + E2_PARCELA + E2_TIPO + E2_FORNECE + E2_LOJA
+User Function VALNFETRIB(mPREFIXO, mNUM, mEMISSAO, mTRIBUTO)
+Local mVALTRIBUTO  := 0
+Local mPARCELA := SPACE(1)
+Local mNATUREZA := SPACE(10)
+Local mTIPO := SPACE(3)
+Local mFORNECE := "UNIAO "
+Local mLOJA := "00"
+
+IF mTRIBUTO == "IR"
+	mPARCELA := "1"
+	mNATUREZA := "IRF"
+	mTIPO := "TX "        
+	mFORNECE := "UNIAO "
+ELSEIF mTRIBUTO == "PIS"
+	mPARCELA := "2"
+	mNATUREZA := "PIS"
+	mTIPO := "TX "      
+	mFORNECE := "UNIAO "
+ELSEIF mTRIBUTO == "PIS"
+	mPARCELA := "2"
+	mNATUREZA := "PIS"
+	mTIPO := "TX "      
+	mFORNECE := "UNIAO "
+ELSEIF mTRIBUTO == "COFINS"
+	mPARCELA := "3"
+	mNATUREZA := "COFINS"
+	mTIPO := "TX "      
+	mFORNECE := "UNIAO "
+ELSEIF mTRIBUTO == "CSLL"
+	mPARCELA := "4"
+	mNATUREZA := "CSLL"
+	mTIPO := "TX "      
+	mFORNECE := "UNIAO "
+ELSEIF mTRIBUTO == "ISS"
+	mPARCELA := "1"
+	mNATUREZA := "ISS"
+	mTIPO := "ISS"     
+	mFORNECE := "000701" //20081212
+	mLOJA := "00"
+ELSEIF mTRIBUTO == "INSS"
+	mPARCELA := "1"
+	mNATUREZA := "INSS"
+	mTIPO := "INS"  
+	mFORNECE := "INSS  "
+ELSEIF mTRIBUTO == "ICMS"
+	mPARCELA := "4"
+	mNATUREZA := "CSLL"
+	mTIPO := "TX "      
+	mFORNECE := "UNIAO "
+ENDIF
+
+
+DBSELECTAREA("SE2")
+DBSETORDER(1)                               
+IF DBSEEK(XFILIAL("SE2") + mPREFIXO + mNUM + mPARCELA + mTIPO + mFORNECE + mLOJA) ////E2_FILIAL + E2_PREFIXO + E2_NUM + E2_PARCELA + E2_TIPO + E2_FORNECE + E2_LOJA
+	IF mEMISSAO == SE2->E2_EMISSAO   .and. ALLTRIM(SE2->E2_NATUREZ) == ALLTRIM(mNATUREZA)
+		mVALTRIBUTO := SE2->E2_VALOR
+	ELSE
+		mVALTRIBUTO := 0		
+	ENDIF
+ELSE                         
+	mVALTRIBUTO := 0
+ENDIF
+
+return (mVALTRIBUTO)

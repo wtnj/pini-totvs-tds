@@ -1,0 +1,97 @@
+#include "Protheus.ch"
+#include "TbiConn.ch"
+#include 'Ap5Mail.ch'
+
+
+//Programa  TWREMAIL  Autor  Microsiga            Data   04/05/09   
+//Alteracao           Autor  Rodolfo Vacari       Data   29/11/10   
+//Desc.      Conecta a um servidor  POP,baixa os email e salva seus     
+//           Anexos em um diretorio especifico.                         
+//Sintaxe	 TWREmail(cPop,cConta,xSenha,cDirAnexo,cExtensao)        
+//Pa_ram_etros                                                            	
+//	      cPop    := "pop.servidor.com"  - Endereco servidor POP.    
+//	      cConta  := conta@conta.com     - Conta para conectar no    
+//	      servidor.	                        		  
+//	      xSenha  := Senha.       					  
+//	      cDirAnexo := Ex:"workflow\Nfe_Rec", caso não exista será   
+//	      criado o novo diretório.                                   
+//           cExtensao := Ex: "XML", irá apagar todos os arquivos com   
+//	      extensão diverente de XML, se esse parametro for "" não	  
+//           terá ação.                                                 
+//Observação Sem passagem de parâmetros                                 
+//           Se não for passado nenhum parametro sera adotados os       
+//           mvs padrões para ess rotina                                
+//          
+//           cServer1  := "MV_XPOPNFE" // Servidor Pop                  
+//           cAccount  := "MV_XCONNFE" // Conta Email                   
+//           cPassword := "MV_XPSSNFE" // Senha                         
+//           cDir	 := "MV_XDIRNFE" // Onde será salvos os anexos    
+//                                                                      
+//                                                                      
+//Uso        WorkFlow Ed. Pini                                          
+
+User Function EDREmail(AEMP)
+local nemails
+Local cServer1  := ""
+Local cAccount  := ""
+Local cEnvia    := ""
+Local cRecebe   := ""
+Local cPassword := ""
+Local aFiles    := {}
+Local aFiles1   := {}
+Local nI        := 1
+Local cMensagem := ''
+Local cTos
+Local cDir		:= ""
+//Prepare Environment EMPRESA "01" FILIAL "01"
+if ValType(AEMP) == "A" 
+if  Len(aEmp) > 0 
+		Prepare Environment EMPRESA AEMP[1] FILIAL AEMP[2]
+Endif        
+
+cExtensao := "XML"	
+     
+cServer1  := SuperGetMv("MV_XPOPNFE",,"pop.gmail.com")      // Servidor Pop
+cAccount  := SuperGetMv("MV_XCONNFE",,"nfe@pini.com.br")    // Conta Email "nfe@pini.com.br"
+cPassword := SuperGetMv("MV_XPSSNFE",,"nfe2011pini")            // Senha
+cDir	  := SuperGetMv("MV_XDIRNFE",,"\NFE\PINI\Entradas\") // Onde será salvos os anexos
+cDir	  += AllTrim(Str(Year(dDatabase))) //+"_S"
+
+WHILE !file(cDir)                              
+  if !file("\NFE")                              
+  	MakeDir("\NFE")                               
+  Elseif !file("\NFE\PINI")
+	  MakeDir("\NFE\PINI")
+  Elseif !file("\NFE\PINI\Entradas")
+	  MakeDir("\NFE\PINI\Entradas")	  
+  ElseIf !file(cDir)
+	   MakeDir(cDir)
+  Endif
+End
+
+
+
+CONNECT pop SERVER cServer1 ACCOUNT cAccount PASSWORD cPassword Result lok //Recebimento
+
+POP MESSAGE COUNT nEmails     
+
+FOR N:=1 TO NEMAILS
+
+RECEIVE MAIL MESSAGE nemails;
+					FROM cenvia;
+					TO	crecebe;
+					SUBJECT "Recebe";
+					BODY cmensagem;
+					ATTACHMENT aFiles1 SAVE IN cDir;
+					DELETE;
+					RESULT lok
+next
+DISCONNECT POP SERVER result lok                    
+				
+aDirectory := Directory( cDir + "\*.*")
+cExtensao := AllTrim(Upper(cExtensao))
+If ValType(cExtensao)<> "U" .And. !Empty(cExtensao)
+  aEval( aDirectory, { |aFile|  if(Upper(Right(Alltrim(aFile[ 1 ]),3)) <> cExtensao.and.dDatabase==aFile[ 3 ],(CONOUT("Deletando "+cDir+"\"+ aFile[ 1 ]),FErase( cDir+"\"+ aFile[ 1 ] )),)  } )
+endif
+
+Return

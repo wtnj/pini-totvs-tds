@@ -1,0 +1,186 @@
+/*
+Danilo C S Pala 20110504: Alterado a pedido do Jose Martins
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³CONTAPODER3ºAutor  ³DANILO C S PALA     º Data ³  20101109  º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³ RETORNA A CONTA CONTABIL DO PRODUTO 						  º±±
+±±º          ³ DO PODER DE TERCEIROS    								  º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ PINI                                                       º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+User Function CONTAPODER3(cTpNota, cTipo) //cTpNota:E=Entrada ou S=Saida ,cTipo:C=Credito ou D=Debito
+Local cConta := ""
+Local aArea := GetArea()
+Local cTES := ""
+Local cProduto := ""
+
+
+if cTpNota =="S" //Saida
+	cTES := SD2->D2_TES
+	cProduto := SD2->D2_COD
+else //Entrada
+	cTES := SD1->D1_TES
+	cProduto := SD1->D1_COD
+endif
+
+//VERIFICAR O TES
+DbSelectArea("SF4")
+DbSetOrder(1)
+DbSeek(xFilial("SF4")+cTES)
+IF !EMPTY(SF4->F4_CTBESP) 
+	DbSelectArea("SB1")
+	DbSetOrder(1)
+	IF DbSeek(xFilial("SB1")+cProduto)
+		IF SF4->F4_CTBESP =="XN" //EXPOSICAO NFS
+			If SB1->B1_TIPO =="LI" .AND. !("TCPO" $ B1_DESC) //LIVRO PINI
+				if cTipo == "D"
+					cConta := "11030107001"
+				else
+					cConta := "11030102001"
+				endif
+			Elseif SB1->B1_TIPO =="LC" //LIVROS CONSIGNADO
+				if cTipo == "D"
+					cConta := "11030107002"
+				else
+					cConta := "11030102002"
+				endif
+			Elseif (SB1->B1_TIPO =="TC" .OR. SB1->B1_TIPO =="LI") .AND. "TCPO" $ B1_DESC //LIVRO TCPO
+				if cTipo == "D"
+					cConta := "11030107007"
+				else
+					cConta := "11030106001"
+				endif                      
+			Elseif SB1->B1_TIPO =="CD" .AND. "TCPO" $ B1_DESC//CD TCPO
+				if cTipo == "D"
+					cConta := "11030107008"
+				else
+					cConta := "11030106001"
+				endif
+			Elseif SB1->B1_TIPO =="CD" .AND. !("TCPO" $ B1_DESC)//CD PINI
+				if cTipo == "D"
+					cConta := "11030107005"
+				else   
+					cConta := "11030104001"
+				endif
+			Elseif SB1->B1_TIPO =="DV" //DVD PINI
+				if cTipo == "D"
+					cConta := "11030107006"
+				else
+					cConta := "11030104002"
+				endif
+			Elseif SB1->B1_TIPO =="CD" .AND. !("MODELAT" $ B1_DESC)//MODELATTO
+				if cTipo == "D"
+					cConta := "11030107009"
+				else   
+					cConta := "11030106002"
+				endif
+			Else
+				cConta := ""
+			EndIf
+		ELSEIF SF4->F4_CTBESP =="XT" .OR. SF4->F4_CTBESP =="XS"  //EXPOSICAO TRANSPORTE OU EXPOSICAO SIMBOLICA
+			If SB1->B1_TIPO =="LI" .AND. !("TCPO" $ B1_DESC) //LIVRO PINI
+				if cTipo == "C"
+					cConta := "11030107001"
+				else
+					cConta := "11030102001"
+				endif
+			Elseif SB1->B1_TIPO =="LC" //LIVROS CONSIGNADO
+				if cTipo == "C"
+					cConta := "11030107002"
+				else
+					cConta := "11030102002"
+				endif
+			Elseif (SB1->B1_TIPO =="TC" .OR. SB1->B1_TIPO =="LI") .AND. "TCPO" $ B1_DESC //LIVRO TCPO
+				if cTipo == "C"
+					cConta := "11030107007"
+				else
+					cConta := "11030106001"
+				endif                      
+			Elseif SB1->B1_TIPO =="CD" .AND. "TCPO" $ B1_DESC//CD TCPO
+				if cTipo == "C"
+					cConta := "11030107008"
+				else
+					cConta := "11030106001"
+				endif
+			Elseif SB1->B1_TIPO =="CD" .AND. !("TCPO" $ B1_DESC)//CD PINI
+				if cTipo == "C"
+					cConta := "11030107005"
+				else
+					cConta := "11030104001"
+				endif
+			Elseif SB1->B1_TIPO =="DV" //DVD PINI
+				if cTipo == "C"
+					cConta := "11030107006"
+				else
+					cConta := "11030104002"
+				endif
+			Elseif SB1->B1_TIPO =="CD" .AND. !("MODELAT" $ B1_DESC)//MODELATTO 20110504
+				if cTipo == "C"
+					cConta := "11030107009"   
+				else
+					cConta := "11030106002"
+				endif
+			Else
+				cConta := ""
+			EndIf
+		ELSEIF SF4->F4_CTBESP =="CN" //CONSIGNACAO NFS
+			If SB1->B1_TIPO =="LI" .AND. !("TCPO" $ B1_DESC) //LIVRO PINI
+				if cTipo == "D"
+					cConta := "11030107001"
+				else	
+					cConta := "11030102001"
+				endif
+			Elseif (SB1->B1_TIPO =="TC" .OR. SB1->B1_TIPO =="LI") .AND. "TCPO" $ B1_DESC //LIVRO TCPO
+				if cTipo == "D"
+					cConta := "11030107007"
+				else
+					cConta := "11030106001"
+				endif                      
+			Elseif SB1->B1_TIPO =="CD" .AND. "TCPO" $ B1_DESC//CD TCPO
+				if cTipo == "D"
+					cConta := "11030107008"
+				else
+					cConta := "11030106001"
+				endif
+			Else
+				cConta := ""
+			EndIf
+		ELSEIF SF4->F4_CTBESP =="CT" .OR. SF4->F4_CTBESP =="CS" //CONSIGNACAO TRANSPORTE OU CONSIGNACAO SIMBOLICA
+			If SB1->B1_TIPO =="LI" .AND. !("TCPO" $ B1_DESC) //LIVRO PINI
+				if cTipo == "C"
+					cConta := "11030107001"
+				else
+					cConta := "11030102001"
+				endif
+			Elseif (SB1->B1_TIPO =="TC" .OR. SB1->B1_TIPO =="LI") .AND. "TCPO" $ B1_DESC //LIVRO TCPO
+				if cTipo == "C"
+					cConta := "11030107007"
+				else    
+					cConta := "11030106001"
+				endif                      
+			Elseif SB1->B1_TIPO =="CD" .AND. "TCPO" $ B1_DESC//CD TCPO
+				if cTipo == "C"
+					cConta := "11030107008"
+				else
+					cConta := "11030106001"
+				endif
+			Else
+				cConta := ""
+			EndIf   
+		ELSE 
+			cConta := ""
+		ENDIF
+	ELSE          
+		cConta := ""
+	ENDIF
+ELSE
+	cConta := ""
+ENDIF //TES
+
+RestArea(aArea)
+RETURN(cConta)

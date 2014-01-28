@@ -1,0 +1,139 @@
+#INCLUDE "APWEBSRV.CH"
+#INCLUDE "PROTHEUS.CH"
+#INCLUDE "TBICONN.CH"
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ     
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³EDWSPRENOTAºAutor  ³Rodolfo Vacari     º Data ³  07/12/12   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³WebService para inclusao de pre nota e consulta de chave    º±±
+±±º          ³da nfe                                                      º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+
+//Struct dos dados da pre nota
+WsStruct bsPreNotaItem
+	WsData Produto As String
+	WsData Quantidade As Float
+	WsData ValorUnitario As Float
+EndWsStruct      
+
+WsStruct ItensStruct
+	WSDATA ITENS AS ARRAY OF BSPRENOTAITEM
+ENDWSSTRUCT
+	
+WSSTRUCT RetornoStruct
+	WSDATA OK AS BOOLEAN
+	WSDATA CODIGO AS STRING
+	WSDATA MENSAGEM AS STRING
+ENDWSSTRUCT	
+//WebService BSWSPRENOTA
+WSSERVICE BSWSPRENOTA DESCRIPTION "Inclui pre-nota de entrada com base nas informações fornecidas"
+	//Variaveis                        
+	WSDATA EMPRESA AS STRING
+	WSDATA FILIAL AS STRING
+	WSDATA FORNECEDOR AS STRING
+	WSDATA LOJA AS STRING
+	WSDATA NOTAFISCAL AS STRING
+	WSDATA SERIE AS STRING
+	WSDATA EMISSAO AS STRING
+	WSDATA ESPECIE AS STRING
+	WSDATA ITENS AS ITENSSTRUCT
+	WSDATA RETORNO AS RetornoStruct
+	//Metodos                                                                                                 
+	WsMethod INCLUIPRENOTA DESCRIPTION "Inclui a pre-nota de entrada"
+	WsMethod VALIDSZA DESCRIPTION "Valida se o XML ref. a pre nota foi recebido e se sua chave é válida"
+ENDWSSERVICE
+ 
+//Metodo para inclusao de pre nota		
+WSMethod INCLUIPRENOTA WSRECEIVE EMPRESA, FILIAL, FORNECEDOR, LOJA, NOTAFISCAL, SERIE, EMISSAO, ESPECIE, ITENS WSSEND RETORNO WSSERVICE BSWSPRENOTA
+
+Local _aCabec := {}
+Local _aItens := {}
+Local _cItem := "" 
+Private lMsErroAuto := .F.
+Private lAutoErrNoFile := .T. //Nao gera log em arquivo texto e sim e array
+
+RpcSetType ( 3 )
+PREPARE ENVIRONMENT EMPRESA ::Empresa FILIAL ::Filial
+
+WsChangeModule("SIGACOM")  
+                   
+_cItem := StrZero(1, TamSx3("D1_ITEM")[1])
+
+aAdd(_aCabec,{"F1_FORNECE", ::Fornecedor,Nil})	
+aAdd(_aCabec,{"F1_LOJA", ::Loja,Nil})
+aAdd(_aCabec,{"F1_DOC", ::NotaFiscal,Nil})
+aAdd(_aCabec,{"F1_SERIE", ::Serie,Nil})
+aAdd(_aCabec,{"F1_EMISSAO", ::Emissao,Nil})
+aAdd(_aCabec,{"F1_ESPECIE", ::Especie,Nil})    
+
+For i := 1 To Len(::DadosPreNota:Itens)
+    aAdd(_aItens,{;
+    {"D1_ITEM", _cItem, Nil},;
+    {"D1_COD", ::Itens:Itens[i]:Produto, Nil},;
+    {"D1_QUANT", ::Itens:Itens[i]:Quantidade, Nil},;
+    {"D1_VUNIT", ::Itens:Itens[i]:ValorUnitario, Nil},;
+    {"D1_TOTAL", Round(::Itens:Itens[i]:Quantidade * ::Itens:Itens[i]:ValorUnitario, TamSx3("D1_TOTAL")[2]), Nil}}) 
+    _cItem := Soma1(_cItem)
+Next                       
+
+MSExecAuto({|x,y,z| MATA140(x,y,z)},_aCabec,_aItens,3)
+
+If lMsErroAuto
+	U_MailNotify("rodolfo@rvacari.com.br","","Erro Inclusao Pre Nota - "+Capital(SM0->M0_FILIAL),{GetAutoGRLog()},{},.T.)	
+	SetSoapFault("ErroRotAut","Erro na inclusao da Pre-Nota de Entrada o administrador foi informado via e-mail, aguarde o retorno do mesmo sobre esta nao conformidade")
+	::Retorno:OK := .F.
+	::Retorno:Codigo := "-1"
+	::Retorno:Mensagem := "Erro na execução da rotina automática"
+Else                       
+	::Retorno:OK := .T.
+	::Retorno:Codigo := "1"
+	::Retorno:Mensagem := "Pré-nota includa com sucesso"
+EndIf	   
+            
+RESET ENVIRONMENT                
+RestArea(_aArea)
+Return(!lMsErroAuto)
+ 
+//Metodo para consulta a tabela SZA e validacao da chave da nfe    
+
+WSMethod VALIDSZA WSRECEIVE EMPRESA, FILIAL, FORNECEDOR, LOJA, NOTAFISCAL, SERIE WSSEND Retorno WSSERVICE BSWSPRENOTA
+
+Local _lRet := .T.
+Local _aArea := GetArea()
+Local _cAliasZA := GetNextAlias()
+Local _aRetSefaz := {}        
+Local _cCNPJ := ""
+
+RpcSetType ( 3 )
+PREPARE ENVIRONMENT EMPRESA ::Empresa FILIAL ::Filial
+
+WsChangeModule("SIGACOM")  
+
+_cCNPJ := GetAdvfVal("SA2","A2_CGC",xFilial("SA2")+::Fornecedor + ::Loja, 1 , "")
+dbUseArea(.T.,"TOPCONN",TcGenQry(,,"SELECT ZA_CHVNFE, ZA_NFOK, ZA_CANCELA FROM "+RetSQlName("SZA") + " ZA WHERE ZA_NOTA = '"+::NotaFiscal+"' "+;
+"AND ZA_SERIE = '"+::Serie+"' AND ZA_CNPJDES = '"+SM0->M0_CGC+"' AND ZA_CNPJEMI = '"+_cCNPJ+"' AND D_E_L_E_T_ = '' "), _cAliasZA,.T.,.F.)
+TcSetField(_cAliasZA,"ZA_NFOK","L",1,0)
+TcSetField(_cAliasZA,"ZA_CANCELA","L",1,0)
+
+dbSelectArea(_cAliasZA)
+If !Eof()
+	//_aRetSefaz := U_ConNFeKey(_cKeyNFe)
+	_aRetSefaz := U_ConNFeKey(_cAliasZA->ZA_CHVNFE)
+	::Retorno:OK := _aRetSefaz[3] == "100"
+	::Retorno:Codigo := _aRetSefaz[3]
+	//::Retorno:Mensagem := AllTrim(_aRetSefaz[4])
+Else                        
+	::Retorno:OK := .F.
+	::Retorno:Codigo := "-1"         
+	//::Retorno:Mensagem := "Não é possível incluir esta nota fiscal, seu arquivo XML ainda não foi recepcionado"
+EndIf
+(_cAliasZA)->(dbCloseArea())
+RestArea(_aArea)
+
+Return _lRet

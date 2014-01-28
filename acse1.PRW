@@ -1,0 +1,75 @@
+#INCLUDE "RWMAKE.CH"
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: LUCPER    ³Autor: SOLANGE NALINI         ³ Data:  28/04/01  ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: Preparacao dos titulos para Lucros e Perdas                ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo Financeiro - Espec¡fico PINI                        ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+/*/
+//ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ MV_PAR01 ³ Data do Cancelamento: ³
+//ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+User Function AJUSE1E5()
+
+Private nCont, cSerie
+
+DbUseArea(.t.,,"AJULP.DBF","TRB",.f.,.f.)
+
+lEnd := .f.
+
+Processa({|lEnd|PF015Proc(@lEnd)},"Ajuste SE1","Processando",.t.)
+
+Return
+
+Static Function PF015Proc()
+
+nCont   := 0
+nValTot := 0
+
+DbSelectArea("SE1")
+DbSetOrder(1) //mp10 era (17)
+
+DbSelectArea("TRB")
+ProcRegua(RecCount())
+
+While !Eof()
+	DbSelectArea("SE1")
+	If DbSeek(xFilial("SE1")+TRB->SERIE+TRB->DUPL+TRB->PARCELA)
+		If Alltrim(SE1->E1_MOTIVO) == "CAN"
+			DbSelectArea("TRB")
+			Reclock("TRB",.f.)
+			OK := "MOTIVO  "+Alltrim(SE1->E1_MOTIVO)+Alltrim(SE1->E1_HISTBX)
+			MsUnlock()
+			IncProc("Ignorando  : "+StrZero(nCont,6)+" "+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA)
+			DbSkip()
+			Loop
+		EndIf			
+		nCont++
+		IncProc("Atualizando: "+StrZero(nCont,6)+" "+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA)
+		AcertaBaixa()
+	Endif
+	DBSelectArea("TRB")
+	Dbskip()
+End
+
+RETURN
+
+Static Function AcertaBaixa(cSerie)
+
+DbSelectArea("TRB")
+Reclock("TRB",.f.)
+TRB->OK := "OK        "+Alltrim(SE1->E1_MOTIVO)+Alltrim(SE1->E1_HISTBX)
+MsUnlock()
+
+DbSelectarea("SE1")
+Reclock("SE1",.F.)
+SE1->E1_MOTIVO  := "CAN"
+SE1->E1_HISTBX  := "CANCELADO"
+MsUnlock()
+
+Return

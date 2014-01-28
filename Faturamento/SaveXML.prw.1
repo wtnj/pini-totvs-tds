@@ -1,0 +1,222 @@
+ #INCLUDE "PROTHEUS.CH"
+#include "TbiConn.ch"
+#INCLUDE "XMLXFUN.CH"
+#DEFINE CRLF Chr(13) + Chr(10)
+
+User Function SaveXML(aEmp)
+
+Local _cMsg := ""
+Local _cTo := "r.vacari01@hotmail.com"
+U_CheckPRW("SAVEXML")
+If aEmp != Nil
+	Prepare Environment Empresa aEmp[1] Filial aEmp[2] MODULO "SIGAFAT"
+EndIf
+
+Private _aLog := {}
+
+GetMail()
+
+If Len(_aLog) > 0
+	U_MailNotify(_cTo,"","Inconsistência ao Gravar XML de NFe de Entrada",_aLog,{},.f.)
+EndIf
+Return
+
+**********************************************************************
+//Funcao para baixar os emails com xml da NFE
+**********************************************************************
+Static Function GetMail()
+local nemails
+Local cServer1  := ""
+Local cAccount  := ""
+Local cEnvia    := ""
+Local cRecebe   := ""
+Local cPassword := ""
+Local aFiles    := {}
+Local aFiles1   := {}
+Local nI        := 1
+Local cMensagem := ''
+Local cTos
+
+Do Case
+	Case cEmpAnt == "01"
+		cDir	  := SuperGetMv("MV_XDIRNFE",,"\NFE\PINI\Entradas\") // Onde será salvos os anexos
+		cDir	  += AllTrim(Str(Year(dDatabase))) //+"_S"
+		
+		WHILE !file(cDir)
+			if !file("\NFE")
+				MakeDir("\NFE")
+			Elseif !file("\NFE\PINI")
+				MakeDir("\NFE\PINI")
+			Elseif !file("\NFE\PINI\Entradas")
+				MakeDir("\NFE\PINI\Entradas")
+			ElseIf !file(cDir)
+				MakeDir(cDir)
+			Endif
+		End
+		
+	Case cEmpant == "02"
+		cDir	  := SuperGetMv("MV_XDIRNFE",,"\NFE\BP\Entradas\") // Onde será salvos os anexos
+		cDir	  += AllTrim(Str(Year(dDatabase))) //+"_S"
+		
+		WHILE !file(cDir)
+			if !file("\NFE")
+				MakeDir("\NFE")
+			Elseif !file("\NFE\BP")
+				MakeDir("\NFE\BP")
+			Elseif !file("\NFE\BP\Entradas")
+				MakeDir("\NFE\BP\Entradas")
+			ElseIf !file(cDir)
+				MakeDir(cDir)
+			Endif
+		End
+EndCase
+cExtensao := "XML"
+
+cServer1  := SuperGetMv("MV_XPOPNFE",,"pop.gmail.com")      // Servidor Pop
+cAccount  := SuperGetMv("MV_XCONNFE",,"nfe@pini.com.br")    // Conta Email "twesbc_nfe@woodbridgegroup.com"
+cPassword := SuperGetMv("MV_XPSSNFE",,"nfe2011pini")            // Senha
+
+
+CONNECT pop SERVER cServer1 ACCOUNT cAccount PASSWORD cPassword Result lok //Recebimento
+
+POP MESSAGE COUNT nEmails
+
+FOR N:=1 TO NEMAILS
+	
+	RECEIVE MAIL MESSAGE nemails;
+	FROM cenvia;
+	TO	crecebe;
+	SUBJECT "Recebe";
+	BODY cmensagem;
+	ATTACHMENT aFiles1 SAVE IN cDir; 
+	DELETE;
+	RESULT lok
+	
+	U_InsertXml(cDir, aFiles1, cenvia)
+next
+DISCONNECT POP SERVER result lok
+
+aDirectory := Directory( cDir + "\*.*")
+cExtensao := AllTrim(Upper(cExtensao))
+If ValType(cExtensao)<> "U" .And. !Empty(cExtensao)
+	aEval( aDirectory, { |aFile|  if(Upper(Right(Alltrim(aFile[ 1 ]),3)) <> cExtensao.and.dDatabase==aFile[ 3 ],(CONOUT("Deletando "+cDir+"\"+ aFile[ 1 ]),FErase( cDir+"\"+ aFile[ 1 ] )),)  } )
+endif
+
+Return
+
+**********************************************************************
+//Funcao para incluir xml no banco de dados      
+//ATENCAO nao eh feita a verificacao se eh repedito o XML pois pode
+// se tratar de 1 xml de cancelamento
+**********************************************************************
+User Function InsertXml(cDir, aFiles, cDest)
+
+Local _aRetNfe := {}
+Local _cKeyNFe := ""
+Local _cError
+Local _cWarning
+Local _lRecusada
+Local i
+Local x
+Local _cXml := ""
+Local _aData := {;
+{"ZA_CHVNFE", , Nil},;
+{"ZA_XMLNFE", , Nil},;
+{"ZA_HRCKKEY", , Nil},;
+{"ZA_CNPJEMI", , Nil},;
+{"ZA_CNPJDES", , Nil},;
+{"ZA_NOTA", , Nil},;
+{"ZA_SERIE", , Nil},;
+{"ZA_EMISSAO", , Nil},;
+{"ZA_VALOR", , Nil},;
+{"ZA_DEST", , Nil},;
+{"ZA_NFOK", , Nil},;
+{"ZA_CANCELA", , Nil}}
+Local _nPosChv		:= aScan(_aData,{|x| x[1] == "ZA_CHVNFE"})
+Local _nPosXML		:= aScan(_aData,{|x| x[1] == "ZA_XMLNFE"})
+Local _nPosHRK		:= aScan(_aData,{|x| x[1] == "ZA_HRCKKEY"})
+Local _nPosCNEM		:= aScan(_aData,{|x| x[1] == "ZA_CNPJEMI"})
+Local _nPosCNDE		:= aScan(_aData,{|x| x[1] == "ZA_CNPJDES"})
+Local _nPosNota		:= aScan(_aData,{|x| x[1] == "ZA_NOTA"})
+Local _nPosSerie	:= aScan(_aData,{|x| x[1] == "ZA_SERIE"})
+Local _nPosEmiss	:= aScan(_aData,{|x| x[1] == "ZA_EMISSAO"})
+Local _nPosValor	:= aScan(_aData,{|x| x[1] == "ZA_VALOR"})
+Local _nPosDest		:= aScan(_aData,{|x| x[1] == "ZA_DEST"})
+Local _nPosOk		:= aScan(_aData,{|x| x[1] == "ZA_NFOK"})
+Local _nPosCanc		:= aScan(_aData,{|x| x[1] == "ZA_CANCELA"})
+Local _cMsg
+Local _lRet := .T.   
+Local cFile := ""          
+U_CheckPRW("SAVEXML")
+Private lMsErroAuto := .F.
+Private lAutoErrNoFile := .T.
+Private _oXml
+Private _oRoot
+dbSelectArea("SZA")
+dbSetOrder(1)
+For i := 1 To Len(aFiles)
+	cFile := aFiles[i][1]	
+	If at(".XML",UPPER(cFile)) == 0 //verifica se eh um arquivo xml
+		Loop
+	EndIf
+	_cError := ""
+	_cWarning := ""
+	_oXml := XmlParserFile( cFile, "_", @_cError, @_cWarning )
+	If Empty(_cError)
+		If Type("_oXml:_NFE") <> "U"
+			_cKeyNFe := AllTrim(StrTran(Upper(_oXml:_NFE:_INFNFE:_ID:TEXT), "NFE", ""))
+			_oRoot := _oXml:_NFE
+		Elseif Type("_oXml:_NFEPROC") <> "U"
+			_cKeyNFe := AllTrim(StrTran(Upper(_oXml:_NFEPROC:_NFE:_INFNFE:_ID:TEXT), "NFE", ""))
+			_oRoot := _oXml:_NFEPROC:_NFE
+		EndIf
+		If !Empty(_cKeyNFe)
+			FT_FUse(cFile)
+			_cXml := ""
+			While !FT_FEOF()
+				_cXml += FT_FREADLN()
+				FT_FSkip()
+			EndDo
+			FT_FUse()//fecha o arquivo 
+			
+			If SZA->(dbSeek(xFilial("SZA") + _cKeyNFe))
+				Loop
+			EndIf
+				
+			_aRetNFe := U_ConNFeKey(_cKeyNFe)
+			
+			_aData[_nPosChv][2] := _cKeyNFe
+			_aData[_nPosXML][2] := _cXml
+			_aData[_nPosHRK][2] := Dtoc(Date()) + " " + Time()
+			_aData[_nPosCNDE][2] := IF(TYPE("_oRoot:_INFNFE:_DEST:_CNPJ:TEXT")=="U" , _oRoot:_INFNFE:_DEST:_CPF:TEXT,_oRoot:_INFNFE:_DEST:_CNPJ:TEXT)          //Verifica CNPJ do Destinatario no XML
+			_aData[_nPosCNEM][2] := IF(TYPE("_oRoot:_INFNFE:_EMIT:_CNPJ:TEXT")=="U" , _oRoot:_INFNFE:_EMIT:_CPF:TEXT,_oRoot:_INFNFE:_EMIT:_CNPJ:TEXT)          //Verifica CNPJ do Destinatario no XML
+			_aData[_nPosNota][2] := StrZero(Val(_oRoot:_INFNFE:_IDE:_NNF:TEXT),9)
+			_aData[_nPosSerie][2] := PadR(_oRoot:_INFNFE:_IDE:_SERIE:TEXT,3)
+			_aData[_nPosEmiss][2] := Stod(Replace(_oRoot:_INFNFE:_IDE:_DEMI:TEXT,"-",""))
+			_aData[_nPosValor][2] := Val(Iif(Type("_oRoot:_INFNFE:_TOTAL:_ICMSTOT:_VNF") != "U", _oRoot:_INFNFE:_TOTAL:_ICMSTOT:_VNF:TEXT, "0"))
+			_aData[_nPosDest][2] :=	Iif(cDest != Nil, cDest, "")
+			_aData[_nPosOk][2] :=	_aRetNfe[3] == "100"
+			_aData[_nPosCanc][2] :=	_aRetNfe[3] == "101"
+
+			If _aRetNFe[3] <> "100"
+				aAdd(_aLog,"A NOTA : " + _aData[_nPosNota][2] + " DO FORNECEDOR " + ALLTRIM(_oRoot:_DEST:_XNOME:TEXT) + " ESTA RECUSADA NO SEFAZ")
+				aAdd(_aLog,"")
+				_lRet := .F.
+			EndIf
+			
+			AxCadastro("SZA","XML NOTA FISCAL ELETRONICA",".T.",".T.",,,,,,_aData,3,,)
+			_cMsg := ""
+			If lMsErroauto
+				aEval(GetAutoGRLog(),{|x| _cMsg += x + CRLF})
+				aAdd(_aLog," Error ao salvar os dados do Arquivo: " + cFile + " " + _cMsg)
+				aAdd(_aLog,"")
+				_lRet := .F.
+			EndIf
+		EndIf
+	Else
+		aAdd(_aLog,_cError)
+		aAdd(_aLog,"")
+		_lRet := .F.
+	EndIf
+Next
+Return _lRet

@@ -1,0 +1,28 @@
+#INCLUDE "RWMAKE.CH"
+User Function LPSA601()
+// ALTERACAO DA CONTA CONTAB DOS CARTOES DE CREDITO, ANDRE/JOSE RICARDO, Danilo C S Pala 20040903
+//Alteracao da conta contab de debito ANDRE/JOSE RICARDO, Danilo C S Pala 20040928
+Local mcta  := space(20) // ''
+Local aArea := GetArea()
+If Empty(SE1->E1_PORTADO) 
+	IF (subs(SE1->E1_NATUREZ,1,2) $ "CA/CM/CV/CI") //20040903
+   		MCTA:='21080202003'  //20040903
+	ELSEIF (subs(SE1->E1_NATUREZ,1,2) $ "CH") //20040928
+		MCTA:='21080202002'  //20040928
+	ELSEIF (subs(SE1->E1_NATUREZ,1,3) $ "DEP/DH /DP /BX ") //20040928
+		MCTA:='21080202001'  //20040928
+	ELSE
+		MCTA:='11020101002'
+    END IF
+Else   
+   dbselectarea("SA6") 
+   DBGOTOP()
+   dbsetorder(1)
+   dbseek(xfilial("SA6")+SE1->E1_PORTADO+SE1->E1_AGEDEP+SE1->E1_CONTA)        
+   If Found()
+      MCTA:=SA6->A6_CONTA 
+   Endif
+Endif
+RestArea(aArea)
+
+RETURN(MCTA)

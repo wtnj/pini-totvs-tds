@@ -1,0 +1,31 @@
+#include "rwmake.ch"
+#include "ap5mail.ch"
+/*     20030829
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณEmailTesteบAutor  ณDanilo C S Pala     บ Data ณ  20110218   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ Teste de envio de email pelo Gmail                         บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+
+User Function EmailTeste
+Private cServMail := "smtp.gmail.com:587"
+Private cEmailConta := "dpala@pini.com.br" //GETMV("MV_EMCONTA")//"dpala@pini.com.br"
+Private cEmailSenha := "sano32" //GETMV("MV_EMSENHA")//"1235"
+Private cBody := "<html><body><h1>chegou?</h1></body></html>"
+Private cTitulo := "Teste siga"
+Private lEnviado := .F.
+
+CONNECT SMTP SERVER cServMail ACCOUNT cEmailConta PASSWORD cEmailSenha SSL RESULT lEnviado
+SEND MAIL FROM cEmailConta TO "antonio.marcos@pini.com.br" SUBJECT cTitulo BODY cBody RESULT lEnviado
+DISCONNECT SMTP SERVER
+
+Return

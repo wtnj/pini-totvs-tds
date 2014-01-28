@@ -1,0 +1,494 @@
+#include "protheus.ch"
+#include "xmlxfun.ch"
+#include "tbiconn.ch"
+#include "colors.ch"
+#include "topconn.ch"
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณ EDNFEA01 บAutor  ณ Rodolfo Vacari     บ Data ณ  07/12/12   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ Faz a importacao das notas de entrada conforme o arquivo   บฑฑ
+ฑฑบ          ณ  XML informado                                             บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+User Function EDNFEA01()
+
+Local _oXML
+Local _cArqXML  := ""
+Local _cNomArq  := ""
+Local _cExtArq  := ""
+Local _cError   := ""
+Local _cWarning := ""
+Local _nCNPJOK  := 1
+Local _oDlg
+Local _cNota := Space(TamSx3("F2_DOC")[1])
+Local _cSerie := Space(TamSx3("F2_SERIE")[1])
+Local _cFornece := Space(TamSx3("A2_COD")[1])
+Local _cLoja := Space(TamSx3("A2_LOJA")[1])
+Local _cChave := Space(TamSx3("F1_CHVNFE")[1])
+Local _lCancel := .F.
+Local _cCNPJEmi := ""
+Local _cCliForLbl := "Fornecedor:"
+Local _oCbx       
+Local _cSeek := ""
+Private lMsErroAuto := .F.
+Private _cTipoNf := ""
+Private _aCbxTipo	 := {{"Normal","Devolu็ใo","Beneficiamento","Comp Pre็o/Frete","Comp ICMS","Comp IPI"}, {"N", "D", "B", "C", "I", "P"}}
+Private _oTxtFor
+
+While !_lCancel .And. (Empty(_cNota) .And. Empty(_cFornece) .And. Empty(_cLoja) .Or.Empty(_cChave))
+	
+	DEFINE MSDIALOG _oDlg TITLE "Entrada de NF-e Por XML" FROM C(225),C(241) TO C(367),C(693) PIXEL
+	@ C(004),C(004) Say "Tipo da NF:" Size C(030),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(002),C(043) ComboBox _oCbx VAR _cTipoNf Items _aCbxTipo[1] Size C(062),C(010) On Change(Iif(_cTipoNf $ "Devolu็ใo/Beneficiamento",;
+	(_cCliForLbl := "Cliente", _oTxtFor:cF3 := "CLI"), (_cCliForLbl := "Fornecedor:", _oTxtFor:cF3 := "FOR")),_oDlg:Refresh() ) PIXEL OF _oDlg
+	@ C(004),C(117) Say "Nota Fiscal: " Size C(031),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(002),C(160) MsGet _cNota Size C(060),C(009) COLOR CLR_BLACK PIXEL OF _oDlg
+	@ C(017),C(004) Say "Serie: " Size C(017),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(015),C(033) MsGet _cSerie Size C(036),C(009) COLOR CLR_BLACK PIXEL OF _oDlg
+	@ C(017),C(081) Say _cCliForLbl Size C(030),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(015),C(119) MsGet _oTxtFor Var _cFornece F3 "FOR" Size C(047),C(009) COLOR CLR_BLACK PIXEL OF _oDlg HASBUTTON
+	@ C(017),C(175) Say "Loja" Size C(012),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(015),C(195) MsGet _cLoja Size C(024),C(009) COLOR CLR_BLACK PIXEL OF _oDlg
+	@ C(030),C(004) Say "OU" Size C(010),C(008) COLOR CLR_RED PIXEL OF _oDlg
+	@ C(045),C(004) Say "Chave NF-e:" Size C(032),C(008) COLOR CLR_BLUE PIXEL OF _oDlg
+	@ C(043),C(036) MsGet _cChave Size C(184),C(009) COLOR CLR_BLACK PIXEL OF _oDlg
+	@ C(056),C(146) Button "&Ok" Size C(035),C(010) Action (_oDlg:End()) PIXEL OF _oDlg
+	@ C(056),C(185) Button "&Cancela" Size C(035),C(010) Action(_lCancel := .T., _oDlg:End()) PIXEL OF _oDlg
+	
+	ACTIVATE MSDIALOG _oDlg CENTERED
+	
+End
+
+If _lCancel
+	Return
+EndIf
+	
+If _cTipoNf $ "Devolu็ใo/Beneficiamento"
+	_cCNPJEmi := GetAdvfVal("SA1","A1_CGC",xFilial("SA1")+_cFornece + _cLoja,1,"")
+Else
+	_cCNPJEmi := GetAdvfVal("SA2","A2_CGC",xFilial("SA2")+_cFornece + _cLoja,1,"")
+EndIf
+
+_cSeek := xFilial("SZA") + Iif(!Empty(_cChave), _cChave, SM0->M0_CGC + _cCNPJEmi + _cNota + _cSerie)
+dbSelectArea("SZA")
+dbSetOrder(3)
+If dbSeek(_cSeek)
+	// Abre o arquivo no servidor, cria o objeto do XML e apaga o arquivo destino
+	_oXML := XmlParser(SZA->ZA_XMLNFE,"_",@_cError,@_cWarning)
+	
+	// Se nao houver nenhum erro, inicia o processo, caso contrario mostra mensagem de erro
+	If Empty(_cError) .And. Empty(_cWarning) .And. _oXML <> Nil .And. ValType(XmlChildEx(_oXML,"_NFEPROC")) == "O"
+		Processa({|| _oImpNota(_oXML:_NFEPROC:_NFE:_INFNFE) })
+	EndIf
+Else
+	MsgStop("Nใo foi encontrado nota fiscal ref. aos dados informados","NOSZA")
+EndIf
+Return               
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณ ENFEA01  บAutor  ณ Rodolfo Vacari     บ Data ณ  30/04/10   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ Inclui os dados das notas                                  บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Bright                                                     บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function _oImpNota(_oDados)
+
+Local _oMainDlg
+Local _aArrSA2 := {}
+Local _aCabec  := {}
+Local _aItens  := {}
+Local _aAuxIte := {}
+Local _aFndSA5 := {}
+Local _aNfOri  := {}
+Local _cNewCod := ""
+Local _cEnd    := ""
+Local _cCodPrd := ""
+Local _cCodMun := ""
+Local _cCodSA5 := ""
+Local _cTypDet := ""
+Local _cCodXML := ""
+Local _cDesXML := ""
+Local _cNota   := StrZero(Val(_oDados:_IDE:_NNF:TEXT),6)
+Local _cSerie  := AllTrim(_oDados:_IDE:_SERIE:TEXT) + Space(3-Len(AllTrim(_oDados:_IDE:_SERIE:TEXT)))
+Local _dEmissao:= Stod(StrTran(_oDados:_IDE:_DEMI:TEXT,"-",""))
+Local _nPos    := 0
+Local _nQuant  := 0
+Local _nUnit   := 0
+Local _nBasICM := 0
+Local _nValICM := 0
+Local _nAlqICM := 0
+Local _nAlqIPI := 0
+Local _nValIPI := 0
+Local _nTotal  := 0
+Local _nTotNf  := 0
+Local _nPosTot := 0
+Local _nRecSF1 := 0
+Local _nRecSA2 := 0
+Local _lTela   := .T.
+Local _cPedido := ""
+Local _xPosIni	:= 0
+Local _xPosFim 	:= 0
+Local _cTipo := _aCbxTipo[2][aScan(_aCbxTipo[1], { |x| x == _cTipoNf})]
+Local _isFornece := !(_cTipo $ "B|D")
+
+If _isFornece
+	dbSelectArea("SA2")
+	dbSetOrder(3)
+	If !dbSeek(xFilial()+_oDados:_EMIT:_CNPJ:TEXT)
+		Aviso("Cadastro de Fornecedores","O fornecedor "+AllTrim(_oDados:_EMIT:_XFANT:TEXT)+" nใo foi encontrado. Favor cadastrแ-lo.",{"Fechar"})
+		Return
+	ElseIf Empty(SA2->A2_NATUREZ)
+		Aviso("Cadastro de Fornecedores","O fornecedor "+AllTrim(SA2->A2_NREDUZ)+" nใo tem natureza financeira cadastrada. Favor atualizar o cadastro.",{"Fechar"})
+		Return
+	EndIf
+Else
+	dbSelectArea("SA1")
+	dbSetOrder(3)
+	If !dbSeek(xFilial()+_oDados:_EMIT:_CNPJ:TEXT)
+		Aviso("Cadastro de Clientes","O cliente "+AllTrim(_oDados:_EMIT:_XFANT:TEXT)+" nใo foi encontrado. Favor cadastrแ-lo.",{"Fechar"})
+		Return
+	ElseIf Empty(SA2->A2_NATUREZ)
+		Aviso("Cadastro de Clientes","O cliente "+AllTrim(SA2->A2_NREDUZ)+" nใo tem natureza financeira cadastrada. Favor atualizar o cadastro.",{"Fechar"})
+		Return
+	EndIf
+EndIf
+
+_cChaveNFe := StrTran(UPPER(_oDados:_ID:TEXT),"NFE","")
+// Cria o array com o cabecalho da nota fiscal
+AAdd(_aCabec, {"F1_TIPO"   ,_cTipo          ,nil} )
+AAdd(_aCabec, {"F1_FORMUL" ,"N"          ,nil} )
+AAdd(_aCabec, {"F1_DOC"    ,_cNota       ,nil} )
+AAdd(_aCabec, {"F1_SERIE"  ,_cSerie      ,nil} )
+//AAdd(_aCabec, {"F1_EMISSAO",dDataBase    ,nil} )
+AAdd(_aCabec, {"F1_EMISSAO",_dEmissao    ,nil} )
+AAdd(_aCabec, {"F1_FORNECE",SA2->A2_COD  ,nil} )
+AAdd(_aCabec, {"F1_LOJA"   ,SA2->A2_LOJA ,nil} )
+AAdd(_aCabec, {"F1_ESPECIE","SPED"       ,nil} )
+//AAdd(_aCabec, {"F1_COND"   ,_cCondPag    ,nil} )
+AAdd(_aCabec, {"F1_CHVNFE" ,_cChaveNFe   ,nil} )
+
+// Verifica se todos os produtos estใo cadastrados e caso nใo estejam, abre a tela para cadastrar
+_cTypDet := ValType(_oDados:_DET)
+dbSelectArea("SB1")
+dbSetOrder(1)
+dbSelectArea("SA5")
+dbSetOrder(5) // Codigo do produdo no fornecedor
+ProcRegua(IIf(_cTypDet=="O",1,Len(_oDados:_DET)))
+For _nPos := 1 To IIf(_cTypDet=="O",1,Len(_oDados:_DET))
+	
+	IncProc("Verificando os produtos...")
+	
+	_cCodPrd := ""
+	If _cTypDet=="O"
+		_cCodXML := _oDados:_DET:_PROD:_CPROD:TEXT
+		_cDesXML := _oDados:_DET:_PROD:_XPROD:TEXT
+	Else
+		_cCodXML := AllTrim(_oDados:_DET[_nPos]:_PROD:_CPROD:TEXT)
+		_cDesXML := AllTrim(_oDados:_DET[_nPos]:_PROD:_XPROD:TEXT)
+	EndIf
+	dbSelectArea("SA5")
+	dbSeek(xFilial()+_cCodXML)
+	While !Eof() .And. _cCodXML == AllTrim(SA5->A5_CODPRF)
+		If SA5->A5_FORNECE == SA2->A2_COD .And. SA5->A5_LOJA == SA2->A2_LOJA
+			_cCodPrd := SA5->A5_PRODUTO
+		EndIf
+		dbSelectArea("SA5")
+		dbSkip()
+	EndDo
+	
+	If Empty(_cCodPrd) .And. aScan(_aFndSA5, {|x| x[1]==_cCodXML} ) == 0
+		AAdd(_aFndSA5, {_cCodXML, _cDesXML } )
+	EndIf
+	
+Next _nPos
+
+// Abre a tela para amarrar os produtos sem cadastros
+For _nPos := 1 To Len(_aFndSA5)
+	
+	_lTela   := .T.
+	_cCodSA5 := Space(TamSX3("B1_COD")[1])
+	
+	While _lTela
+		
+		DEFINE MSDIALOG _oMainDlg TITLE "Produto X Fornecedor" FROM 00,00 TO 10,40 OF oMainWnd
+		@ 020,005 SAY "Fornecedor  " + _aFndSA5[_nPos][1] PIXEL
+		@ 035,005 SAY _aFndSA5[_nPos][2] PIXEL
+		@ 052,005 SAY "Protheus" PIXEL
+		@ 050,040 MSGET _cCodSA5 VALID !Empty(_cCodSA5) F3 "SB1" SIZE 60,08 PIXEL
+		ACTIVATE MSDIALOG _oMainDlg CENTER ON INIT EnchoiceBar(_oMainDlg,{|| _oMainDlg:End()},{|| _oMainDlg:End()})
+		
+		dbSelectArea("SB1")
+		If !Empty(_cCodSA5) .And. dbSeek(xFilial()+_cCodSA5)
+			dbSelectArea("SA5")
+			dbSetOrder(1) // Fornecedor + Produto
+			If !dbSeek(xFilial()+SA2->(A2_COD+A2_LOJA)+AllTrim(SB1->B1_COD))
+				RecLock("SA5",.T.)
+				SA5->A5_FILIAL  := xFilial("SA5")
+				SA5->A5_FORNECE := SA2->A2_COD
+				SA5->A5_LOJA    := SA2->A2_LOJA
+				SA5->A5_NOMEFOR := SA2->A2_NREDUZ
+				SA5->A5_PRODUTO := SB1->B1_COD
+				SA5->A5_NOMPROD := SB1->B1_DESC
+				SA5->A5_CODPRF  := AllTrim(_aFndSA5[_nPos][1])
+				MsUnLock()
+				_lTela := .F.
+			Else
+				Aviso("Produtos x Fornecedores","O produto "+AllTrim(SB1->B1_DESC)+" jแ estแ cadastrado com outro c๓digo ("+SA5->A5_PRODUTO+"). Este item deverแ ser digitado manualmente.",{"Continuar"})
+				_lTela := .F.
+				Return
+			EndIf
+		EndIf
+		
+		If Empty(_cCodSA5)
+			If Aviso("Produtos x Fornecedores","O produto nao foi informado. Deseja sair da rotina?",{"Sim","Nao"}) == 1
+				Return
+			EndIf
+		EndIf
+		
+	EndDo
+	
+Next _nPos
+
+// Cria o array com os itens da nota fiscal
+dbSelectArea("SF4")
+dbSetOrder(1)
+dbSelectArea("SB1")
+dbSetOrder(1)
+dbSelectArea("SA5")
+dbSetOrder(5) // Codigo do produdo no fornecedor
+ProcRegua(IIf(_cTypDet=="O",1,Len(_oDados:_DET)))
+For _nPos := 1 To IIf(_cTypDet=="O",1,Len(_oDados:_DET))
+	
+	IncProc("Gerando nota de entrada...")
+	
+	_nBasICM := 0
+	_nValICM := 0
+	_nAlqICM := 0
+	_nAlqIPI := 0
+	_nValIPI := 0
+	
+	If _cTypDet=="O"
+		_cCodXML := _oDados:_DET:_PROD:_CPROD:TEXT
+		_cDesXML := _oDados:_DET:_PROD:_XPROD:TEXT
+		_cNCM	 := _oDados:_DET:_PROD:_NCM:TEXT
+		_nQuant  := Val(_oDados:_DET:_PROD:_QCOM:TEXT)
+		_nUnit   := Val(_oDados:_DET:_PROD:_VUNCOM:TEXT)
+		_nTotal  := Val(_oDados:_DET:_PROD:_VPROD:TEXT)
+		If ValType(XmlChildEx(_oDados:_DET:_IMPOSTO,"_ICMS")) == "O" .And. ValType(XmlChildEx(_oDados:_DET:_IMPOSTO:_ICMS,"_ICMS00")) == "O"
+			_nBasICM := Val(_oDados:_DET:_IMPOSTO:_ICMS:_ICMS00:_VBC:TEXT)
+			_nValICM := Val(_oDados:_DET:_IMPOSTO:_ICMS:_ICMS00:_VICMS:TEXT)
+			_nAlqICM := Val(_oDados:_DET:_IMPOSTO:_ICMS:_ICMS00:_PICMS:TEXT)
+		EndIf
+		If ValType(XmlChildEx(_oDados:_DET:_IMPOSTO,"_IPI")) == "O" .And. ValType(XmlChildEx(_oDados:_DET:_IMPOSTO:_IPI,"_IPITRIB")) == "O"
+			_nAlqIPI := Val(_oDados:_DET:_IMPOSTO:_IPI:_IPITRIB:_PIPI:TEXT)
+			_nValIPI := Val(_oDados:_DET:_IMPOSTO:_IPI:_IPITRIB:_VIPI:TEXT)
+		EndIf
+		If Upper(AllTrim(_oDados:_DET:_PROD:_UCOM:TEXT)) $ "|MI|ML|MIL|MILHEIRO|MILH|MH"
+			_nQuant := _nQuant * 1000
+			_nUnit  := _nUnit / 1000
+		EndIf
+	Else
+		_cCodXML := AllTrim(_oDados:_DET[_nPos]:_PROD:_CPROD:TEXT)
+		_cDesXML := AllTrim(_oDados:_DET[_nPos]:_PROD:_XPROD:TEXT)
+		_cNCM	 := _oDados:_DET[_nPos]:_PROD:_NCM:TEXT
+		_nQuant  := Val(_oDados:_DET[_nPos]:_PROD:_QCOM:TEXT)
+		_nUnit   := Val(_oDados:_DET[_nPos]:_PROD:_VUNCOM:TEXT)
+		_nTotal  := Val(_oDados:_DET[_nPos]:_PROD:_VPROD:TEXT)
+		If ValType(XmlChildEx(_oDados:_DET[_nPos]:_IMPOSTO,"_ICMS")) == "O" .And. ValType(XmlChildEx(_oDados:_DET[_nPos]:_IMPOSTO:_ICMS,"_ICMS00")) == "O"
+			_nBasICM := Val(_oDados:_DET[_nPos]:_IMPOSTO:_ICMS:_ICMS00:_VBC:TEXT)
+			_nValICM := Val(_oDados:_DET[_nPos]:_IMPOSTO:_ICMS:_ICMS00:_VICMS:TEXT)
+			_nAlqICM := Val(_oDados:_DET[_nPos]:_IMPOSTO:_ICMS:_ICMS00:_PICMS:TEXT)
+		EndIf
+		If ValType(XmlChildEx(_oDados:_DET[_nPos]:_IMPOSTO,"_IPI")) == "O" .And. ValType(XmlChildEx(_oDados:_DET[_nPos]:_IMPOSTO:_IPI,"_IPITRIB")) == "O"
+			_nAlqIPI := Val(_oDados:_DET[_nPos]:_IMPOSTO:_IPI:_IPITRIB:_PIPI:TEXT)
+			_nValIPI := Val(_oDados:_DET[_nPos]:_IMPOSTO:_IPI:_IPITRIB:_VIPI:TEXT)
+		EndIf
+		If Upper(AllTrim(_oDados:_DET[_nPos]:_PROD:_UCOM:TEXT)) $ "|MI|ML|MIL|MILHEIRO|MILH|MH"
+			_nQuant := _nQuant * 1000
+			_nUnit  := _nUnit / 1000
+		EndIf
+	EndIf
+	
+	// Verifica o codigo do produto no Protheus
+	_cCodPrd := ""
+		dbSelectArea("SA5")
+		dbSeek(xFilial()+_cCodXML)
+		While !Eof() .And. _cCodXML == AllTrim(SA5->A5_CODPRF)
+			If SA5->A5_FORNECE == SA2->A2_COD .And. SA5->A5_LOJA == SA2->A2_LOJA
+				_cCodPrd := SA5->A5_PRODUTO
+			EndIf
+			dbSelectArea("SA5")
+			dbSkip()
+		EndDo	
+	
+	//Verifica se o fornecedor tem armazem cadastrado caso sim, forca o armazem.
+	If !Empty(_cCodPrd)
+		
+		dbSelectArea("SB1")
+		dbSeek(xFilial()+_cCodPrd)
+		//dbSelectArea("SF4")
+		//dbSeek(xFilial()+_cTESEnt)
+		
+		//Valida o NCM Solicitacao do Troll
+		If AllTrim(SB1->B1_POSIPI) != AllTrim(_cNCM) .And. !Empty(SB1->B1_POSIPI)
+			MsgAlert("O NCM do produto " + _cDesXML+ " ้ diferente entre o fornecedor e a "+Capital(AllTrim(SM0->M0_FILIAL)),"NCM " + _cNCM + "/" + SB1->B1_POSIPI)
+		EndIf
+		//If SF4->F4_PODER3 == "D"
+		//	_aNfOri := _oBuscaOrig(SB1->B1_COD,SA2->A2_COD,SA2->A2_LOJA,_nQuant,SB1->B1_DESC)
+		//EndIf
+		
+		//If Len(_aNfOri) > 0 .Or. SF4->F4_PODER3 <> "D"
+		_aAuxIte := {}
+		AAdd(_aAuxIte, {"D1_COD"    ,SB1->B1_COD    ,Nil} )
+		AAdd(_aAuxIte, {"D1_LOCAL"  ,SB1->B1_LOCPAD ,Nil} )
+		//AAdd(_aAuxIte, {"D1_TES"    ,_cTESEnt       ,Nil} )
+		AAdd(_aAuxIte, {"D1_QUANT"  ,_nQuant        ,Nil} )
+		AAdd(_aAuxIte, {"D1_VUNIT"  ,_nUnit         ,Nil} )
+		AAdd(_aAuxIte, {"D1_TOTAL"  ,_nTotal        ,Nil} )
+		AAdd(_aAuxIte, {"D1_CC"     ,SB1->B1_CC     ,Nil} )		
+		AAdd(_aAuxIte, {"D1_BASEICM",_nBasICM       ,Nil} )
+		AAdd(_aAuxIte, {"D1_PICM"   ,_nAlqICM       ,Nil} )
+		AAdd(_aAuxIte, {"D1_VAlICM" ,_nValICM       ,Nil} )
+		AAdd(_aAuxIte, {"D1_IPI"    ,_nAlqIPI       ,Nil} )
+		AAdd(_aAuxIte, {"D1_VALIPI" ,_nValIPI       ,Nil} )
+		If SF4->F4_PODER3 == "D"
+			AAdd(_aAuxIte, {"D1_NFORI"  ,_aNfOri[1]     ,Nil} )
+			AAdd(_aAuxIte, {"D1_SERIORI",_aNfOri[2]     ,Nil} )
+			AAdd(_aAuxIte, {"D1_IDENTB6",_aNfOri[3]     ,Nil} )
+			AAdd(_aAuxIte, {"D1_ITEMORI",_aNfOri[4]     ,Nil} )
+		EndIf
+		
+		_nTotNf += _nTotal
+		
+	EndIf
+	
+Next _nPos
+
+// Ajusta o valor dos itens para bater o valor total da nota fiscal
+If Len(_aItens) > 0 .And. Round(_nTotNf,2) <> Round(_nTotal,2)
+	_nPosTot := aScan(_aItens[Len(_aItens)], {|x| x[1]=="D1_TOTAL"} )
+	_aItens[Len(_aItens)][_nPosTot][2] += ( Val(_oDados:_TOTAL:_ICMSTOT:_VPROD:TEXT) - _nTotNf )
+EndIf
+
+lMsErroAuto := .F.
+If Len(_aItens) > 0
+	_cNota := _cNota + Space(TamSx3("F1_DOC")[1]-Len(_cNota))
+	dbSelectArea("SF1")
+	dbSetOrder(1)
+	If dbSeek(xFilial()+_cNota+_cSerie+SA2->(A2_COD+A2_LOJA))
+		Aviso("Erro","A nota fiscal "+_cNota+" jแ existe no sistema.",{"Fechar"})
+	Else
+		
+		Mata103(_aCabec,_aItens,3,.T.)
+		dbSelectArea("SF1")
+		dbSetOrder(1)
+		If dbSeek(xFilial()+_cNota+_cSerie+SA2->A2_COD+SA2->A2_LOJA)
+			_nRecSF1 := SF1->(Recno())
+			_nRecSA2 := SA2->(Recno())
+			SF1->(dbGoTo(_nRecSF1))
+			SA2->(dbGoTo(_nRecSA2))
+		EndIf
+		
+	EndIf
+	
+EndIf
+
+Return
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณoAjustaSX1บAutor  ณ Rodolfo Vacari     บ Data ณ  30/04/10   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ Ajusta o Arquivo SX1 conforme necessidade do relatorio     บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ ED. PINI                                                   บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function oAjustaSx1()
+
+Local _aPerg  := {}
+Local _ni
+
+Aadd(_aPerg,{"Tipo de Entrada .....?","mv_ch1","C",03,"G","mv_par01","","","","SF4",""})
+Aadd(_aPerg,{"Tipo de Saida .......?","mv_ch2","C",03,"G","mv_par02","","","","SF4",""})
+Aadd(_aPerg,{"Condicao de Pagamento?","mv_ch3","C",03,"G","mv_par03","","","","SE4",""})
+Aadd(_aPerg,{"Fornecedor....?","mv_ch4","C",06,"G","mv_par04","","","","SA2",""})
+Aadd(_aPerg,{"Loja Fornecedor?","mv_ch5","C",02,"G","mv_par05","","","","SA2",""})
+Aadd(_aPerg,{"Mensagem Padrao .....?","mv_ch6","C",03,"G","mv_par06","","","","SM4",""})
+Aadd(_aPerg,{"Mensagem Livre 1 ....?","mv_ch7","C",90,"G","mv_par07","","","","",""})
+Aadd(_aPerg,{"Mensagem Livre 2 ....?","mv_ch8","C",90,"G","mv_par08","","","","",""})
+Aadd(_aPerg,{"Mensagem Livre 3 ....?","mv_ch9","C",90,"G","mv_par09","","","","",""})
+Aadd(_aPerg,{"Mensagem Livre 4 ....?","mv_cha","C",90,"G","mv_par10","","","","",""})
+Aadd(_aPerg,{"Tipo de Frete .......?","mv_chb","C",01,"C","mv_par11","CIF","FOB","","",""})
+Aadd(_aPerg,{"Almoxarifao Entrada .?","mv_chc","C",02,"C","mv_par12","","","","",""})
+Aadd(_aPerg,{"Pedido de Compra.....?","mv_che","C",06,"G","mv_par13","","","","SC7",""})
+
+dbSelectArea("SX1")
+For _ni := 1 To Len(_aPerg)
+	If !dbSeek(_cPerg+StrZero(_ni,2))
+		RecLock("SX1",.T.)
+		SX1->X1_GRUPO    := _cPerg
+		SX1->X1_ORDEM    := StrZero(_ni,2)
+		SX1->X1_PERGUNT  := _aPerg[_ni][1]
+		SX1->X1_VARIAVL  := _aPerg[_ni][2]
+		SX1->X1_TIPO     := _aPerg[_ni][3]
+		SX1->X1_TAMANHO  := _aPerg[_ni][4]
+		SX1->X1_GSC      := _aPerg[_ni][5]
+		SX1->X1_VAR01    := _aPerg[_ni][6]
+		SX1->X1_DEF01    := _aPerg[_ni][7]
+		SX1->X1_DEF02    := _aPerg[_ni][8]
+		SX1->X1_DEF03    := _aPerg[_ni][9]
+		SX1->X1_F3       := _aPerg[_ni][10]
+		SX1->X1_CNT01    := _aPerg[_ni][11]
+		MsUnLock()
+	EndIf
+Next _ni
+
+Return
+
+/*ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑฺฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟฑฑ
+ฑฑณPrograma   ณ   C()   ณ Autores ณ Norbert/Ernani/Mansano ณ Data ณ10/05/2005ณฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤดฑฑ
+ฑฑณDescricao  ณ Funcao responsavel por manter o Layout independente da       ณฑฑ
+ฑฑณ           ณ resolucao horizontal do Monitor do Usuario.                  ณฑฑ
+ฑฑภฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿*/
+Static Function C(nTam)
+Local nHRes	:=	oMainWnd:nClientWidth	// Resolucao horizontal do monitor
+If nHRes == 640	// Resolucao 640x480 (soh o Ocean e o Classic aceitam 640)
+	nTam *= 0.8
+ElseIf (nHRes == 798).Or.(nHRes == 800)	// Resolucao 800x600
+	nTam *= 1
+Else	// Resolucao 1024x768 e acima
+	nTam *= 1.28
+EndIf
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณTratamento para tema "Flat"ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+If "MP8" $ oApp:cVersion
+	If (Alltrim(GetTheme()) == "FLAT") .Or. SetMdiChild()
+		nTam *= 0.90
+	EndIf
+EndIf
+Return Int(nTam)

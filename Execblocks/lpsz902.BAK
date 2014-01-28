@@ -1,0 +1,18 @@
+#INCLUDE "RWMAKE.CH"
+User Function LPSZ902()
+
+Local mcta  := ''
+Local aArea := GetArea()
+
+dbselectarea("SZ9")
+DBGOTOP()
+DBSETORDER(1)
+DBSEEK(XFILIAL("SZ9")+SUBSTR(SE1->E1_NATUREZ,1,3))
+If Found()
+   MCTA:=SZ9->Z9_CONTA1
+Endif
+
+RestArea(aArea)
+
+RETURN(MCTA)
+
