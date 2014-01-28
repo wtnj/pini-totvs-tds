@@ -1,0 +1,196 @@
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: RARENOV   ³Autor: Raquel Farias          ³ Data:   23/09/99 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo: Atualiza campo pedren                                      ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento  Liberado para Usu rio em:           ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: RARENOV   ³Alterado por: Raquel Farias   ³ Data:   22/08/00 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo: Acrescentei utiliza‡Æo do indice 12 do sc6                 ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function Rarenov()
+
+MCONTA  :=0
+MCONTA1 :=0
+
+_aCampos := {  {"PEDIDO" ,"C", 6,0},;
+{"ITEM"   ,"C", 2,0},;
+{"EDIN  " ,"N", 4,0},;
+{"EDFIN " ,"N", 4,0},;
+{"EDVENC" ,"N", 4,0},;
+{"PEDREN" ,"N", 6,0},;
+{"ITEMREN","C", 2,0}}
+
+_cNome := CriaTrab(_aCampos,.t.)
+dbUseArea(.T.,, _cNome,"RARENOV",.F.,.F.)
+
+Processa({|| RareProc()})
+
+Return
+
+Static Function RareProc()
+
+DBSELECTAREA("SC6")
+DBSETORDER(1)
+MEMP:=XFILIAL('SC6')
+DBGOTOP()
+
+ProcRegua(LastRec())
+
+WHILE !EOF() .and. SC6->C6_FILIAL == xFilial("SC6")
+	MCONTA++
+	REGISTRO  := RECNO()
+	MEDFIN    := 0
+	MEDIN     := 0
+	MEDVENC   := 0
+	MPEDIDO   := ""
+	MITEM     := ""
+	MPEDREN   := ""
+	MITEMREN  := ""
+	MCODCLI   := SC6->C6_CLI
+	MCODDEST  := SC6->C6_CODDEST
+	
+	IncProc("AGUARDE - LENDO REGISTRO SC6->"+Alltrim(STR(MCONTA)))
+	
+	IF SUBS(SC6->C6_PRODUTO,1,2)<>'01'
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	IF SUBS(SC6->C6_PRODUTO,5,3)=='001'
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	IF VAL(SC6->C6_NUM)==0
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	IF VAL(SC6->C6_NUMANT)<>0
+		MPEDIDO :=SC6->C6_NUMANT
+	ELSE
+		MPEDIDO :=SC6->C6_NUM
+	ENDIF
+	
+	IF SC6->C6_PEDANT==MPEDIDO
+		Reclock("SC6",.F.)
+		REPLACE C6_PEDANT  WITH '      '
+		REPLACE C6_ITEMANT WITH '  '
+		MsUnlock()
+	ENDIF
+	
+	IF SC6->C6_EDFIN==9999 .OR. SC6->C6_PEDREN==MPEDIDO
+		Reclock("SC6",.F.)
+		REPLACE C6_PEDREN  WITH '  '
+		REPLACE C6_ITEMREN WITH '  '
+		MsUnlock()
+		DBSKIP()
+		LOOP
+	ENDIF
+	
+	MITEM   :=SC6->C6_ITEM
+	MPRODUTO:=SC6->C6_PRODUTO
+	MEDFIN  :=SC6->C6_EDFIN
+	MEDVENC :=SC6->C6_EDVENC         
+	MDATA   :=SC6->C6_DATA
+	
+	DBSETORDER(12)
+	DBGOTOP()
+	DbSeek(XFILIAL()+MPEDIDO+MITEM )
+	IF FOUND() .AND. MCODCLI==SC6->C6_CLI 
+	   IF VAL(SC6->C6_NUMANT)<>0
+			MPED :=SC6->C6_NUMANT
+		ELSE
+			MPED :=SC6->C6_NUM
+		ENDIF
+		MPEDREN :=MPED
+		MITEMREN :=VAL(SC6->C6_ITEM)
+		MEDIN   :=SC6->C6_EDINIC
+		DBSELECTAREA("SC6")
+		DbGoTo(REGISTRO)
+		Reclock("SC6",.F.)
+		if c6_pedren == '      '
+			REPLACE C6_pedren WITH MPEDREN
+			REPLACE C6_itemren WITH STRZERO(MITEMREN,2)
+		endif
+		MsUnlock()
+	ELSE
+		DBSELECTAREA("SC6")
+		DBSETORDER(12)
+		DBGOTOP()
+		MITEMANT:='  '
+		DbSeek(xFilial()+MPEDIDO+MITEMANT)
+		IF FOUND()
+			WHILE SC6->C6_PEDANT==MPEDIDO 
+			    IF SUBS(SC6->C6_PRODUTO,1,4)<>SUBS(MPRODUTO,1,4);
+					.AND. MCODCLI<>SC6->C6_CLI .AND. MCODDEST<>SC6->C6_CODDEST
+					DBSKIP()
+					LOOP
+				ELSE
+					IF VAL(SC6->C6_NUMANT)<>0
+						MPED :=SC6->C6_NUMANT
+					ELSE
+						MPED :=SC6->C6_NUM
+					ENDIF
+					
+					MPEDREN:=MPED
+					MITEMREN:=VAL(SC6->C6_ITEM)
+					MEDIN   :=SC6->C6_EDINIC
+					Reclock("SC6",.F.)
+					REPLACE C6_ITEMANT WITH MITEM
+					MsUnlock()
+					DBSELECTAREA("SC6")
+					DbGoTo(REGISTRO)
+					Reclock("SC6",.F.)
+					if c6_pedren == '      '
+						REPLACE C6_pedren WITH MPEDREN
+						REPLACE C6_itemren WITH STRZERO(MITEMREN,2)
+					endif
+					MsUnlock()
+					EXIT
+				ENDIF
+			ENDDO
+		ENDIF
+	ENDIF
+	IF VAL(MPEDREN) <> 0
+		DBSELECTAREA ('RARENOV')
+		Reclock("RARENOV",.T.)
+		REPLACE PEDIDO  WITH MPEDIDO
+		REPLACE ITEM    WITH MITEM
+		REPLACE EDFIN   WITH MEDFIN
+		REPLACE PEDREN  WITH VAL(MPEDREN)
+		REPLACE ITEMREN WITH STRZERO(MITEMREN,2)
+		REPLACE EDIN    WITH MEDIN
+		REPLACE EDVENC  WITH MEDVENC
+		MsUnlock()
+	ENDIF
+	
+	DBSELECTAREA("SC6")
+	DBSETORDER(1)
+	DbGoTo(REGISTRO)
+	DBSKIP()
+	IF VAL(MPEDREN)<>0
+		MCONTA1++
+	ENDIF
+	IncProc("AGUARDE - ATUALIZANDO RENOVADOS->"+Alltrim(STR(MCONTA1)))
+ENDDO
+
+DBSELECTAREA ('RARENOV')
+MARQ:='\SIGA\ARQTEMP\RAREN'+MEMP
+COPY TO &MARQ
+
+DBCLOSEAREA()
+DBSELECTAREA("SC6")
+Retindex("SC6")
+
+Return

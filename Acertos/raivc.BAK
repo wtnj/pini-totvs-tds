@@ -1,0 +1,675 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: RAIVC     ³Autor: Solange Nalini         ³ Data:   05/09/02 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: IVC - RESUMO DA DISTRIBUICAO GEOGRAFICA                    ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento                                      ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function RAIVC()        // incluido pelo assistente de conversao do AP5 IDE em 25/02/02
+
+SetPrvt("_CALIAS,_NINDEX,_NREG,CPERG,TITULO,CDESC1")
+SetPrvt("CDESC2,CDESC3,CSTRING,ARETURN,LCONTINUA,WNREL")
+SetPrvt("NLASTKEY,CPROGRAMA,NCARACTER,TAMANHO,MDESCR1,MDESCR2")
+SetPrvt("MAMPL,MDESCR,_CNOME,_ACAMPOS,CINDEX,CCHAVE,MCODPROD,MASS")
+SetPrvt("MV_PAR01,_CFILTRO,CKEY,_CARQ,RESTO,MREVISTA")
+SetPrvt("MCLIENTE,MCODDEST,MPEDIDO,MITEM,MPAGOSN,MEST")
+SetPrvt("MCIDADE,MCEP,MOBS,MORDEM,MLOCGEO,MLOCAL,MCANC,MCODCLI")
+SetPrvt("CABEC2,MPGA,CTITULO,CABEC1,L,NTAMANHO,MTIPOREV,MTIPOOP")
+SetPrvt("TOTGER,TCAPITAL,TINTERIOR,TOUTROS,TTOTAL,M_PAG,MCODRENOV")
+SetPrvt("MEDINIC,MEDFIN,MEDVENC,MEDSUSP,MATIV,MTPCLI,MCODREV,MQTDEP,MTES,MCF")
+SetPrvt("MNOME,MCONTATO,MENDERECO,MFONE,MEMAIL")
+
+Local aArea := GetArea()
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01             // Cod.da Revista                       ³
+//³ mv_par02             // Edicao                               ³
+// mv_par03             // Arquivo de cancelados
+// mv_par04            // Assinantes Ativos       Assinantes da Edição
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cPerg:="IVC"
+
+lEnd := .f.
+
+If Pergunte(cPerg)
+        Processa({|lEnd| RAIVCProc(@lEnd)}, "AUDITORIA IVC", "Aguarde, Processando IVC...")// Substituido pelo assistente de conversao do AP5 IDE em 25/02/02 ==>         RptStatus({||Execute(_RunProc)}, "Processando IVC ........")
+EndIf
+
+RestArea(aArea)
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: R024Proc  ³Autor: Solange Nalini         ³ Data:   10/02/99 ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡ao: IVC - RESUMO DA DISTRIBUICAO GEOGRAFICA                    ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : RAIVC                                                 ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function RAIVCProc()
+
+
+Private lContinua   := .T.
+Private nLastKey    := 0
+Private CPROGRAMA   :="RAIVC"
+Private lAbortPrint :=.F.
+Private MHORA       := TIME()
+Private cString     := SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2)
+Private mSaida      := "1"
+Private cArqPath    := GetMv("MV_PATHTMP")
+Private _cString    := cArqPath+cString+".DBF"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao SETPRINT                        ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If nLastKey == 27
+        Return
+Endif
+
+If nLastKey == 27
+        Return
+Endif
+
+
+DBSELECTAREA("SZJ")
+DBSETORDER(1)
+DBSEEK(XFILIAL("SZJ")+MV_PAR01+STR(MV_PAR02,4))
+
+If !found()
+        MsgAlert("REVISTA NAO CADASTRADA")
+        return
+Endif
+
+MDESCR1 := TRIM(SZJ->ZJ_DESCR)+ALLTRIM(STR(MV_PAR02,4,0))
+MDESCR2 := MV_PAR03
+MAMPL   := SZJ->ZJ_REVAMPL
+MDESCR  := SZJ->ZJ_DESCR
+
+_CNOME   :="IVC"
+_aCampos :={}
+
+AADD(_aCampos,{"CODCLI"  ,"C",6 ,0})
+AADD(_aCampos,{"CODDEST" ,"C",6 ,0})
+AADD(_aCampos,{"NOME"    ,"C",40,0})
+AADD(_aCampos,{"CONTATO" ,"C",40,0})
+AADD(_aCampos,{"_ENDEREC","C",40,0})
+AADD(_aCampos,{"CIDADE"  ,"C",30,0})
+AADD(_aCampos,{"ESTADO"  ,"C",2, 0})
+AADD(_aCampos,{"CEP"     ,"C",8, 0})
+AADD(_aCampos,{"FONE"    ,"C",30,0})
+AADD(_aCampos,{"EMAIL"   ,"C",60,0})
+AADD(_aCampos,{"CAPITAL" ,"N",5, 0})
+AADD(_aCampos,{"INTERIOR","N",5, 0})
+AADD(_aCampos,{"OUTROS"  ,"N",5, 0})
+AADD(_aCampos,{"TOTAL"   ,"N",5, 0})
+AADD(_aCampos,{"ORDEM"   ,"N",2, 0})
+AADD(_aCampos,{"OBS "    ,"C",20,0})
+AADD(_aCampos,{"OPERACAO" ,"C",40,0})
+AADD(_aCampos,{"TIPOREV"  ,"C",1, 0})
+AADD(_aCampos,{"AMPLIADA" ,"C",1, 0})
+AADD(_aCampos,{"CANCELADA","C",1, 0})
+AADD(_aCampos,{"CODPROD"  ,"C",15,0})
+AADD(_aCampos,{"EDINIC"   ,"N",4, 0})
+AADD(_aCampos,{"EDFIN"    ,"N",4, 0})
+AADD(_aCampos,{"EDVENC"   ,"N",4, 0})
+AADD(_aCampos,{"EDSUSP"   ,"N",4, 0})
+AADD(_aCampos,{"ASS"      ,"C",10,0})
+AADD(_aCampos,{"ATIVIDADE","C",40,0})
+AADD(_aCampos,{"TPCLI"    ,"C",1, 0})
+AADD(_aCampos,{"PEDIDO"   ,"C",6, 0})
+AADD(_aCampos,{"ITEM"     ,"C",2, 0})
+AADD(_aCampos,{"PARCELAS" ,"N",2, 0})
+AADD(_aCampos,{"CF"       ,"C",3 ,0})
+AADD(_aCampos,{"TES"      ,"C",3 ,0})
+AADD(_aCampos,{"CODRENOV" ,"C",8 ,0})
+AADD(_aCampos,{"PAGOSN"   ,"C",1 ,0})
+
+If Select("IVC") <> 0
+        DbSelectArea("IVC")
+        DbCloseArea()
+EndIf
+
+_cNome := CriaTrab(_aCampos,.t.)
+dbUseArea(.T.,,_cNome,"IVC",.F.,.F.)
+
+DBSELECTAREA("IVC")
+cIndex := CriaTrab(Nil,.F.)
+cChave := "STR(ORDEM,2,0)+ESTADO+PAGOSN"
+MsAguarde({|| Indregua("IVC",cIndex,cCHAVE,,,"AGUARDE....CRIANDO INDICE ")},"Aguarde","Gerando Indice Temporario (IVC)...")
+
+mv_par01 :=  mv_par01 + space(11)
+
+_CARQ:="\SIGAADV\ETIQUETAS\ESPECIAIS\"+trim(MDESCR2)+".DBF"
+
+If Select("CANC") <> 0
+        DbSelectArea("CANC")
+        DbCloseArea()
+EndIf
+
+dbUseArea(.T.,,_Carq,"CANC",.F.,.F.)
+
+DBSELECTAREA("CANC")
+
+cIndex := CRIATRAB(NIL,.F.)
+cKey   := "NUMPED+ITEM"
+MsAguarde({|| IndRegua("CANC",CINDEX,CKEY,,,"SELECIONANDO REGISTROS DO ARQ")},"Aguarde","Gerando Indice Temporario (CANC)...")
+
+ProcRegua(RecCount())
+
+DbSelectArea("SC6")
+DbGoTop()
+DbSetOrder(6)
+DbSeek(xFilial("SC6")+MV_PAR01,.T.)
+
+While !Eof() .and. SC6->C6_FILIAL == xFilial("SC6") .and. SC6->C6_REGCOT == MV_PAR01
+        IncProc("Pedido " + SC6->C6_NUM)
+         MTIPOREV:=SC6->C6_TIPOREV
+         MPEDIDO:=SC6->C6_NUM
+         MITEM:=SC6->C6_ITEM
+         MCLIENTE:=SC6->C6_CLI
+         MCODDEST:=SC6->C6_CODDEST
+         MCODPROD:=SC6->C6_PRODUTO
+         MEDINIC:=SC6->C6_EDINIC
+         MEDFIN:=SC6->C6_EDFIN
+         MEDVENC:=SC6->C6_EDVENC
+         MEDSUSP:=SC6->C6_EDSUSP
+         MASS:=""
+         MTIPOOP:=""
+         MTES:=SC6->C6_TES
+         MCF:=SC6->C6_CF
+         MCODRENOV:=SC6->C6_PEDREN+SC6->C6_ITEMREN
+         MENDERECO:=""  
+         IF SC6->C6_NUM=='264078'
+            MSGALERT("ACHOU PEDIDO")
+         ENDIF
+
+
+          If SUBS(SC6->C6_PRODUTO,5,3)='001'
+                   DbSelectArea("SC6")
+                   DbSkip()
+                   Loop
+           EndIf
+
+
+         If SUBS(MCODPROD,5,3)='002' .OR. SUBS(MCODPROD,5,3)='004'
+            MASS:='ANUAL'
+         Endif
+
+         If SUBS(MCODPROD,5,3)='003' .OR. SUBS(MCODPROD,5,3)='005'
+            MASS:='BIENAL'
+         Endif
+
+          If SUBS(MCODPROD,5,3)='008' .OR. SUBS(MCODPROD,5,3)='009'
+            MASS:='ANUAL'
+         Endif
+
+          If SUBS(MCODPROD,5,3)='010' .OR. SUBS(MCODPROD,5,3)='011'
+            MASS:='BIENAL'
+         Endif
+
+         If SUBS(MCODPROD,5,3)='006' .OR. SUBS(MCODPROD,5,3)='007'
+            MASS:='SEMESTRAL'
+         Endif
+
+        // TESTE 12/06....       If SC6->C6_EDINIC > Alltrim(Str(MV_PAR02,4,0)) .or. SC6->C6_EDVENC < Alltrim(Str(MV_PAR02,4,0)) .or. SC6->C6_REGCOT <> MV_PAR01
+        If MV_PAR04==1  // assinantes ativos até a edição
+           If SC6->C6_EDINIC>MV_PAR02  .or. SC6->C6_EDSUSP < MV_PAR02 .or. Alltrim(SC6->C6_REGCOT) <> Alltrim(MV_PAR01)
+                   DbSelectArea("SC6")
+                   DbSkip()
+                   Loop
+           EndIf
+        Endif
+
+        If MV_PAR04==2   // assinantes na Edição
+            If SC6->C6_EDINIC > MV_PAR02 .or. SC6->C6_EDSUSP < MV_PAR02 .or. Alltrim(SC6->C6_REGCOT) <> Alltrim(MV_PAR01)
+                   DbSelectArea("SC6")
+                   DbSkip()
+                   Loop
+           EndIf
+        Endif
+
+        If MV_PAR04==3  // assinantes ativos a partir da edição X
+           If SC6->C6_EDINIC< MV_PAR02 .or. Alltrim(SC6->C6_REGCOT) <> Alltrim(MV_PAR01)
+                  DbSelectArea("SC6")
+                  DbSkip()
+                  Loop
+           EndIf
+        Endif
+
+
+        //ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+        //³ Tratamento das ampliadas pelo parametro no SZJ - ZJ_REVAMPL             ³
+        //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       DbSelectArea("SC5")
+       DbGoTop()
+       DbSetOrder(1)
+       If DbSeek(xFilial("SC5")+SC6->C6_NUM,.T.)
+            DbSelectArea("SZ9")
+            DbGoTop()
+            DbSetOrder(1)
+            If DbSeek(xFilial("SZ9")+SC5->C5_TIPOOP,.T.)
+                MTIPOOP:=SZ9->Z9_DESCR
+                MQTDEP:= SZ9->Z9_QTDEP
+             Endif
+       Endif
+
+        Dbselectarea("CANC")
+        If MsSeek(mpedido+mItem)
+           MCANC:='S'
+        Else
+            // VALIDA CANCELADOS PARA ITENS CONVERTIDOS
+            Dbselectarea("CANC")
+             If  MsSeek(mpedido)
+               DO While numped==mpedido
+                    DO CASE
+                          CASE MV_PAR01 $('0101/0102/0103/0104/0105/0114')
+                                   MCODREV:='0115/0116'
+                          CASE MV_PAR01=='0108'
+                                   MCODREV:='0116'
+                           CASE MV_PAR01=='0107'
+                                    MCODREV:='0107'
+                           OTHERWISE
+                                   MCODREV=SUBSTR(PRODUTO,1,4)
+                    ENDCASE
+                    If SUBSTR(PRODUTO,1,4) $(MCODREV)
+                      MCANC:='S'
+                    Else
+                        MCANC:=""
+                    Endif
+                    DbSkip()
+              END
+            Else
+               MCANC:=""
+           Endif
+       Endif
+
+        DBSELECTAREA("SF4")
+        DBSETORDER(1)
+        IF DBSEEK(XFILIAL("SF4")+SC6->C6_TES)
+              IF SF4->F4_DUPLIC=='N'
+                      MPAGOSN:='G'
+              ELSE
+                      MPAGOSN:='P'
+              ENDIF
+        ENDIF
+
+        DbSelectArea("SC6")
+        IF SC6->C6_TES $ "650/651/654/701"
+                 MPAGOSN := 'G'
+        ELSE
+                 MPAGOSN := 'P'
+        ENDIF
+
+        DBSELECTAREA("SA1")
+        DbsetOrder(1)
+        DBSEEK(XFILIAL("SA1")+MCLIENTE)
+
+
+        MCIDADE := SA1->A1_MUN
+        MCEP      := SA1->A1_CEP
+        MTPCLI    := SA1->A1_TPCLI
+        MFONE     :=SA1->A1_TEL
+        MEMAIL    :=SA1->A1_EMAIL
+        MNOME     :=SA1->A1_NOME
+        MENDERECO :=SA1->A1_END
+        MEST      := SA1->A1_EST
+        DBSELECTAREA("ZZ8")
+                IF DBSEEK(XFILIAL("ZZ8")+SA1->A1_ATIVIDA)
+                     MATIV := ZZ8->ZZ8_DESCR
+                Else
+                     MATIV:=""
+                ENDIF
+
+        IF MCODDEST # ' '
+                DBSELECTAREA("SZN")
+                IF DBSEEK(XFILIAL("SZN")+MCLIENTE+MCODDEST)
+                        MCONTATO:= SZN->ZN_NOME
+                ENDIF
+                DBSELECTAREA("SZO")
+                IF DBSEEK(XFILIAL("SZO")+MCLIENTE+MCODDEST)
+                        MEST    := SZO->ZO_ESTADO
+                        MCIDADE := SZO->ZO_CIDADE
+                        MENDERECO:=SZO->ZO_END
+                        MCEP    := SZO->ZO_CEP
+                        MFONE     :=SZO->ZO_FONE
+
+                ENDIF
+        ENDIF
+        //A ROTINA ABAIXO PROCURA NO ARQ DE CEP LOCAL GEOGR (C-CAPITAL,I-INTERIOR) E
+        //*A ORDEM DE IMPRESSAO NO RELATORIO PARA O IVC.   HABILITAR APOS A CRIA€AO DE
+        //*CAMPOS.
+        //
+        //** TIRAR QUANDO HABILITAR O SZ0
+        //*/
+
+        MOBS   := ' '
+        mordem := 0
+        MLOCAL:=' '
+
+        /*
+        DBSELECTAREA("SZ0")
+        DBSETORDER(1)
+        IF DBSEEK(XFILIAL("SZ0")+MCEP)
+              MLOCAL := SZ0->Z0_LOCGEO
+              MORDEM := Alltrim(STR(SZ0->Z0_ORDEM))
+              MOBS   := ' '
+        ELSE
+              MLOCAL := ' '
+              MORDEM := ' '
+              MOBS   := 'S/CEP-PED.:'+SC6->C6_NUM+'/'+SC6->C6_ITEM
+        ENDIF
+        */
+
+        // QUANDO HABILITAR A ROTINA ACIMA, DESPREZAR A ABAIXO
+
+        If ALLTRIM(MCIDADE) == 'PORTO VELHO' .AND. MEST == 'RO'
+                MLOCAL:='C'
+                MORDEM:=5
+        ElseIf  ALLTRIM(MCIDADE) # 'PORTO VELHO' .AND. MEST == 'RO'
+                MLOCAL:='I'
+                MORDEM:=5
+        ElseIf ALLTRIM(MCIDADE) == 'BOA VISTA' .AND. MEST == 'RR'
+                MLOCAL:='C'
+                MORDEM:= 6
+        ElseIf ALLTRIM(MCIDADE) # 'BOA VISTA' .AND. MEST == 'RR'
+                MLOCAL:='I'
+                MORDEM:= 6
+        ElseIf ALLTRIM(MCIDADE) == 'BELEM' .AND. MEST == 'PA'
+                MLOCAL:='C'
+                MORDEM:= 4
+        ElseIf ALLTRIM(MCIDADE)#'BELEM' .AND. MEST=='PA'
+                MLOCAL:='I'
+                MORDEM:= 4
+        ElseIf ALLTRIM(MCIDADE)=='ARACAJU' .AND. MEST=='SE'
+                MLOCAL:='C'
+                MORDEM:= 16
+        ElseIf ALLTRIM(MCIDADE)#'ARACAJU' .AND. MEST=='SE'
+                MLOCAL:='I'
+                MORDEM:= 16
+        ElseIf ALLTRIM(MCIDADE)=='MACAPA' .AND. MEST=='AP'
+                MLOCAL:='C'
+                MORDEM:=2
+        ElseIf ALLTRIM(MCIDADE)#'MACAPA' .AND. MEST=='AP'
+                MLOCAL:='I'
+                MORDEM:= 2
+        ELseIf ALLTRIM(MCIDADE)=='SAO PAULO' .AND. MEST=='SP'
+                MLOCAL:='C'
+                MORDEM:= 20
+        ElseIf ALLTRIM(MCIDADE)#'SAO PAULO' .AND. MEST=='SP'
+                MLOCAL:='I'
+                MORDEM:= 20
+        ElseIf ALLTRIM(MCIDADE)=='VITORIA' .AND. MEST=='ES'
+                MLOCAL:='C'
+                MORDEM:= 17
+        ElseIf ALLTRIM(MCIDADE)#'VITORIA' .AND. MEST=='ES'
+                MLOCAL:='I'
+                MORDEM:= 17
+        ElseIf ALLTRIM(MCIDADE) $('TERESINA/TEREZINA/TEREZINHA') .AND. MEST=='PI'
+                MLOCAL:='C'
+                MORDEM:=14
+        ElseIf ALLTRIM(MCIDADE) # 'TERESINA' .and.  ALLTRIM(MCIDADE)#'TEREZINA' .and. ALLTRIM(MCIDADE) #'TEREZINHA' .AND. MEST=='PI'
+                MLOCAL:='I'
+                MORDEM:= 14
+        ElseIf ALLTRIM(MCIDADE) $ ('SAO LUIS/SAO LUIZ') .AND. MEST=='MA'
+                MLOCAL:='C'
+                MORDEM:= 11
+        ElseIf ALLTRIM(MCIDADE) #'SAO LUIS' .and. ALLTRIM(MCIDADE)#'SAO LUIZ' .AND. MEST=='MA'
+                MLOCAL:='I'
+                MORDEM:= 11
+        ElseIf ALLTRIM(MCIDADE)=='RIO BRANCO' .AND. MEST=='AC'
+                MORDEM:=1
+                MLOCAL:='C'
+        ElseIf ALLTRIM(MCIDADE)#'RIO BRANCO' .AND. MEST=='AC'
+                MLOCAL:='I'
+                MORDEM:=1
+        ElseIf ALLTRIM(MCIDADE)=='NATAL' .AND. MEST=='RN'
+                MLOCAL:='C'
+                MORDEM:= 15
+        ElseIf ALLTRIM(MCIDADE)#'NATAL' .AND. MEST=='RN'
+                MLOCAL:='I'
+                MORDEM:= 15
+        ElseIf ALLTRIM(MCIDADE)=='FORTALEZA' .AND. MEST=='CE'
+                MLOCAL:='C'
+                MORDEM:= 9
+        ElseIf ALLTRIM(MCIDADE)#'FORTALEZA' .AND. MEST=='CE'
+                MLOCAL:='I'
+                MORDEM:= 9
+        ElseIf ALLTRIM(MCIDADE)=='MACEIO' .AND. MEST=='AL'
+                MLOCAL:='C'
+                MORDEM:= 7
+        ElseIf ALLTRIM(MCIDADE)#'MACEIO' .AND. MEST=='AL'
+                MLOCAL:='I'
+                MORDEM:= 7
+        ElseIf ALLTRIM(MCIDADE)=='MANAUS' .AND. MEST=='AM'
+                MLOCAL:='C'
+                MORDEM:= 3
+        ElseIf ALLTRIM(MCIDADE)#'MANAUS' .AND. MEST=='AM'
+                MLOCAL:='I'
+                MORDEM:= 3
+        ElseIf ALLTRIM(MCIDADE)=='RECIFE' .AND. MEST=='PE'
+                MLOCAL:='C'
+                MORDEM:= 13
+        ElseIf ALLTRIM(MCIDADE)#'RECIFE' .AND. MEST=='PE'
+                MLOCAL:='I'
+                MORDEM:= 13
+        ElseIf ALLTRIM(MCIDADE)=='SALVADOR' .AND. MEST=='BA'
+                MLOCAL:='C'
+                MORDEM:= 8
+        ElseIf ALLTRIM(MCIDADE)#'SALVADOR' .AND. MEST=='BA'
+                MLOCAL:='I'
+                MORDEM:= 8
+        ElseIf ALLTRIM(MCIDADE)=='JOAO PESSOA' .AND. MEST=='PB'
+                MLOCAL:='C'
+                MORDEM:= 12
+        ElseIf ALLTRIM(MCIDADE)#'JOAO PESSOA' .AND. MEST=='PB'
+                MLOCAL:='I'
+                MORDEM:= 12
+        ElseIf MEST=='EX'
+                MLOCAL:='O'
+                MORDEM:= 29
+        ElseIf ALLTRIM(MCIDADE)=='BELO HORIZONTE' .AND. MEST=='MG'
+                MLOCAL:='C'
+                MORDEM:= 18
+        ElseIf ALLTRIM(MCIDADE)#'BELO HORIZONTE' .AND. MEST=='MG'
+                MLOCAL:='I'
+                MORDEM:=  18
+        ElseIf ALLTRIM(MCIDADE)=='RIO DE JANEIRO' .AND. MEST=='RJ'
+                MLOCAL:='C'
+                MORDEM:= 19
+        ElseIf ALLTRIM(MCIDADE)#'RIO DE JANEIRO' .AND. MEST=='RJ'
+                MLOCAL:='I'
+                MORDEM:= 19
+        ElseIf ALLTRIM(MCIDADE)=='PALMAS' .AND. MEST=='TO'
+                MLOCAL:='C'
+                MORDEM:=28
+        ElseIf ALLTRIM(MCIDADE)#'PALMAS' .AND. MEST=='TO'
+                MLOCAL:='I'
+                MORDEM:= 28
+        ElseIf ALLTRIM(MCIDADE)=='GOIANIA' .AND. MEST=='GO'
+                MLOCAL:='C'
+                MORDEM:= 25
+        ElseIf ALLTRIM(MCIDADE)#'GOIANIA' .AND. MEST=='GO'
+                MLOCAL:='I'
+                MORDEM:= 25
+        ElseIf ALLTRIM(MCIDADE)=='CAMPO GRANDE' .AND. MEST=='MS'
+                MLOCAL:='C'
+                MORDEM:= 27
+        ElseIf ALLTRIM(MCIDADE)#'CAMPO GRANDE' .AND. MEST=='MS'
+                MLOCAL:='I'
+                MORDEM:=  27
+        ElseIf ALLTRIM(MCIDADE)=='CUIABA' .AND. MEST=='MT'
+                MLOCAL:='C'
+                MORDEM:= 26
+        ElseIf ALLTRIM(MCIDADE)#'CUIABA' .AND. MEST=='MT'
+                MLOCAL:='I'
+                MORDEM:= 26
+        ElseIf ALLTRIM(MCIDADE)=='BRASILIA' .AND. MEST=='DF'
+                MLOCAL:='C'
+                MORDEM:= 24
+        ElseIf ALLTRIM(MCIDADE)#'BRASILIA' .AND. MEST=='DF'
+                MLOCAL:='I'
+                MORDEM:= 24
+        ElseIf ALLTRIM(MCIDADE)=='PORTO ALEGRE' .AND. MEST=='RS'
+                MLOCAL:='C'
+                MORDEM:= 23
+        ElseIf ALLTRIM(MCIDADE)#'PORTO ALEGRE' .AND. MEST=='RS'
+                MLOCAL:='I'
+                MORDEM:= 23
+        ElseIf ALLTRIM(MCIDADE)=='FLORIANOPOLIS' .AND. MEST=='SC'
+                MLOCAL:='C'
+                MORDEM:= 22
+        ElseIf ALLTRIM(MCIDADE)#'FLORIANOPOLIS' .AND. MEST=='SC'
+                MLOCAL:='I'
+                MORDEM:= 22
+        ElseIf ALLTRIM(MCIDADE)=='CURITIBA' .AND. MEST=='PR'
+                MLOCAL:='C'
+                MORDEM:=21
+        ElseIf ALLTRIM(MCIDADE)#'CURITIBA' .AND. MEST=='PR'
+                MLOCAL:='I'
+                MORDEM:= 21
+        EndIf
+        If Empty(MLOCAL)  .OR. Empty(MORDEM)
+               MOBS:=SC6->C6_NUM
+        Endif
+
+        //ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+        //³  GRAVA ARQUIVO TEMPORARIO                                    ³
+        //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+        GRAVA_TEMP()
+        DBSELECTAREA("SC6")
+        DBSKIP()
+END
+
+cMsg := "Arquivo Gerado com Sucesso em: "+_cString
+lEnd:= .F.
+bBloco:= {|lEnd| FGERARQ(@lEnd)}
+MsAguarde(bBloco,"Aguarde" ,"Copiando Arquivo...", .T. )
+MSGINFO(cMsg)
+
+DBSELECTAREA("IVC")
+DBCLOSEAREA()
+
+DbSelectArea("SZ9")
+Retindex("SZ9")
+
+DbSelectArea("SC5")
+Retindex("SC5")
+
+DbSelectArea("SC6")
+Retindex("SC6")
+
+DbSelectArea("SA1")
+Retindex("SA1")
+
+DbSelectArea("SZN")
+Retindex("SZN")
+
+DbSelectArea("SZO")
+Retindex("SZO")
+
+DbSelectArea("CANC")
+DbCloseArea()
+
+Return
+
+Static Function FGERARQ()
+
+        DBSELECTAREA("IVC")
+        DBGOTOP()
+        COPY TO &_cString
+Return
+
+
+
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³GRAVA_TEMPºAutor  ³Microsiga           º Data ³  03/26/02   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³                                                            º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ AP5                                                        º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static FUNCTION GRAVA_TEMP()
+
+        Reclock("IVC",.t.)
+        replace ORDEM  WITH MORDEM
+        do case
+                case mlocal=='C'
+                        replace CAPITAL WITH 1
+                CASE MLOCAL=='I'
+                        replace INTERIOR WITH 1
+                CASE MLOCAL=='O'
+                        replace OUTROS WITH 1
+        ENDCASE
+        replace OBS    WITH MOBS
+
+         IF MAMPL=='S'
+                IF SUBS(SC6->C6_PRODUTO,5,3) == '008' .OR. SUBS(SC6->C6_PRODUTO,5,3) == '009' ;
+                        .OR. SUBS(SC6->C6_PRODUTO,5,3) == '010' .OR. SUBS(SC6->C6_PRODUTO,5,3) == '011'
+                        replace TOTAL  WITH 1
+                Else
+                       replace TOTAL  WITH 0
+                ENDIF
+        Else
+             replace TOTAL  WITH 1
+        ENDIF
+
+
+        replace CODCLI WITH MCLIENTE
+        replace CODDEST WITH MCODDEST
+        replace NOME WITH MNOME
+        replace CONTATO WITH MCONTATO 
+        replace _ENDEREC WITH MENDERECO
+        replace CIDADE  WITH MCIDADE
+        replace ESTADO WITH MEST
+        replace CEP WITH MCEP
+        replace FONE WITH MFONE
+        replace EMAIL WITH MEMAIL
+        replace OPERACAO WITH MTIPOOP
+        replace PAGOSN WITH MPAGOSN
+        replace AMPLIADA WITH MAMPL
+        replace CANCELADA WITH MCANC
+        replace TIPOREV WITH MTIPOREV
+        replace CODPROD WITH MCODPROD
+        replace ASS WITH MASS
+        replace TPCLI WITH MTPCLI
+        replace ATIVIDADE  WITH MATIV
+        replace PEDIDO  WITH MPEDIDO
+        replace ITEM  WITH MITEM
+        replace EDINIC WITH MEDINIC
+        replace EDFIN WITH MEDFIN
+        replace EDVENC WITH MEDVENC
+        replace EDSUSP WITH MEDSUSP
+        replace PARCELAS WITH MQTDEP
+        replace CF WITH MCF
+        replace TES WITH MTES
+        replace CODRENOV WITH MCODRENOV
+
+
+        If ! Empty(MOBS)
+            replace OBS    WITH ALLTRIM(OBS)+'/'+MOBS
+        Endif
+        MsUnlock()
+RETURN
+

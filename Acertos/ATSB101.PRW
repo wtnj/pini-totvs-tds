@@ -1,0 +1,159 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 30/03/02
+
+User Function ATSB101()
+SetPrvt("CINDEX,CKEY,MCONTA,MGRUPO")
+lEnd  := .F.
+bBloco:= {|lEnd| ATproc(@lEnd)}
+Processa( bBloco, "Aguarde" ,"Processando...", .T. )  
+
+Return
+
+Static Function ATproc()   
+
+DbSelectArea("SB1")  
+ProcRegua(LastRec())
+DBGOTOP()
+DO WHILE .NOT. EOF() .AND. SM0->M0_CODIGO=='01'
+   IncProc("COD: "+B1_COD+" ATUALIZANDO : "+StrZero(RECNO(),7))
+   MCONTA:=' '                
+   MGRUPO:=' '
+
+   IF SUBSTR(B1_COD,1,4)=='0307'
+      MCONTA:='31010104001'
+   ENDIF   
+    
+   IF SUBSTR(B1_COD,1,4)=='0301'  .or.SUBSTR(B1_COD,1,4)=='0302'  .or.;
+      SUBSTR(B1_COD,1,4)=='0303'  .or. SUBSTR(B1_COD,1,4)=='0304'  .or.;
+      SUBSTR(B1_COD,1,4)=='0305' 
+      MCONTA:='31010104003'
+   ENDIF      
+   
+   IF SUBSTR(B1_COD,1,4)=='0306'
+      MCONTA:='31010104005'
+   ENDIF   
+   
+   IF SUBSTR(B1_COD,1,4)=='0308'
+      MCONTA:='31010104002'
+   ENDIF  
+     
+   IF SUBSTR(B1_COD,1,4)=='0309'  .or. SUBSTR(B1_COD,1,4)=='0310'  .or. ;
+      SUBSTR(B1_COD,1,4)=='0311'  .or. SUBSTR(B1_COD,1,4)=='0313'  .or.;
+      SUBSTR(B1_COD,1,4)=='0315'  .or. SUBSTR(B1_COD,1,4)=='0316'  .or.;
+      SUBSTR(B1_COD,1,4)=='0317'  .or. SUBSTR(B1_COD,1,4)=='0319' .or.  SUBSTR(B1_COD,1,4)=='0399'
+      MCONTA:='31010104006'
+   ENDIF      
+   
+   IF SUBSTR(B1_COD,1,2)=='08'
+      MCONTA:='31010104006'
+   ENDIF  
+   
+   IF SUBSTR(B1_COD,1,4)=='0312'.OR. SUBSTR(B1_COD,1,4)=='0323'
+      MCONTA:='31010104005'
+   ENDIF
+   IF SUBSTR(B1_COD,1,4)=='0314' .OR. SUBSTR(B1_COD,1,4)=='0214'
+      MCONTA:='31010104006'
+   ENDIF
+   IF SUBSTR(B1_COD,1,4)=='0318'
+      MCONTA:='31010104004'
+   ENDIF
+   IF SUBSTR(B1_COD,1,4)=='0320'
+      MCONTA:='31010104003'
+   ENDIF
+   IF SUBSTR(B1_COD,1,4)=='0321'
+      MCONTA:='31010104002'
+   ENDIF 
+   
+   IF SUBSTR(B1_COD,1,4)=='0322'
+      MCONTA:='31010104007'
+   ENDIF   
+   
+   IF SUBSTR(B1_COD,1,4)=='0699' .OR. SUBSTR(B1_COD,1,2)=='09'
+      MCONTA:='31010108003'
+   ENDIF
+   
+   IF SUBSTR(B1_COD,1,7)=='0202326'.OR. B1_GRUPO='0201' .OR. B1_GRUPO='0202'
+      MCONTA:='31010105003'
+   ENDIF    
+   
+   IF B1_GRUPO=='0100'  .and. subs(b1_cod,1,2)='01'
+      MCONTA:='21080101001'
+   ENDIF     
+   
+   IF SUBSTR(B1_COD,1,4)=='0107' .AND. SUBSTR(B1_COD,5,3)=='001'
+      MCONTA:='31010101002'
+   ENDIF    
+         
+   IF SUBSTR(B1_COD,1,4)=='0124' .AND. SUBSTR(B1_COD,5,3)=='001'       // AU CONVERSAO
+      MCONTA:='31010101002'
+   ENDIF        
+   
+   IF SUBSTR(B1_COD,1,4)=='0115' .AND. SUBSTR(B1_COD,5,3)=='001'
+      MCONTA:='31010103002'
+   ENDIF
+   
+   IF SUBSTR(B1_COD,1,4)=='0116' .AND. SUBSTR(B1_COD,5,3)=='001'
+      MCONTA:='31010102002'
+   ENDIF         
+   
+   IF MCONTA=' ' .AND. B1_GRUPO='0101'
+      MCONTA:='31010101003'
+   ENDIF
+   
+   IF B1_GRUPO=='0200'
+      MCONTA:='31010105001'
+   ENDIF 
+   
+   IF B1_GRUPO=='0198'
+      MCONTA:='31010101003'
+   ENDIF
+
+
+   IF B1_TIPO=='CD' .OR.  B1_TIPO='MR'
+      MCONTA:='31010106001'
+   ENDIF        
+  
+   IF B1_TIPO=='DC'
+      MCONTA:='31010106002'
+   ENDIF
+          
+   IF B1_TIPO=='VC'
+      MCONTA:='31010107002'
+   ENDIF
+   
+   IF B1_TIPO=='VI'
+      MCONTA:='31010107001'
+   ENDIF
+
+   IF B1_GRUPO=='0601'
+      MCONTA:='31010108001'
+   ENDIF
+   
+   IF SUBSTR(B1_COD,1,2)=='10' 
+      MCONTA:='31010109001'
+   ENDIF
+
+   IF SUBSTR(B1_COD,1,2)=='10' .AND. ' AV' $(B1_DESC)
+      MCONTA:='31010109002'                             
+      MGRUPO:='1001'
+   ENDIF
+   IF SUBSTR(B1_COD,1,2)='04'
+      MCONTA:='31010110001'
+   ENDIF 
+   IF SUBSTR(B1_COD,1,2)='05'
+      MCONTA:='31010111001'
+   ENDIF   
+   
+   If ! Empty(mconta)
+      RECLOCK('SB1',.F.)
+      REPLA B1_CONTA WITH MCONTA
+      IF MGRUPO<>' '
+         REPLA B1_GRUPO WITH MGRUPO
+      ENDIF
+      MSUNLOCK()
+   ENDIF
+   DBSKIP()
+ENDDO
+DbSelectArea("SB1")
+Retindex("SB1")
+Return
+

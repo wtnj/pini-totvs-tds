@@ -1,0 +1,59 @@
+#INCLUDE "RWMAKE.CH"
+User Function RATASB1()
+  Private lEnd, cArqtemp1, mChave,mCodcli,mEnd,mFone,mCGCant,mIeant,mNome,mvlchave,mTamalho,mTamalho1  
+  lEnd:= .F.
+  Processa({|lEnd| ProcSB1(@lEnd)})
+Return
+
+
+Static Function ProcSB1()
+
+cArqTemp1 := "RAQUEL.DBF"
+dbUseArea( .T.,, cArqTemp1,"TMP", if(.F. .OR. .F., !.F., NIL), .F. )
+
+dbSelectArea("TMP")
+DbGoTop()
+
+ProcRegua(RecCount())
+
+WHILE !EOF() .and. !lEnd
+	IncProc("Lendo Registro " + Str(recno(),6,0))
+	mChave :=B1_COD
+
+	DbSelectArea("SB1")
+	DbSetOrder(1)
+	DbGoTop()
+	If DbSeek(xFilial("SB1")+MCHAVE)  .AND. SB1->B1_CONTA<>TMP->B1_CONTA
+	   RecLock("SB1",.F.)
+	   REPLA B1_CONTA WITH TMP->B1_CONTA
+	   MsUnlock()
+	Endif 
+
+	
+	DbSelectArea("SD3")
+	DbSetOrder(3)
+	DbGoTop()
+	If DbSeek(xFilial("SD3")+MCHAVE)  .AND. SD3->D3_CONTA<>TMP->B1_CONTA 
+	   Do While sd3->d3_cod==mchave
+	      IF DTOS(SD3->D3_EMISSAO)>='20021101' 
+	         RecLock("SD3",.F.)
+	         REPLA D3_CONTA WITH TMP->B1_CONTA
+	         MsUnlock()                            
+	      Endif
+	   Skip
+	   Enddo
+	Endif                
+
+	
+	DbSelectArea("TMP")
+    DBSKIP()
+END
+
+DbSelectArea("TMP")
+DbCloseArea()     
+
+DbSelectArea("SB1")
+RetIndex("SB1")  
+DbSelectArea("SD3")
+RetIndex("SD3")  
+Return

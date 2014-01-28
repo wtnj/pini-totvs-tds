@@ -1,0 +1,83 @@
+#include "rwmake.ch"
+User Function RaatSE3()
+
+SetPrvt("LEND,CARQ,MHORA,_ACAMPOS,MACHOU_CNOME,CINDEX,CKEY")
+
+lEnd:= .F.
+
+MHORA:= TIME()
+cArq := SUBS(CUSUARIO,7,3)+SUBS(MHORA,1,2)+SUBS(MHORA,7,2)
+
+_aCampos:={}              
+AADD(_aCampos,{"PEDIDO","C",6,0})
+AADD(_aCampos,{"PARCELA","C",1,0})
+AADD(_aCampos,{"DUPLICATA","C",6,0})
+AADD(_aCampos,{"PREFIXO","C",3,0})
+AADD(_aCampos,{"EMISSAO","D",8,0})
+AADD(_aCampos,{"BAIXA","D",8,0})
+AADD(_aCampos,{"DTALT","D",8,0})
+AADD(_aCampos,{"DATACOM","D",8,0})
+AADD(_aCampos,{"MOTIVO","C",40,0})
+AADD(_aCampos,{"VALOR","N",17,2})
+AADD(_aCampos,{"VEND1","C",6,0})
+AADD(_aCampos,{"COMISS","C",1,0})
+
+_cNome := CriaTrab(_aCampos,.t.)
+cIndex := CriaTrab(Nil,.F.)
+cKey   := "PEDIDO+PARCELA+VEND1"
+
+dbUseArea(.T.,, _cNome,cArq,.F.,.F.)
+dbSelectArea(cArq)
+Indregua(cArq,cIndex,ckey,,,"Selecionando Registros do Arq")
+
+Processa({|| R0SE3Proc()})
+
+Static Function R0SE3Proc()
+
+dbSelectArea("SE1")
+dbSetOrder(21)  ///dbSetOrder(15) AP5
+DbGoTop()
+ProcRegua(RecCount())
+
+WHILE !EOF()
+   IncProc("Lendo Registro "+Str(Recno(),6))
+   If Empty(SE1->E1_DTALT)
+        DbSelectArea("SE3")
+        IF !DBSEEK(XFILIAL("SE3")+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA)
+           MACHOU:='N'
+        ELSE
+           MACHOU:=' '
+        EndIf
+   Else
+      dbSelectArea("SE1")
+      DbSkip()
+      Loop
+   Endif
+
+   RecLock(CARQ,.t.)
+   PEDIDO  :=SE1->E1_PEDIDO
+   PARCELA :=SE1->E1_PARCELA
+   DUPLICA :=SE1->E1_NUM
+   PREFIXO :=SE1->E1_PREFIXO
+   EMISSAO :=SE1->E1_EMISSAO
+   BAIXA   :=SE1->E1_BAIXA
+   DTALT   :=SE1->E1_DTALT
+   DATACOM :=SE3->E3_DATA
+   MOTIVO  :=SE1->E1_MOTIVO
+   VALOR   :=SE1->E1_VALOR
+   VEND1   :=SE1->E1_VEND1
+   COMISS  :=MACHOU
+   MsUnlock()
+   DbSelectArea("SE1")
+   DBSKIP()
+END
+
+DbSelectArea(cARQ)     
+COPY TO RAQUEL
+DbCloseArea()
+
+DbSelectArea("SE1")
+RetIndex()
+
+Return
+

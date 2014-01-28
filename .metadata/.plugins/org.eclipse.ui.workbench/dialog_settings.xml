@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="FileSystemImportWizard">
+	</section>
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="129" key="DIALOG_Y_ORIGIN"/>
+		<item value="433" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="ZipFileImportWizard">
+	</section>
+	<section name="ShowViewDialog">
+		<item value="318" key="DIALOG_WIDTH"/>
+		<item value="com.totvs.tds.core.server.ui.TotvsServerMonitor" key="ShowViewDialog.STORE_SELECTED_VIEW_ID"/>
+		<item value="146" key="DIALOG_Y_ORIGIN"/>
+		<item value="438" key="DIALOG_HEIGHT"/>
+		<item value="569" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<list key="ShowViewDialog.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.rse.ui.view"/>
+			<item value="com.totvs.tds.core.server.ui"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.preferences.keysPreferencePage">
+	</section>
+	<section name="ImportExportAction">
+		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
+		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.team.ui.importWizards"/>
+			<item value="com.totvs.tds.wizards"/>
+		</list>
+	</section>
+</section>

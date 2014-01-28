@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Excluir recurso &quot;nova pini srv/faturamento/diferimento/Difto.prw&quot;" deleteContents="false" description="Excluir recurso &quot;nova pini srv/faturamento/diferimento/Difto.prw&quot;" element1="/nova pini srv/faturamento/diferimento/Difto.prw" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1377283541846"/>
+</session>

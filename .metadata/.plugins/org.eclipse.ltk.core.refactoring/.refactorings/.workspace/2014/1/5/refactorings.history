@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Excluir recurso &quot;validacao&quot;" deleteContents="false" description="Excluir recurso &quot;validacao&quot;" element1="/validacao" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1390820458544"/>&#x0A;<refactoring comment="Excluir recurso &quot;RVACARI/Fontes&quot;" deleteContents="false" description="Excluir recurso &quot;RVACARI/Fontes&quot;" element1="/RVACARI/Fontes" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1390820757528"/>
+</session>

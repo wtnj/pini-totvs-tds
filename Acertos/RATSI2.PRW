@@ -1,0 +1,83 @@
+#INCLUDE "RWMAKE.CH"
+User Function RATCT2()
+
+Private lEnd, cArqtemp1, mChave,mconta,mNum,mLinha
+
+lEnd:= .F.
+
+Processa({|lEnd| ProcCT2(@lEnd)})
+
+Return
+
+Static Function ProcCT2()
+
+cArqTemp1 := "LC"
+dbUseArea( .T.,, cArqTemp1,"TMP", if(.F. .OR. .F., !.F., NIL), .F. )
+dbSelectArea("TMP")
+WHILE !EOF() .and. !lEnd
+	IncProc("Lendo Registro " + Str(recno(),6,0))
+   	RecLock("TMP",.F.)
+	DbDelete() 
+	MsUnlock()  
+	DbSkip()
+Enddo
+If SM0->M0_CODIGO='01'
+   APPEND FROM LCEP
+ENDIF   
+If SM0->M0_CODIGO='02'
+   APPEND FROM LCPS
+ENDIF
+If SM0->M0_CODIGO='03'
+   APPEND FROM LCBP
+ENDIF 
+DbGoTop()
+
+ProcRegua(RecCount())
+                         
+mconta:=0
+WHILE !EOF() .and. !lEnd
+	IncProc("Lendo Registro " + Str(recno(),6,0)+"Atualizados.."+Str(mconta,7,0))
+	MNUN:=VAL(TMP->NUM)
+	MLINHA:=VAL(TMP->LINHA)
+   
+   	RecLock("TMP",.F.)
+	TMP->NUM:=STRZERO(MNUN,10) 
+	TMP->LINHA:=STRZERO(MLINHA,2)
+	MsUnlock()  
+   
+		mChave :=TMP->LDATA+TMP->NUM+TMP->LINHA
+	DbSelectArea("CT2")
+	DbSetOrder(3)
+	DbGoTop()
+	If DbSeek(xFilial("CT2")+MCHAVE) 
+	   If CT2_CCD==TMP->CCD .AND. CT2_CCC==TMP->CCC
+          RecLock("CT2",.F.)
+	      CT2->CT2_CCD := TMP->NOVO
+	      MsUnlock()
+	       
+	      RecLock("TMP",.F.)
+     	  TMP->ATUALIZOU:='S' 
+       	  MsUnlock()          
+       	  MCONTA++
+	   Endif
+	Endif
+	DbSelectArea("TMP")
+	DBSKIP()
+END 
+MSGALERT("ATUALIZOU....."+STR(MCONTA,7,0))
+
+DbSelectArea("TMP")
+If SM0->M0_CODIGO='01'
+   COPY TO ATLCEP
+ENDIF   
+If SM0->M0_CODIGO='02'
+  COPY TO ATLCPS
+ENDIF
+If SM0->M0_CODIGO='03'
+   COPY TO ATLCBP
+ENDIF 
+DbCloseArea()
+                
+DbSelectArea("CT2")
+RetIndex("CT2")
+Return

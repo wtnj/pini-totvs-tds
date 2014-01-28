@@ -1,0 +1,43 @@
+#INCLUDE "RWMAKE.CH"
+User Function RATSI5()
+
+Private lEnd, cArqtemp1, mChave
+
+lEnd:= .F.
+
+Processa({|lEnd| ProcSI5(@lEnd)})
+
+Return
+
+Static Function ProcSI5()
+
+cArqTemp1 := "LP"
+dbUseArea( .T.,, cArqTemp1,"TMP", if(.F. .OR. .F., !.F., NIL), .F. )
+
+dbSelectArea("TMP")
+DbGoTop()
+
+ProcRegua(RecCount())
+
+WHILE !EOF() .and. !lEnd
+	IncProc("Lendo Registro " + Str(recno(),6,0))
+	mChave :=TMP->CODIGO+TMP->SEQ
+	DbSelectArea("SI5")
+	DbSetOrder(1)
+	DbGoTop()
+	If DbSeek(xFilial("SI5")+MCHAVE)
+	   RecLock("SI5",.F.)
+	   SI5->I5_DEBITO := TMP->DEBITO
+	   SI5->I5_CREDITO:= TMP->CREDITO
+	   MsUnlock()
+	Endif
+	DbSelectArea("TMP")
+	DBSKIP()
+END
+
+DbSelectArea("TMP")
+DbCloseArea()
+                
+DbSelectArea("SI5")
+RetIndex("SI5")
+Return

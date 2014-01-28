@@ -1,0 +1,394 @@
+#include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 30/03/02
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Programa: PFAT058   ³Autor: Raquel Farias          ³ Data:  14/07/03  ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo: Atualiza Status da Assinaturas de Orgao Publico/Renova     ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Uso      : M¢dulo de Faturamento  Liberado para Usu rio em:           ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ±±
+±±³Altera‡Æo           ³Alterado por:                 ³ Data:            ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Descri‡Æo:                                                            ³ ±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ±±
+±±³Liberado para Usu rio em:                                             ³ ±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+User Function ATSC6CONV()
+SetPrvt("CINDEX,CKEY,MPEDIDO,MSITUAC,MAEDIN,MAEDVENC,MAEDSUSP,MAEDFIN,")
+SetPrvt("MPROC,MVALOR,MQTDEX,MPAGO,MDTSUSP,MEDIN,MEDVENC,MEDSUSP,MEDFIN,")
+SetPrvt("MDTVENCA,MSTATUS,MCODREV,MAJUSTA,MPRODUTO,MTPPORTE,MTES,MCF,MCODDEST,MDTINIC,")
+SetPrvt("MDTFIN,MCODCLI,MLOJA,MITEM,MDESCR,MDTINICA,MEDVENCA,MEDINICA,MEDSUSPA,MEDFINA,MDTINICA")
+
+lEnd  := .F.
+bBloco:= {|lEnd| ATSC6(@lEnd)}
+FILTRA()
+Processa( bBloco, "Aguarde" ,"Processando...", .T. )
+Return
+
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Function  ³ Filtra()                                                      ³
+//ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+//³ Descricao ³ Filtra arquivo SD2 para ser utilizado no programa.            ³
+//ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+//ÀÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Static Function FILTRA()
+DbSelectArea("ZZS")
+DbGoTop()
+cChave  := IndexKey()
+cFiltro := "DTOS(ZZS_DTVENC)>='20030101' .AND. DTOS(ZZS_DTVENC)<=DTOS(DATE())"
+cInd    := CriaTrab(NIL,.f.)
+MsAguarde({|| IndRegua("ZZS",cInd,cChave,,cFiltro,"Filtrando...")},"Aguarde","Gerando Arquivo Temporario (ZZS)...")
+Dbgotop()
+Return
+
+Static Function ATSC6()        // incluido pelo assistente de conversao do AP5 IDE em 30/03/02
+mReco:=0
+DbSelectArea("ZZS")
+DbSetOrder(1)
+ProcRegua(LastRec())
+DBGOTOP()   
+Do While ! EOF()
+	IncProc()    
+
+	mPedido:=ZZS_PEDIDO
+	mSituac:=" "
+	mAedin  :=ZZS_EDIN
+	mAedvenc:=ZZS_EDVENC
+	mAedsusp:=ZZS_EDSUSP
+	mAedfin :=ZZS_EDFIN
+	mProc  :=Date()
+	mValor :=ZZS_VALOR
+	mQtdeEx:=0
+	mPago:= " "
+	mDtsusp :=CTOD('  /  /  ')
+	mDtvencA:=ZZS_DTVENC
+	mCodRec:=" "
+	mStatus:=" "
+	mAjusta:=" "
+	mDtSusp:=CTOD('  /  /  ')
+	mDtInic:=CTOD('  /  /  ')
+	mDtFin :=CTOD('  /  /  ')
+	mItemP:='01'
+	mDescr:=" "   
+    mAedina  :=0
+	mAedvenca:=0
+	mAedsuspa:=0
+	mAedfina :=0
+	             
+    If 'X' $(ZZS_STATUS) .or. 'LP' $(ZZS_STATUS)
+		DbSkip()
+		Loop
+	Endif
+	
+	If Empty(DTOS(ZZS->ZZS_DTPAG)) 
+		mPago:='N'
+	Else
+		mPago:='S'
+	Endif
+	
+	
+	If 'RENOV' $(ZZS->ZZS_TIPO)
+	   mItem:='99'
+	Endif
+	
+	
+	
+	If ALLTRIM(ZZS->ZZS_PRODUTO)=='15'
+		
+		mCodrev:='0115'
+		If ZZS->ZZS_Valor>300
+			mQtdeEx:=24
+			mValor:=ZZS->ZZS_VALOR
+		Endif
+		
+		If ZZS->ZZS_Valor<100
+			If mValor*3 >300
+				mQtdeEx:=24
+				mValor:=ZZS->ZZS_VALOR*3
+			Else
+				mQtdeEx:=12
+				mValor:=ZZS->ZZS_VALOR*3
+			Endif
+		Endif
+		
+		If ZZS->ZZS_Valor>100 .and. ZZS->ZZS_Valor<200
+			mQtdeEx:=12
+			mValor:=ZZS->ZZS_VALOR
+		Endif
+	Endif
+	
+	If ALLTRIM(ZZS->ZZS_PRODUTO)=='16'
+		mCodrev='0116'
+		If ZZS->ZZS_VALOR>200
+			mQtdeEx:=24
+			mValor:=ZZS->ZZS_VALOR
+		Endif
+		
+		If ZZS->ZZS_VALOR<100
+			If ZZS->ZZS_VALOR*3 >200
+				mValor:=ZZS->ZZS_VALOR*3
+				mQtdeEx:=24
+			Else
+				mValor:=ZZS->ZZS_VALOR*3
+				mQtdeEx:=12
+			Endif
+		Endif
+		
+		If ZZS->ZZS_VALOR>100 .and. ZZS->ZZS_VALOR<200
+			mValor:=ZZS->ZZS_VALOR
+			mQtdeEx:=12
+		Endif
+	Endif
+	
+	If ALLTRIM(ZZS->ZZS_PRODUTO)=='24'
+		mCodrev='0124'
+		If ZZS->ZZS_VALOR>150
+			mValor:=ZZS->ZZS_VALOR
+			mQtdeEx:=24
+		Endif
+		
+		If ZZS->ZZS_VALOR<90
+			If ZZS->ZZS_VALOR*3 >150
+				mValor:=ZZS->ZZS_VALOR*3
+				mQtdeEx:=24
+			Else
+				mQtdeEx:=12
+				mValor:=ZZS->ZZS_VALOR*3
+			Endif
+		Endif
+		
+		If ZZS->ZZS_VALOR>90 .and. ZZS->ZZS_VALOR<150
+			mValor:=ZZS->ZZS_VALOR
+			mQtdeEx:=12
+		Endif
+	Endif
+	
+	If mQtdeEx==12
+		mProd:='004'
+	Endif
+	
+	If mQtdeEx==24
+		mProd:='005'
+	Endif
+	
+	DBSELECTAREA("SB1")
+	DbSetOrder(1)
+	If DBSEEK(xFILIAL("SB1")+MCODREV+mProd)
+		mDescr :=SB1->B1_DESC
+	Endif
+	
+	DbSelectArea("SC6")
+	DbSetOrder(1)
+	If DbSeek(xFilial("SC6")+mPedido+mItemP,.T.)
+	   mEdfin :=SC6->C6_EDFIN
+	   DBSELECTAREA("SZJ")
+	   DbSetOrder(1)
+	   If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdfin,4,0))
+	      mDtsusp := SZJ->ZJ_DTCIRC
+		Endif      
+	Endif       
+	
+	DbSelectArea("ZZS")
+	IF mPago=='S' .and. Alltrim(ZZS->ZZS_PARCEL)=='1' .and. mDtsusp<=ZZS->ZZS_DTPAG+180 .and. DTOS(mDtsusp)<>'        ' //renovação antecipada ate 6 meses
+	   mAjusta:='S'
+	Endif     
+	
+	If mAjusta<>'S'
+		DbSelectArea("SC6")
+		DbSetOrder(1)
+		If DbSeek(xFilial("SC6")+mPedido+mItem,.T.)
+			mEdfin :=SC6->C6_EDFIN
+			mEdinic:=SC6->C6_EDINIC
+			DBSELECTAREA("SZJ")
+			DbSetOrder(1)
+			If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdfin,4,0))
+				mDtsusp := SZJ->ZJ_DTCIRC
+			Endif    
+			
+			If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdinic,4,0))
+				mDtInic:= SZJ->ZJ_DTCIRC
+			Endif
+			
+			IF mDtsusp<Date() .and. mPago=='N'
+			   DbSelectArea("ZZS")
+			   DbSkip()
+			   Loop
+			Endif
+			
+			IF mDtsusp>Date() .and. mPago=='N'
+				mSituac:='SI'
+			Endif     
+			
+			IF year(mDtinic)<2003 .and. mPago=='N' .and. sc6->c6_situac=='AA'; //Considera ativa as assinaturas nao renovadas e que estavam ativas na TMKT
+			   .and. mDtinic<mDtvencA   
+			   	mSituac:='AA'
+			Endif       
+				
+			IF mDtsusp>Date() .and. mPago=='S'
+				mSituac:='AA'
+			Endif       
+			
+			IF mDtsusp<Date() .and. mPago=='S'
+				mSituac:='AA'
+				mAjusta:='S'
+			Endif       
+					
+			RECLOCK('SC6',.F.)   
+			If mSituac=='SI'
+   			   Replace C6_SITUAC WITH mSituac
+			   Replace C6_EDSUSP WITH C6_EDINIC
+			Else 
+			   Replace C6_SITUAC WITH mSituac
+			Endif   
+			MSUNLOCK()
+		Endif
+	Endif
+	
+	If mAjusta=='S'
+		DbSelectArea("SC6")
+		DbSetOrder(1)
+		If DbSeek(xFilial("SC6")+mPedido+'01',.T.)
+			mEdin  :=SC6->C6_EDINIC
+			mEdvenc:=SC6->C6_EDVENC
+			mEdsusp:=SC6->C6_EDSUSP
+			mEdfin :=SC6->C6_EDFIN
+			mSituac:=SC6->C6_SITUAC
+			mProduto:=SC6->C6_PRODUTO
+			mTpporte:=SC6->C6_TPPORTE
+			mTes:=SC6->C6_TES
+			mCf:=SC6->C6_CF
+			mCoddest:=SC6->C6_CODDEST
+			mCodcli:=SC6->C6_CLI
+			mLoja:=SC6->C6_LOJA
+			mItem:=SC6->C6_ITEM
+			mSituac:='AA' 
+			mDtinica:=ctod('  /  /  ')  
+			
+			mEdina:=mEdvenc+1
+			mEdvenca:=mEdina+mQtdeEx-1
+		    mEdfina:=mEdvenca
+		    mEdsuspa:=mEdvenca
+								
+			Do While .T.
+			   DBSELECTAREA("SZJ")
+			   DbSetOrder(1)
+			   If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdina,4,0))
+			      mDtInica:= SZJ->ZJ_DTCIRC
+			   Endif            
+			
+			   If month(mDtinica)<month(date()) .and. year(mDtinica)=year(date())
+			      mEdina:=mEdina+1
+			      mEdvenca:=mEdvenca+1
+		          mEdfina:=mEdfina+1
+		          mEdsuspa:=mEdvenca
+		       Else 
+		          Exit   
+			   Endif
+			Enddo
+			
+			DBSELECTAREA("SZJ")
+			DbSetOrder(1)
+			If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdfina,4,0))
+				mDtFin := SZJ->ZJ_DTCIRC
+			Endif
+			
+			DBSELECTAREA("SZJ")
+			DbSetOrder(1)
+			If DBSEEK(xFILIAL("SZJ")+MCODREV+STR(mEdina,4,0))
+				mDtInic := SZJ->ZJ_DTCIRC
+			Endif
+			
+			DBSELECTAREA("ZZS")
+			// verifica se renovacao e ajusta a edição de vencimento
+			If  Empty(ZZS->ZZS_DTPROC)
+				// GRAVA COPIA DE SEGURANCA DAS EDICOES AJUSTADAS
+				RECLOCK('ZZS',.F.)
+				Replace ZZS_EDSUSP WITH mEdsusp
+				Replace ZZS_EDVENC WITH mEdvenc
+				Replace ZZS_EDFIN  WITH mEdfin
+				Replace ZZS_EDIN   WITH mEdin
+				Replace ZZS_DTPROC WITH mProc
+				Replace ZZS_TIPO   WITH 'RENOVACAO ATIVADA'
+				Replace ZZS_TITULO WITH STR(SC6->C6_VALOR,12,2)
+				MSUNLOCK()
+				
+				DbSelectArea("SC6")
+				DbSetOrder(1)
+				RECLOCK('SC6',.F.)
+				Replace C6_PEDREN WITH mPedido
+				Replace C6_ITEMREN WITH '99'
+				MSUNLOCK()
+				
+				
+				DbSelectArea("SC6")
+				DbSetOrder(1)
+				DbSeek(xFilial("SC6")+mPedido+'99')
+				If ! Found()
+					RECLOCK('SC6',.T.)
+					Replace C6_FILIAL  WITH '01'
+					Replace C6_EDINIC  WITH mEdina
+					Replace C6_EDSUSP  WITH mEdvenca
+					Replace C6_EDVENC  WITH mEdvenca
+					Replace C6_EDFIN   WITH mEdfina
+					Replace C6_VALOR   WITH mValor
+					Replace C6_PRCVEN  WITH mValor
+					Replace C6_PRUNIT  WITH mValor
+					Replace C6_DTFIN   WITH mDtfin
+					Replace c6_ITEM    WITH '99'
+					Replace c6_PRODUTO WITH mProduto
+					Replace C6_TPPORTE WITH mTpporte
+					Replace C6_TES     WITH mTes
+					Replace C6_CF      WITH mCF
+					Replace C6_QTDVEN WITH 1
+					Replace C6_TIPOREV WITH '0'
+					Replace C6_CODDEST WITH mCoddest
+					Replace C6_LOTEFAT WITH '900'
+					Replace C6_SITUAC  WITH mSituac
+					Replace c6_DATA    WITH date()
+					Replace C6_REGCOT  WITH MCODREV
+					Replace C6_DTINIC  WITH mDtInic
+					Replace C6_LOCAL   WITH '99'
+					Replace C6_CLI     WITH mCodcli
+					Replace C6_ENTREG  WITH date()
+					Replace C6_LOJA    WITH mLoja
+					Replace C6_NUM     WITH mPedido
+					Replace C6_BLQ     WITH 'N'
+					Replace C6_PEDANT  WITH mPedido
+					Replace c6_ITEMANT WITH mItem
+					Replace c6_SITUAC  WITH mSituac
+					Replace c6_TPPROG  WITH 'N'
+					Replace c6_DESCRI  WITH mDescr
+				Else
+					RECLOCK('SC6',.F.)
+					Replace C6_EDINIC  WITH mEdina
+					Replace C6_EDSUSP WITH mEdvenca
+					Replace C6_EDVENC WITH mEdvenca
+					Replace C6_EDFIN  WITH mEdfina
+					Replace C6_VALOR  WITH mValor
+					Replace C6_PRCVEN WITH mValor
+					Replace C6_PRUNIT  WITH mValor
+					Replace C6_DTFIN  WITH mDtfin
+					Replace c6_SITUAC  WITH mSituac
+					MSUNLOCK()
+				Endif
+			Endif
+		Endif
+	Endif
+	DbSelectArea("ZZS")
+	DbSkip()
+Enddo
+
+DbSelectArea("ZZS")
+Retindex("ZZS")
+
+DbSelectArea("SC6")
+Retindex("SC6")
+Return
+
