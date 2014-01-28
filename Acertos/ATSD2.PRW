@@ -11,7 +11,7 @@ ProcRegua(LastRec())
 DBSELECTAREA("SD2")
 cArq := "SD2"
 cIndex := CriaTrab(Nil,.F.)
-cKey:="D2_PEDIDO+D2_ITEMPV+D2_DOC+D2_SERIE"
+cKey:="D2_PEDIDO+D2_ITEMPV+D2_DOC       +D2_SERIE"
 Indregua(cArq,cIndex,ckey,,,"Selecionando Registros do Arq")
 DBGOTOP()
 MCONTA:=0 
