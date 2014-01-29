@@ -4846,3 +4846,180 @@ java.lang.RuntimeException
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+!SESSION 2014-01-29 09:07:07.797 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=pt_BR
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.osgi 2 0 2014-01-29 09:07:14.805
+!MESSAGE Ao carregar a classe "com.totvs.tds.core.server.TOTVSServers$1", o encadeamento "Thread[Thread-2,6,main]" teve seu tempo de execução esgotado aguardando (5006ms) para que o encadeamento "Thread[main,6,main]" concluísse o início do pacote "com.totvs.tds.core_11.2.32.201307051511 [466]". Para evitar conflito, o encadeamento "Thread[Thread-2,6,main]" prosseguirá mas "com.totvs.tds.core.server.TOTVSServers$1" pode não ser inicializado totalmente.
+!STACK 0
+org.osgi.framework.BundleException: Alteração do estado no progresso do pacote {0} pela segmentação {1}.
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 17 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+
+!ENTRY org.eclipse.ui 4 4 2014-01-29 09:07:15.413
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 09:07:15.424
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_1_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 09:07:15.428
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_lblNewLabel_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 09:07:15.431
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 09:07:15.435
+!MESSAGE NLS missing message: TotvsServerMonitor_text_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.ui 4 4 2014-01-29 09:07:15.810
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.jface 2 0 2014-01-29 09:07:15.853
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-01-29 09:07:15.853
+!MESSAGE A conflict occurred for CTRL+A:
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@9d7383,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@9d7383,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@9d7383,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@9d7383,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@9d7383,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.jface 2 0 2014-01-29 09:07:17.466
+!MESSAGE Ignored reentrant call while viewer is busy. This is only logged once per viewer instance, but similar calls will still be ignored.
+!STACK 0
+java.lang.RuntimeException
+	at org.eclipse.jface.viewers.ColumnViewer.checkBusy(ColumnViewer.java:763)
+	at org.eclipse.jface.viewers.ColumnViewer.refresh(ColumnViewer.java:530)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.updateServerIcon(TotvsServersExtensionView.java:576)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.readNodeTreeView(TotvsServersExtensionView.java:230)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.readNodeTreeView(TotvsServersExtensionView.java:246)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.readNodeTreeView(TotvsServersExtensionView.java:246)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.readTreeViewMap(TotvsServersExtensionView.java:205)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.initialize(TotvsServersExtensionView.java:192)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView$ViewContentProvider.getElements(TotvsServersExtensionView.java:137)
+	at org.eclipse.jface.viewers.StructuredViewer.getRawChildren(StructuredViewer.java:1010)
+	at org.eclipse.jface.viewers.ColumnViewer.getRawChildren(ColumnViewer.java:703)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.getRawChildren(AbstractTreeViewer.java:1336)
+	at org.eclipse.jface.viewers.TreeViewer.getRawChildren(TreeViewer.java:391)
+	at org.eclipse.jface.viewers.StructuredViewer.getFilteredChildren(StructuredViewer.java:917)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.getSortedChildren(AbstractTreeViewer.java:605)
+	at org.eclipse.jface.viewers.AbstractTreeViewer$1.run(AbstractTreeViewer.java:805)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:70)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.createChildren(AbstractTreeViewer.java:782)
+	at org.eclipse.jface.viewers.TreeViewer.createChildren(TreeViewer.java:644)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.createChildren(AbstractTreeViewer.java:753)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalInitializeTree(AbstractTreeViewer.java:1533)
+	at org.eclipse.jface.viewers.TreeViewer.internalInitializeTree(TreeViewer.java:833)
+	at org.eclipse.jface.viewers.AbstractTreeViewer$5.run(AbstractTreeViewer.java:1517)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1443)
+	at org.eclipse.jface.viewers.TreeViewer.preservingSelection(TreeViewer.java:403)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1404)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.inputChanged(AbstractTreeViewer.java:1510)
+	at org.eclipse.jface.viewers.ContentViewer.setInput(ContentViewer.java:280)
+	at org.eclipse.jface.viewers.StructuredViewer.setInput(StructuredViewer.java:1690)
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.createPartControl(TotvsServersExtensionView.java:262)
+	at org.eclipse.ui.internal.ViewReference.createPartHelper(ViewReference.java:375)
+	at org.eclipse.ui.internal.ViewReference.createPart(ViewReference.java:229)
+	at org.eclipse.ui.internal.WorkbenchPartReference.getPart(WorkbenchPartReference.java:595)
+	at org.eclipse.ui.internal.WorkbenchPage.getViews(WorkbenchPage.java:2355)
+	at org.eclipse.ui.internal.WorkbenchPage.getViews(WorkbenchPage.java:2336)
+	at com.totvs.tds.core.TDSCoreStartup$1.run(TDSCoreStartup.java:50)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
