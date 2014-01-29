@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="4" version="2.0">
+<workbench progressCount="2" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="175" y="102">
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.ui.views.ProgressView"/>
-<orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension"/>
-<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
 <orientation position="512" view="com.totvs.tds.editor.navigator.view"/>
+<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
+<orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension"/>
 <orientation position="512" view="org.eclipse.rse.ui.view.systemView"/>
 <orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersOutlineView"/>
 <orientation position="512" view="org.eclipse.ui.console.ConsoleView"/>
@@ -175,16 +175,16 @@
 <view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
+<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
+<fastViews>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
+</fastViews>
+</fastViewBar>
 <fastViewBar fastViewLocation="1024" id="bottomRight" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
 <fastViews>
 <view id="org.eclipse.ui.views.TaskList" ratio="0.29973474"/>
 <view id="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension" ratio="0.29840848"/>
 <view id="org.eclipse.ui.console.ConsoleView" ratio="0.29973474"/>
-</fastViews>
-</fastViewBar>
-<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
-<fastViews>
-<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
