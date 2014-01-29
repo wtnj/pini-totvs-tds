@@ -5233,3 +5233,33 @@ java.lang.RuntimeException
 
 !ENTRY org.eclipse.osgi 2 1 2014-01-29 09:18:57.509
 !MESSAGE NLS unused message: LocalAppServer_23 in: com.totvs.tds.core.extensions.servers.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.597
+!MESSAGE NLS unused message: Activator_2 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.602
+!MESSAGE NLS unused message: Activator_1 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.607
+!MESSAGE NLS unused message: Activator_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.612
+!MESSAGE NLS unused message: Activator_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.617
+!MESSAGE NLS missing message: ASPSourceEditor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.622
+!MESSAGE NLS missing message: ASPSourceEditor_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.627
+!MESSAGE NLS missing message: ContentAssistProcessor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.632
+!MESSAGE NLS missing message: ContentAssistProcessor_7 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.637
+!MESSAGE NLS missing message: TotvsEditor_10 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-01-29 10:40:19.640
+!MESSAGE NLS missing message: TotvsEditor_9 in: com.totvs.tds.editor.messages

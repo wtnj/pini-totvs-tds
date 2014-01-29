@@ -4,9 +4,9 @@
 <window height="768" maximized="true" width="1024" x="175" y="102">
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.ui.views.ProgressView"/>
-<orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension"/>
-<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
 <orientation position="512" view="com.totvs.tds.editor.navigator.view"/>
+<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
+<orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension"/>
 <orientation position="512" view="org.eclipse.rse.ui.view.systemView"/>
 <orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersOutlineView"/>
 <orientation position="512" view="org.eclipse.ui.console.ConsoleView"/>
@@ -30,7 +30,7 @@
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="190" y="23"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
-<coolItem id="AdvPL.editor" itemType="typePlaceholder" x="38" y="23"/>
+<coolItem id="AdvPL.editor" itemType="typeToolBarContribution" x="38" y="23"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -39,10 +39,16 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor activePart="true" focus="true" id="AdvPL.editor" name="ADJIN79.prw" partName="ADJIN79.prw" path="C:/Totvs/Rdmake_Srv/RVACARI/fat/ADJIN79.prw" title="ADJIN79.prw" tooltip="RVACARI/fat/ADJIN79.prw" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RVACARI/fat/ADJIN79.prw"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1549" selectionTopPixel="156"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.rse.ui.view.systemView" partName="Remote Systems">
@@ -135,7 +141,7 @@
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaração"/>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
 </views>
-<perspectives activePerspective="org.eclipse.ui.resourcePerspective">
+<perspectives activePart="AdvPL.editor" activePerspective="org.eclipse.ui.resourcePerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.ui.internal.ide.application.ResourcePerspective" id="org.eclipse.ui.resourcePerspective" label="Informações"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -175,16 +181,16 @@
 <view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
+<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
+<fastViews>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
+</fastViews>
+</fastViewBar>
 <fastViewBar fastViewLocation="1024" id="bottomRight" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
 <fastViews>
 <view id="org.eclipse.ui.views.TaskList" ratio="0.29973474"/>
 <view id="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension" ratio="0.29840848"/>
 <view id="org.eclipse.ui.console.ConsoleView" ratio="0.29973474"/>
-</fastViews>
-</fastViewBar>
-<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
-<fastViews>
-<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
@@ -496,7 +502,14 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
+</editors>
+<item active="true" historyLabel="ADJIN79.prw" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -519,6 +532,9 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ADJIN79.prw" tooltip="RVACARI/fat/ADJIN79.prw">
+<persistable path="/RVACARI/fat/ADJIN79.prw"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="COMRD003.prw" tooltip="RVACARI/Compras/COMRD003.prw">
 <persistable path="/RVACARI/Compras/COMRD003.prw"/>
 </file>
@@ -560,9 +576,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="NFSEXml102.PRW" tooltip="nova pini srv/sped/nfse/NFSEXml102.PRW">
 <persistable path="/nova pini srv/sped/nfse/NFSEXml102.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="NFSEXml003.PRW" tooltip="nova pini srv/sped/nfse/NFSEXml003.PRW">
-<persistable path="/nova pini srv/sped/nfse/NFSEXml003.PRW"/>
 </file>
 </mruList>
 </workbench>
