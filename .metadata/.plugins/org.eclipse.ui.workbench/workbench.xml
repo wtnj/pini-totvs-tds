@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="2" version="2.0">
+<workbench progressCount="4" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="175" y="102">
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.ui.views.ProgressView"/>
-<orientation position="512" view="com.totvs.tds.editor.navigator.view"/>
-<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
 <orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension"/>
+<orientation position="512" view="org.eclipse.ui.views.PropertySheet"/>
+<orientation position="512" view="com.totvs.tds.editor.navigator.view"/>
 <orientation position="512" view="org.eclipse.rse.ui.view.systemView"/>
 <orientation position="512" view="com.totvs.tds.core.server.ui.TotvsServersOutlineView"/>
 <orientation position="512" view="org.eclipse.ui.console.ConsoleView"/>
@@ -45,9 +45,9 @@
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="AdvPL.editor" name="ADJIN79.prw" partName="ADJIN79.prw" path="C:/Totvs/Rdmake_Srv/RVACARI/fat/ADJIN79.prw" title="ADJIN79.prw" tooltip="RVACARI/fat/ADJIN79.prw" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RVACARI/fat/ADJIN79.prw"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1549" selectionTopPixel="156"/>
+<editor activePart="true" focus="true" id="AdvPL.editor" name="RFAT121.prw" partName="RFAT121.prw" path="C:/Totvs/Rdmake_Srv/RVACARI/rel/RFAT121.prw" title="RFAT121.prw" tooltip="RVACARI/rel/RFAT121.prw" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RVACARI/rel/RFAT121.prw"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7893" selectionTopPixel="1206"/>
 </editor>
 </editors>
 <views>
@@ -181,16 +181,16 @@
 <view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
-<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
-<fastViews>
-<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
-</fastViews>
-</fastViewBar>
 <fastViewBar fastViewLocation="1024" id="bottomRight" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
 <fastViews>
 <view id="org.eclipse.ui.views.TaskList" ratio="0.29973474"/>
 <view id="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension" ratio="0.29840848"/>
 <view id="org.eclipse.ui.console.ConsoleView" ratio="0.29973474"/>
+</fastViews>
+</fastViewBar>
+<fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="0">
+<fastViews>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.29964414"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
@@ -505,9 +505,31 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/sped/nfe/nfesefaz.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/RH/RVPLR01.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/rel/RFAT121.prw"/>
 </editors>
-<item active="true" historyLabel="ADJIN79.prw" index="0">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="ADJIN79.prw" index="0">
+<position info="not_deleted" x="112" y="10"/>
+</item>
+<item historyLabel="nfesefaz.prw" index="1">
+<position info="not_deleted" x="135657" y="0"/>
+</item>
+<item historyLabel="ADJIN79.prw" index="2">
+<position info="not_deleted" x="1637" y="0"/>
+</item>
+<item historyLabel="RVPLR01.prw" index="3">
+<position info="not_deleted" x="40" y="9"/>
+</item>
+<item historyLabel="RFAT121.prw" index="4">
+<position info="not_deleted" x="1110" y="10"/>
+</item>
+<item historyLabel="RVPLR01.prw" index="3">
+<position info="not_deleted" x="202" y="0"/>
+</item>
+<item active="true" historyLabel="RFAT121.prw" index="4">
+<position/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -532,20 +554,23 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="RFAT121.prw" tooltip="RVACARI/rel/RFAT121.prw">
+<persistable path="/RVACARI/rel/RFAT121.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="RVPLR01.prw" tooltip="RVACARI/RH/RVPLR01.prw">
+<persistable path="/RVACARI/RH/RVPLR01.prw"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ADJIN79.prw" tooltip="RVACARI/fat/ADJIN79.prw">
 <persistable path="/RVACARI/fat/ADJIN79.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="nfesefaz.prw" tooltip="nova pini srv/sped/nfe/nfesefaz.prw">
+<persistable path="/nova pini srv/sped/nfe/nfesefaz.prw"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="COMRD003.prw" tooltip="RVACARI/Compras/COMRD003.prw">
 <persistable path="/RVACARI/Compras/COMRD003.prw"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ATSD2.PRW" tooltip="nova pini srv/acertos/vários/ATSD2.PRW">
 <persistable path="/nova pini srv/acertos/vários/ATSD2.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="nfesefaz.prw" tooltip="nova pini srv/sped/nfe/nfesefaz.prw">
-<persistable path="/nova pini srv/sped/nfe/nfesefaz.prw"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="RFAT121.prw" tooltip="RVACARI/rel/RFAT121.prw">
-<persistable path="/RVACARI/rel/RFAT121.prw"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="SERIE_SI5.prw" tooltip="RVACARI/ctb/SERIE_SI5.prw">
 <persistable path="/RVACARI/ctb/SERIE_SI5.prw"/>
@@ -573,9 +598,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="Difto.prw" tooltip="nova pini srv/faturamento/diferimento/Difto.prw">
 <persistable path="/nova pini srv/faturamento/diferimento/Difto.prw"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="NFSEXml102.PRW" tooltip="nova pini srv/sped/nfse/NFSEXml102.PRW">
-<persistable path="/nova pini srv/sped/nfse/NFSEXml102.PRW"/>
 </file>
 </mruList>
 </workbench>

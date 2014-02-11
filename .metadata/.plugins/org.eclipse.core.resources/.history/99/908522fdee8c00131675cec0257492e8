@@ -170,7 +170,7 @@ If mv_par07  == 1
 			
 			EndIF		
                    
-        //Busca informações do custo1
+        //Verifica se existe diferenças...
 		If (PODER3->QTDSAIDA - nSomaS) != 0
 		
 			cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * (PODER3->QTDSAIDA - nSomaS),2) ) //(PODER3->QTDSAIDA - nSomaS) * ( PODER3->CUSTO1 ) / PODER3->QTDSAIDA )

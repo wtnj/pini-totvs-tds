@@ -755,22 +755,12 @@ If cTipo == "1"
 				EndIf
 				aadd(aDest,Upper(SA1->A1_EST))
 				aadd(aDest,SA1->A1_CEP)
-				//aadd(aDest,IIF(Empty(SA1->A1_PAIS),"1058"  ,Posicione("SYA",1,xFilial("SYA")+SA1->A1_PAIS,"YA_SISEXP"))) //20110519
-				//aadd(aDest,IIF(Empty(SA1->A1_PAIS),"BRASIL",Posicione("SYA",1,xFilial("SYA")+SA1->A1_PAIS,"YA_DESCR" ))) //20110519
-				//aadd(aDest,IIF(Empty(SA1->A1_CODPAIS),"1058"   , ALLTRIM(STR(VAL( Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_CODIGO"))) ))) //20110519
-				//aadd(aDest,IIF(Empty(SA1->A1_CODPAIS),"BRASIL" , Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_PAIS"))) //20110519
+				aadd(aDest,IIF(Empty(SA1->A1_PAIS),"1058"  ,Posicione("SYA",1,xFilial("SYA")+SA1->A1_PAIS,"YA_SISEXP"))) //20110519
+				aadd(aDest,IIF(Empty(SA1->A1_PAIS),"BRASIL",Posicione("SYA",1,xFilial("SYA")+SA1->A1_PAIS,"YA_DESCR" ))) //20110519
+				aadd(aDest,IIF(Empty(SA1->A1_CODPAIS),"1058"   , ALLTRIM(STR(VAL( Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_CODIGO"))) ))) //20110519
+				aadd(aDest,IIF(Empty(SA1->A1_CODPAIS),"BRASIL" , Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_PAIS"))) //20110519
 				//Alteração feita por Douglas Rodrigues da Silva '28/01/2014. Não estava carregando codigo e titulo para notas com destino internacional
-				If !Upper(SA1->A1_EST) == "EX" 
-					
-					aadd(aDest, cValToChar(VAL(Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_CODIGO"))))
-					aadd(aDest, cValToChar(VAL(Posicione("CCH",1,xFilial("CCH")+SA1->A1_CODPAIS,"CCH_PAIS")))) 
 				
-				Else
-				
-					aadd(aDest,"1058")
-					aadd(aDest,"BRASIL")	
-					
-				Endif
 				
 				aadd(aDest,LimparTel(SA1->A1_DDD+SA1->A1_TEL)) //20110606 aadd(aDest,SA1->A1_DDD+SA1->A1_TEL)                                                 				
 				
@@ -3029,7 +3019,7 @@ Else
 					DbSelectArea("CD5")
 					DbSetOrder(4)
 					// Procura algum registro na CD5 referente a nota que foi complementada
-					If MsSeek(xFilial("CD5")+(cAliasSD1)->D1_DOC+(cAliasSD1)->D1_SERIE+(cAliasSD1)->D1_FORNECE+(cAliasSD1)->D1_LOJA+(cAliasSD1)->D1_ITEM)
+					If ! MsSeek(xFilial("CD5")+(cAliasSD1)->D1_DOC+(cAliasSD1)->D1_SERIE+(cAliasSD1)->D1_FORNECE+(cAliasSD1)->D1_LOJA+(cAliasSD1)->D1_ITEM)
 							aAdd(aDI,{;
 								{"I04","NCM",SB1->B1_POSIPI},;
 								{"I15","vFrete",0},;

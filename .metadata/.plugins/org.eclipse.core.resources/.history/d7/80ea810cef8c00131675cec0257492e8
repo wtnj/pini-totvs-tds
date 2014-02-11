@@ -170,21 +170,22 @@ If mv_par07  == 1
 			
 			EndIF		
                    
-        //Busca informações do custo1
-		If (PODER3->QTDSAIDA - nSomaS) != 0
-		
-			cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * (PODER3->QTDSAIDA - nSomaS),2) ) //(PODER3->QTDSAIDA - nSomaS) * ( PODER3->CUSTO1 ) / PODER3->QTDSAIDA )
+        //Verifica se existe diferenças...DER3->QTDSAIDA )
 					
      	Endif
 
        	nSomaS := 0
        	
+		If (PODER3->QTDSAIDA - nSomaS) != 0
+		
+			cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * (PODER3->QTDSAIDA - nSomaS),2) ) //(PODER3->QTDSAIDA - nSomaS) * ( PODER3->CUSTO1 ) / PO
 		cMontaCVS += CRLF // Salto de linha para .csv (excel)  			
 		PODER3->(DBSKIP())
 	Enddo
     
  	// Chama a função que gera o arquivo csv com os dados.
  	DBCloseArea("PODER3")
+ 	
  	criaCSV()
 
  /*
@@ -222,21 +223,6 @@ Endif
 
 Return  
          
-Static Function RFAT1212()  
-
-Local nCusto1 := 0
-/*	
-   	cQuer := "SELECT D2_CUSTO1 FROM SD2010 SD2 WHERE SD2.D_E_L_E_T_ != '*' AND SD2.D2_DOC = '"+PODER3->DOCORI+"' AND SD2.D2_SERIE = '"+ PODER3->SERIE +"' AND SD2.D2_COD = '"+PODER3->PRODUTO+"' "
-
-	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuer), "CUSTO", .T., .F. )		
-	
-	nCusto1 := CUSTO->D2_CUSTO1
-	
-	DBCLOSEAREA("CUSTO")
-*/
-Return(nCusto1)
-
-
 ////////////////////////////////////////////////////////////////////////
 // Exportando dados para planilha 
 ////////////////////////////////////////////////////////////////////////
