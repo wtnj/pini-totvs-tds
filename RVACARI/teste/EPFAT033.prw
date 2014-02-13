@@ -131,8 +131,13 @@ RECLOK("SF2",.F.)
 	SF2->F2_FIMP := "S"
 MSUNLOCK()
 
-
+*/
 
 
 
 Return
+
+
+USER FUNCTION CGFRD001()
+Return
+
