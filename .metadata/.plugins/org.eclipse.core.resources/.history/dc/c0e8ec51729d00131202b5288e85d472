@@ -53,6 +53,15 @@ lEnd := .F.
 Processa({|lEnd| ProcArq(@lEnd)})
 Return
 
+
+
+
+
+
+
+
+
+
 /*
 ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
 ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
@@ -222,12 +231,12 @@ WHILE !EOF() .AND. SE3->E3_FILIAL == xFilial("SE3") .and. DTOS(SE3->E3_DATA) <= 
 								ZZV->ZZV_VALNF		:= SD2->D2_TOTAL * CONT
 								//ZZV->ZZV_VALAUT
 								//ZZV->ZZV_ALIQ		:= mv_par03
-								ZZV_PORC				:= SZY->ZY_PORC
+								ZZV_PORC			:= SZY->ZY_PORC
 								ZZV->ZZV_STATUS		:= MZZVSTATUS 		//1 = ABERTO, 2= PAGO CLIENTE, 3 = PAGO AUTOR, 4 = CANCELADO CLIENTE
-								ZZV->ZZV_QTD			:= SD2->D2_QUANT * CONT
+								ZZV->ZZV_QTD		:= SD2->D2_QUANT * CONT
 								ZZV->ZZV_MOEDA		:= SZY->ZY_MOEDA
 								ZZV->ZZV_DTCANC		:= MZZVDTCANC
-								ZZV->ZV_TPAUT			:= MTIPOVEN   
+								ZZV->ZV_TPAUT		:= MTIPOVEN   
 								ZZV->ZZV_DESCON		:= (((SD2->D2_COMIS1 + SD2->D2_COMIS2 + SD2->D2_COMIS3 + SD2->D2_COMIS4 + SD2->D2_COMIS5) /100) * SD2->D2_TOTAL) * CONT//20061106
 							MsUnlock()
 					ELSE //encontrou                    
@@ -235,7 +244,7 @@ WHILE !EOF() .AND. SE3->E3_FILIAL == xFilial("SE3") .and. DTOS(SE3->E3_DATA) <= 
 			   				RECLOCK("ZZV",.F.)
 			   					ZZV->ZZV_DTPGCL		:= SE3->E3_DATA // DATA DO PAGAMENTO DA COMISSAO AO VENDEDOR, LOGO DO DIREITO AUTORAL
 								ZZV->ZZV_STATUS		:= MZZVSTATUS 		//1 = ABERTO, 2= PAGO CLIENTE, 3 = PAGO AUTOR, 4 = CANCELADO CLIENTE
-								ZZV_PORC				:= SZY->ZY_PORC
+								ZZV_PORC			:= SZY->ZY_PORC
 								ZZV->ZZV_MOEDA		:= SZY->ZY_MOEDA
 								ZZV->ZZV_DTCANC		:= MZZVDTCANC
 							MsUnlock()
@@ -285,7 +294,6 @@ DBCLOSEAREA("SF4")
 
 DBSELECTAREA("SB1")
 DBCLOSEAREA("SB1")
-
 RETURN
 
 

@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value=".DOT" key="selection"/>
+		<item value="c_EndCobC" key="selection"/>
 		<list key="findhistory">
+			<item value="c_EndCobC"/>
+			<item value="CENDCOB"/>
 			<item value=".dot"/>
 			<item value="NFS"/>
 			<item value="NF"/>
 			<item value="+="/>
 			<item value="CD5"/>
 			<item value="pais"/>
-			<item value="cPais"/>
-			<item value="usua"/>
 		</list>
 		<list key="replacehistory">
 		</list>

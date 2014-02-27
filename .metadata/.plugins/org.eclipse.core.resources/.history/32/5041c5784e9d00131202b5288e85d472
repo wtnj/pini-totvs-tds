@@ -160,7 +160,7 @@ If mv_par07  == 1
 						Enddo
 						
 						If MV_PAR06 == 1			        	
-			     			cMontaCVS += "Total;;;;;;;;"+PODER32->PRODUTO+";"+PODER32->DESCR+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
+			     			cMontaCVS += "Total;;;;;;;;"+PODER32->PRODUTO+";;" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
 						EndIf
 			Endif		
 	                   

@@ -88,7 +88,7 @@ Static Function WordImp()
 	cQuery := " SELECT F2_DOC, F2_SERIE, F2_CLIENTE, F2_LOJA, F2_EMISSAO, F2_HORA, F2_VALBRUT, F2_DESCONT, F2_XCHNFSC "
 	cQuery += " FROM "+RETSQLNAME("SF2")+" SF2, "
 	cQuery += " WHERE F2_DOC BETWEEN '"+mv_par01+"' AND '"+mv_par02+"'  "
-	cQuery += " AND F2_SERIE = '"+mv_par03+"' "
+	cQuery += " AND SF2.F2_SERIE = '"+mv_par03+"' "
 	cQuery += " AND SF2.D_E_L_E_T_ <> '*' " 
 	cQuery += " ORDER BY F2_DOC " // novo
 
@@ -339,7 +339,7 @@ c_ChaveDig  := NFS->F2_XCHNFSC
 //	cArquivo := cGetFile("Documentos  (*.DO*)        | *.DO* | ",;
 //	"Dialogo de Selecao de Arquivos",,,.f.)
 //Else
-	cArquivo := "C:\Temp\NFSC.DOTX" 
+	cArquivo := "C:\Temp\nfsc.dotm" 
 //   	cArquivo := "\SYSTEM\Modelos\\NFSC.DOT"
 //Endif
                     
