@@ -122,9 +122,7 @@ If mv_par07  == 1
 			cMontaCVS += "0" + ";"//cValToChar(PODER3->QTDENTR) + ";"
 			cMontaCVS += cValToChar(PODER3->QTDDIF) + ";"
 			cMontaCVS += cValToChar(PODER3->CUSTO1) + ";"
-			
-			_cEmiss	:= PODER3->EMISSAO
-			
+
 			//Busca dados da entrada
 			
 			cQuery := "SELECT TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, ROUND(QTDSAIDA,1) AS QTDSAIDA, ROUND(NVL(QTDENTR,0),1) AS QTDENTR, ROUND(QTDDIF,1) AS QTDDIF, ROUND(CUSTO1,1) AS CUSTO1 FROM rel_poder_terceiros"
@@ -165,6 +163,8 @@ If mv_par07  == 1
 				        	_cCodP		:= PODER32->PRODUTO
 				        	_cDescP 	:= PODER32->DESCR
 				        	_cDocOr	:= PODER32->DOCORI
+				        	_cEmiss	:= PODER32->EMISSAO
+				        	 
 				        	 			        		        	
 							PODER32->(dbSkip())
 						Enddo

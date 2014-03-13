@@ -57,11 +57,6 @@ Private cMask      := "Planilhas (*.xls) |*.xls|Todos os arquivos (*.*) |*.*|"
 Private cMontaCVS                                    
 Private nSomaE := 0
 Private nSomaS := 0
-Private _cCodP
-Private _cDescP
-Private _cDocOr
-Private _cEmiss
-
 
 if mv_par05  == 1
 	cSituacao := "A"
@@ -122,9 +117,7 @@ If mv_par07  == 1
 			cMontaCVS += "0" + ";"//cValToChar(PODER3->QTDENTR) + ";"
 			cMontaCVS += cValToChar(PODER3->QTDDIF) + ";"
 			cMontaCVS += cValToChar(PODER3->CUSTO1) + ";"
-			
-			_cEmiss	:= PODER3->EMISSAO
-			
+
 			//Busca dados da entrada
 			
 			cQuery := "SELECT TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, ROUND(QTDSAIDA,1) AS QTDSAIDA, ROUND(NVL(QTDENTR,0),1) AS QTDENTR, ROUND(QTDDIF,1) AS QTDDIF, ROUND(CUSTO1,1) AS CUSTO1 FROM rel_poder_terceiros"
@@ -161,16 +154,13 @@ If mv_par07  == 1
 					        	cMontaCVS += CRLF // Salto de linha para .csv (excel)
 					        Endif
 					        	 
-				        	nSomaS 		:= nSomaS + PODER32->QTDENTR
-				        	_cCodP		:= PODER32->PRODUTO
-				        	_cDescP 	:= PODER32->DESCR
-				        	_cDocOr	:= PODER32->DOCORI
+				        	nSomaS := nSomaS + PODER32->QTDENTR 
 				        	 			        		        	
 							PODER32->(dbSkip())
 						Enddo
 						
 						If MV_PAR06 == 1			        	
-			     			cMontaCVS += "Total;;"+_cDocOr+";;;;"+_cEmiss+";;"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
+			     			cMontaCVS += "Total;;;;;;;;"+"teste"+";"+PODER32->DESCR+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
 						EndIf
 			Endif		
 	                   
@@ -182,7 +172,7 @@ If mv_par07  == 1
 	     	Endif
 	
 		    nSomaS := 0
-		    
+	       	
 	       	PODER32->(DBCloseArea("PODER32"))
 			
 				cMontaCVS += CRLF // Salto de linha para .csv (excel)  			

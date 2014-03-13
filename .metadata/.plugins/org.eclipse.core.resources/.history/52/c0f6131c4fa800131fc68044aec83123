@@ -57,6 +57,9 @@ Private cMask      := "Planilhas (*.xls) |*.xls|Todos os arquivos (*.*) |*.*|"
 Private cMontaCVS                                    
 Private nSomaE := 0
 Private nSomaS := 0
+Private _cCodP
+Private _cDescP
+
 
 if mv_par05  == 1
 	cSituacao := "A"
@@ -154,13 +157,15 @@ If mv_par07  == 1
 					        	cMontaCVS += CRLF // Salto de linha para .csv (excel)
 					        Endif
 					        	 
-				        	nSomaS := nSomaS + PODER32->QTDENTR 
+				        	nSomaS := nSomaS + PODER32->QTDENTR
+				        	_cCodP	:= PODER32->PRODUTO
+				        	_cDescP := PORDER32->DESCR 
 				        	 			        		        	
 							PODER32->(dbSkip())
 						Enddo
 						
 						If MV_PAR06 == 1			        	
-			     			cMontaCVS += "Total;;;;;;;;"+PODER32->PRODUTO+";;" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
+			     			cMontaCVS += "Total;;;;;;;;"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
 						EndIf
 			Endif		
 	                   
@@ -172,7 +177,7 @@ If mv_par07  == 1
 	     	Endif
 	
 		    nSomaS := 0
-	       	
+		    
 	       	PODER32->(DBCloseArea("PODER32"))
 			
 				cMontaCVS += CRLF // Salto de linha para .csv (excel)  			

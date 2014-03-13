@@ -1301,7 +1301,7 @@ For nX := 1 To len(aCols)
         C6_REGCOT   := '99'+space(13)
         C6_TPPROG   := 'N'
         C6_SITUAC   :='AA'                                                        
-//        c6_comis1 := IIF(cTComis1 $ "OP",cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMOTEL")),cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMREP1")))
+        //c6_comis1 := IIF(cTComis1 $ "OP",cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMOTEL")),cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMREP1")))
         if !empty(sc5->c5_vend3)
         	c6_comis3 := posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMSUP")
         endif

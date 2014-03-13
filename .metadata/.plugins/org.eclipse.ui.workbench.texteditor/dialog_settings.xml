@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item value="525" key="DIALOG_WIDTH"/>
-		<item value="97" key="DIALOG_Y_ORIGIN"/>
-		<item value="267" key="DIALOG_HEIGHT"/>
-		<item value="507" key="DIALOG_X_ORIGIN"/>
+		<item value="619" key="DIALOG_WIDTH"/>
+		<item value="48" key="DIALOG_Y_ORIGIN"/>
+		<item value="283" key="DIALOG_HEIGHT"/>
+		<item value="774" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="c_EndCobC" key="selection"/>
+		<item value="A1_INSCR" key="selection"/>
 		<list key="findhistory">
-			<item value="c_EndCobC"/>
-			<item value="CENDCOB"/>
-			<item value=".dot"/>
-			<item value="NFS"/>
-			<item value="NF"/>
-			<item value="+="/>
-			<item value="CD5"/>
-			<item value="pais"/>
+			<item value="A1_INSCR"/>
+			<item value="SA1-&gt;A1_INS"/>
+			<item value="aDest"/>
+			<item value="dest"/>
+			<item value="destina"/>
+			<item value="isuf"/>
+			<item value="B1_CODBAR"/>
+			<item value="SM0-&gt;M0"/>
 		</list>
 		<list key="replacehistory">
 		</list>
