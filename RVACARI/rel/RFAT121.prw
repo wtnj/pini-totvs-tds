@@ -169,7 +169,7 @@ If mv_par07  == 1
 							PODER32->(dbSkip())
 						Enddo
 						
-						If MV_PAR06 == 1			        	
+						If MV_PAR06 == 1 .And. nSomaS != 0		        	
 			     			cMontaCVS += "Total;;"+_cDocOr+";;;;"+_cEmiss+";;"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
 						EndIf
 			Endif		

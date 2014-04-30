@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="619" key="DIALOG_WIDTH"/>
-		<item value="48" key="DIALOG_Y_ORIGIN"/>
+		<item value="11" key="DIALOG_Y_ORIGIN"/>
+		<item value="413" key="DIALOG_X_ORIGIN"/>
 		<item value="283" key="DIALOG_HEIGHT"/>
-		<item value="774" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="A1_INSCR" key="selection"/>
+		<item value="MATA103" key="selection"/>
 		<list key="findhistory">
-			<item value="A1_INSCR"/>
-			<item value="SA1-&gt;A1_INS"/>
-			<item value="aDest"/>
-			<item value="dest"/>
-			<item value="destina"/>
-			<item value="isuf"/>
-			<item value="B1_CODBAR"/>
-			<item value="SM0-&gt;M0"/>
+			<item value="mata103"/>
+			<item value="xtipo == 2"/>
+			<item value="MATA103"/>
+			<item value="cPais"/>
+			<item value="A1_CODPAIS"/>
+			<item value="aDest[15]"/>
+			<item value="suf"/>
+			<item value="IESUF"/>
 		</list>
 		<list key="replacehistory">
 		</list>

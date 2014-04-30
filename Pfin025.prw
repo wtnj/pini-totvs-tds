@@ -61,7 +61,7 @@ Private Ivlboleto := 0 //inicio //20120830
 Private Tvlboleto := 0 //tamanho //20120830
 
 
-Private aItens := {"Itau400","ItauBP","Bradesco","Daycoval","Mercantil","Safra","Sofisa","Real240","Real400","AbcBrasil"}
+Private aItens := {"Itau400","ItauBP","Bradesco","Daycoval","Mercantil","Safra","Sofisa","Real240","Real400","AbcBrasil","Banrisul"}
 
 Private aCores    := {{'(ALLTRIM(FONTE->OCORREN) == "06 - LIQUIDACAO NORMAL" .OR. ALLTRIM(FONTE->OCORREN) == "08 - LIQUIDACAO EM CARTORI") .AND. (ALLTRIM(FONTE->CONSIST) == "TITULO OK")', 'ENABLE'    },;
 	                {'ALLTRIM(FONTE->CONSIST) != "TITULO OK"' , 'DISABLE'   }}
@@ -145,6 +145,21 @@ elseif alltrim(cLayout) == "Real240"
 	Tdesconto := 15 //tamanho
 	Ijuros := 18 //inicio 
 	Tjuros := 15 //tamanho       
+elseif alltrim(cLayout) == "Banrisul"
+	ItpReg := 1 //inicio 
+	TtpReg := 1 //tamanho
+	Inossonum := 117 //inicio 
+	Tnossonum := 10 //tamanho
+	Idesconto := 241 //inicio 
+	Tdesconto := 13 //tamanho
+	Ijuros := 267 //inicio 
+	Tjuros := 13 //tamanho       
+	Icodocor := 109 //inicio 
+	Tcodocor := 2 //tamanho
+	Ivlreceb := 254 //inicio 
+	Tvlreceb := 13 //tamanho
+	Ivlboleto := 153 //inicio 
+	Tvlboleto := 13 //tamanho   
 	
 else
  	msgstop("layout ainda nao desenvolvido para esta rotina")
@@ -184,9 +199,32 @@ While !Eof()
 							Baixar(SE1->E1_PREFIXO, SE1->E1_NUM, SE1->E1_PARCELA, Vdesconto, Vjuros, Vvlreceb) //20120830
 						endif  
 					ENDIF
-				else
+				Else
 					MsgAlert("Titulo nao localizado: Nossonumero: " + Vnossonum +"  Valor:"+ alltrim(str(Vvlreceb,10,2)))
 				endif
+				
+				//Tratado por Douglas Silva 04/04/2014 para tratar as baixas do Banrisul
+				DBSELECTAREA("SE1")
+				DbOrderNickName("E1_IDCNAB")  // dbSetOrder(25) 20130226 //nossonumero E1_FILIAL+E1_NUMBCO+E1_PORTADO //mp10 era 18 //20100413 dbSetOrder(24) 
+				If dbSeek(xfilial("SE1")+Vnossonum)
+					IF SE1->E1_PORTADO == "111"
+						MsgAlert("Titulo no SERASA: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
+					ELSE
+						if MsgYEsNo("Baixar: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
+							if Vvlboleto > SE1->E1_SALDO //20120830 daqui boleto gerado com juros somado ao valor principal
+								Vjuros := Vvlboleto - SE1->E1_SALDO
+								Vvlreceb := Vvlboleto
+							else
+								Vvlreceb := SE1->E1_SALDO + Vjuros //complementar com juros 20120910
+							endif  //20120830 ate aqui
+		
+							Baixar(SE1->E1_PREFIXO, SE1->E1_NUM, SE1->E1_PARCELA, Vdesconto, Vjuros, Vvlreceb) //20120830
+						endif  
+					ENDIF
+				Else
+					MsgAlert("Titulo nao localizado: Nossonumero: " + Vnossonum +"  Valor:"+ alltrim(str(Vvlreceb,10,2)))
+				endif
+				
 			endif
 		ElseIf alltrim(cLayout) == "Bradesco" .or. alltrim(cLayout) == "Mercantil"  .or. alltrim(cLayout) == "Safra" .or. alltrim(cLayout) == "Daycoval" .or. alltrim(cLayout) == "Real400" .or. alltrim(cLayout) == "AbcBrasil"//20100902
 			if Vcodocor == "06" .or. (Vcodocor == "15" .and. alltrim(cLayout) <> "Real400") .or. (Vcodocor == "08" .and. alltrim(cLayout) <> "Real400") //liquidacao normal //liquidacao em cartorio

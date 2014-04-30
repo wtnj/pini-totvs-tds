@@ -1,4 +1,4 @@
-#INCLUDE "RWMAKE.CH"
+#INCLUDE "protheus.CH"
 User Function LPSA601()
 // ALTERACAO DA CONTA CONTAB DOS CARTOES DE CREDITO, ANDRE/JOSE RICARDO, Danilo C S Pala 20040903
 //Alteracao da conta contab de debito ANDRE/JOSE RICARDO, Danilo C S Pala 20040928
@@ -9,18 +9,20 @@ User Function LPSA601()
 //Danilo C S Pala em 20130411:  Feicon2013
 Local mcta  := space(20) // ''
 Local aArea := GetArea()
-If (SE1->E1_PREFIXO =="ECF" .OR. SE1->E1_PREFIXO =="EC1") .AND. ALLTRIM(SE1->E1_ORIGEM)=="LOJA701" .AND. EMPTY(SE1->E1_PEDIDO) // daqui 20130411
+If ALLTRIM(SE1->E1_ORIGEM)=="LOJA010" .AND. EMPTY(SE1->E1_PEDIDO) // daqui 20130411
 	If alltrim(SE1->E1_TIPO)=="CH"
 		MCTA := '21080202002'
 	ElseIf alltrim(SE1->E1_TIPO)=="R$"
 		MCTA := '21080202001'
 	ElseIf alltrim(SE1->E1_TIPO)=="CC"
 		MCTA := '21080202003'
+	ElseIf alltrim(SE1->E1_TIPO)=="CD"
+		MCTA := '21080202003'
 	Else
 		MCTA := ''
 	Endif
 Else  // ate aqui 20130411
-	If Empty(SE1->E1_PORTADO) 
+	If Empty(SE1->E1_PORTADO)   
 		IF (subs(SE1->E1_NATUREZ,1,2) $ "CA/CM/CV/CI") .or. alltrim(SE1->E1_NATUREZ)=="V ELECTRON" .or. alltrim(SE1->E1_NATUREZ)=="M MAESTRO"//20040903  //20080909 //20111208
    			MCTA:='21080202003'  //20040903
 		ELSEIF (subs(SE1->E1_NATUREZ,1,2) $ "CH") //20040928

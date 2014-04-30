@@ -1,4 +1,4 @@
-#INCLUDE "RWMAKE.CH"
+#INCLUDE "protheus.CH"
 //Alterado por Danilo C S Pala em 20070813: alterar cc para lucros e perdas
 //Danilo C S Pala em 20110817: tipo de operacao com 2 naturezas e contas contabeis
 //Danilo C S Pala em 20130411:  Feicon2013 
@@ -10,12 +10,15 @@ Local aArea := GetArea()
 IF (SM0->M0_CODIGO ='03' .AND. SE1->E1_PORTADO='904') .OR. (SM0->M0_CODIGO ='02' .AND. SE1->E1_PORTADO='920') //20070813
 	MCTA := '31020102002'
 ELSE
-	If (SE1->E1_PREFIXO =="ECF" .OR. SE1->E1_PREFIXO =="EC1") .AND. ALLTRIM(SE1->E1_ORIGEM)=="LOJA701" .AND. EMPTY(SE1->E1_PEDIDO) // daqui 20130411
+	//(SE1->E1_PREFIXO =="FE2" .OR. SE1->E1_PREFIXO =="FE3" .OR. SE1->E1_PREFIXO =="ECF" .OR. SE1->E1_PREFIXO =="EC1") .AND. 
+	If  ALLTRIM(SE1->E1_ORIGEM)=="LOJA010" .AND. EMPTY(SE1->E1_PEDIDO) // daqui 20130411
 		If alltrim(SE1->E1_TIPO)=="CH"
 			MCTA := '11020101003'
 		ElseIf alltrim(SE1->E1_TIPO)=="R$"
 			MCTA := '11020101008'
 		ElseIf alltrim(SE1->E1_TIPO)=="CC"
+			MCTA := '11020001004'
+		ElseIf alltrim(SE1->E1_TIPO)=="CD"
 			MCTA := '11020001004'
 		Else
 			MCTA := ''
@@ -41,6 +44,7 @@ ELSE
 		Endif
 	Endif //20130411
 ENDIF
+
 
 RestArea(aArea)
 

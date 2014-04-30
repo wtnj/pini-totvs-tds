@@ -39,8 +39,10 @@ endif
 DbSelectArea("SF4")
 DbSetOrder(1)
 DbSeek(xFilial("SF4")+cTES)
-IF !EMPTY(SF4->F4_CTBESP) .and. SF4->F4_DUPLIC <>"S" .AND. Alltrim(cAlmox) <>'CD' .and. Alltrim(cAlmox) <>'02' .and. cSERIE <>'2  ' .and. SF4->F4_CTBESP<>"DC"
+IF !EMPTY(SF4->F4_CTBESP) .and. SF4->F4_DUPLIC <>"S" .AND. Alltrim(cAlmox) <>'CD' .and. Alltrim(cAlmox) <>'02' .and. SF4->F4_CTBESP<>"DC"
 	nValor := nTotal
+ElseIf SF4->F4_CODIGO == "662" .Or. SF4->F4_CODIGO == "FE6" 
+	nValor := nTotal	
 ELSE
 	nValor := 0
 ENDIF //TES

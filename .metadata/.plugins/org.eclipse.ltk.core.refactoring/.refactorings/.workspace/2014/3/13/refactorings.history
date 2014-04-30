@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Excluir recurso &quot;nova pini srv/sped/nfe/nfesefaz_OLD.prw&quot;" deleteContents="false" description="Excluir recurso &quot;nova pini srv/sped/nfe/nfesefaz_OLD.prw&quot;" element1="/nova pini srv/sped/nfe/nfesefaz_OLD.prw" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1396026249350"/>
+</session>

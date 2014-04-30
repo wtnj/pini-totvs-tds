@@ -45,13 +45,15 @@ if (SD2->D2_SERIE=='UNI' .OR. TRIM(SD2->D2_SERIE)=='D1' .OR. SD2->D2_SERIE=='CUP
 		IF EMPTY(SF4->F4_CTBESP) .or. SF4->F4_CTBESP =="DC" 
 			DbSelectArea("SB1")
 			DbSetOrder(1)
-			IF DbSeek(xFilial("SB1")+cProduto)
-				If SB1->B1_TIPO =="LI" .or. SB1->B1_TIPO =="LC" .or. SB1->B1_TIPO =="TC" .or. SB1->B1_TIPO =="CD" .or. SB1->B1_TIPO =="DC" .or. SB1->B1_TIPO =="DV" .or. SB1->B1_TIPO =="IE"
+			IF DbSeek(xFilial("SB1")+cProduto) 
+				If SB1->B1_TIPO =="LI" .or. SB1->B1_TIPO =="LC" .or. SB1->B1_TIPO =="TC" .or. SB1->B1_TIPO =="CD" .or. SB1->B1_TIPO =="DC" .or. SB1->B1_TIPO =="DV" .or. SB1->B1_TIPO =="IE" .or. SB1->B1_TIPO =="RE"
 					if ALLTRIM(SB1->B1_COD) <> "0000400" .and. cAlmox<>"CD" //ARCHICAD
 						nValor := nTotal
 					endif
 			    endIf
 			ENDIF //DBSEEK SB1
+		ElseIf SF4->F4_CODIGO == "662"
+			nValor := 0
 		ELSE
 			nValor := 0
 		ENDIF //TES
