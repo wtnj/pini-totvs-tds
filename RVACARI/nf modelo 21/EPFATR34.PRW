@@ -339,7 +339,7 @@ c_ChaveDig  := NFS->F2_XCHNFSC
 //	cArquivo := cGetFile("Documentos  (*.DO*)        | *.DO* | ",;
 //	"Dialogo de Selecao de Arquivos",,,.f.)
 //Else
-	cArquivo := "C:\Temp\nfsc.dotm" 
+	cArquivo := "C:\Temp\nfsc.dot" 
 //   	cArquivo := "\SYSTEM\Modelos\\NFSC.DOT"
 //Endif
                     

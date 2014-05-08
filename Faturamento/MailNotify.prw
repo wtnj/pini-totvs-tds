@@ -18,6 +18,7 @@
 ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
 ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
 */
+
 User Function MailNotify(_cEmailTo,_cEmailBcc,_cAssunto,_aMsg,_aAttach,_lMostraMsg)
 
 Local _ni          := 0
@@ -32,7 +33,8 @@ Local _cArqLog     := ""
 Local _cMailConta  := "nfe_tst@rvacari.com.br" //GETMV("MV_EMCONTA")
 Local _cMailServer := "smtp.rvacari.com.br:587" //GETMV("MV_RELSERV")
 Local _cMailSenha  := "nfe123456" //GETMV("MV_EMSENHA") 
-Local   cFileAttachment := "" 
+Local   cFileAttachment := ""
+Local lResulSend	:= .T. 
 //U_CheckPRW("MAILNOTIFY")
 //If !AllTrim(GetEnvServer())=="BS_DISTR"
 //	Return .F.

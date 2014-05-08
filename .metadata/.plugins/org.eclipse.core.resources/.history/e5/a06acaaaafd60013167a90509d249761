@@ -178,39 +178,10 @@ While !Eof()
 		Vjuros := VAL(substr(FONTE->LINHA, Ijuros, Tjuros))/100
 		Vvlboleto := VAL(substr(FONTE->LINHA, Ivlboleto, Tvlboleto))/100 //20120830
 	endIf
-		
-		//Tratado por Douglas Silva 04/04/2014 para tratar as baixas do Banrisul
-	If alltrim(cLayout) == "Banrisul" //20100902
-		if Vcodocor == "06" .or. Vcodocor == "08" .Or. Vcodocor == "30" //liquidacao normal //liquidacao em cartorio	
-
-			DBSELECTAREA("SE1")
-			//DbOrderNickName("E1_IDCNAB")  // dbSetOrder(25) 20130226 //nossonumero E1_FILIAL+E1_NUMBCO+E1_PORTADO //mp10 era 18 //20100413 dbSetOrder(24) 
-			DBSETORDER(16)
-			If dbSeek(xfilial("SE1")+Vnossonum)
-				IF SE1->E1_PORTADO == "111"
-					MsgAlert("Titulo no SERASA: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
-				ELSE
-					if MsgYEsNo("Baixar: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
-						if Vvlboleto > SE1->E1_SALDO //20120830 daqui boleto gerado com juros somado ao valor principal
-							Vjuros := Vvlboleto - SE1->E1_SALDO
-							Vvlreceb := Vvlboleto
-						else
-							Vvlreceb := SE1->E1_SALDO + Vjuros //complementar com juros 20120910
-						endif  //20120830 ate aqui
-	
-						Baixar(SE1->E1_PREFIXO, SE1->E1_NUM, SE1->E1_PARCELA, Vdesconto, Vjuros, Vvlreceb) //20120830
-					endif  
-				ENDIF
-			Else
-				MsgAlert("Titulo nao localizado: Nossonumero: " + Vnossonum +"  Valor:"+ alltrim(str(Vvlreceb,10,2)))
-			endif
- 				
- 		Endif
- 	EndIf
- 			      
+	      
 	if VtpReg == "1" .and. alltrim(cLayout) <> "Real240"//registro detalhe    
 		If alltrim(cLayout) == "Itau400" //20100902
-			if Vcodocor == "06" .or. Vcodocor == "08"//liquidacao normal //liquidacao em cartorio
+			if Vcodocor == "06" .or. Vcodocor == "08" .or. Vcodocor == "30"//liquidacao normal //liquidacao em cartorio
 				DBSELECTAREA("SE1")
 				DbOrderNickName("E1_NUMBCO")  // dbSetOrder(25) 20130226 //nossonumero E1_FILIAL+E1_NUMBCO+E1_PORTADO //mp10 era 18 //20100413 dbSetOrder(24) 
 				If dbSeek(xfilial("SE1")+Vnossonum)
@@ -231,8 +202,31 @@ While !Eof()
 				Else
 					MsgAlert("Titulo nao localizado: Nossonumero: " + Vnossonum +"  Valor:"+ alltrim(str(Vvlreceb,10,2)))
 				endif
-             Endif
-	ElseIf alltrim(cLayout) == "Bradesco" .or. alltrim(cLayout) == "Mercantil"  .or. alltrim(cLayout) == "Safra" .or. alltrim(cLayout) == "Daycoval" .or. alltrim(cLayout) == "Real400" .or. alltrim(cLayout) == "AbcBrasil"//20100902
+				
+				//Tratado por Douglas Silva 04/04/2014 para tratar as baixas do Banrisul
+				DBSELECTAREA("SE1")
+				DbOrderNickName("E1_IDCNAB")  // dbSetOrder(25) 20130226 //nossonumero E1_FILIAL+E1_NUMBCO+E1_PORTADO //mp10 era 18 //20100413 dbSetOrder(24) 
+				If dbSeek(xfilial("SE1")+Vnossonum)
+					IF SE1->E1_PORTADO == "111"
+						MsgAlert("Titulo no SERASA: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
+					ELSE
+						if MsgYEsNo("Baixar: PREFIXO:" + SE1->E1_PREFIXO +"  NUMERO:"+ SE1->E1_NUM +"   PARCELA:"+ SE1->E1_PARCELA)
+							if Vvlboleto > SE1->E1_SALDO //20120830 daqui boleto gerado com juros somado ao valor principal
+								Vjuros := Vvlboleto - SE1->E1_SALDO
+								Vvlreceb := Vvlboleto
+							else
+								Vvlreceb := SE1->E1_SALDO + Vjuros //complementar com juros 20120910
+							endif  //20120830 ate aqui
+		
+							Baixar(SE1->E1_PREFIXO, SE1->E1_NUM, SE1->E1_PARCELA, Vdesconto, Vjuros, Vvlreceb) //20120830
+						endif  
+					ENDIF
+				Else
+					MsgAlert("Titulo nao localizado: Nossonumero: " + Vnossonum +"  Valor:"+ alltrim(str(Vvlreceb,10,2)))
+				endif
+				
+			endif
+		ElseIf alltrim(cLayout) == "Bradesco" .or. alltrim(cLayout) == "Mercantil"  .or. alltrim(cLayout) == "Safra" .or. alltrim(cLayout) == "Daycoval" .or. alltrim(cLayout) == "Real400" .or. alltrim(cLayout) == "AbcBrasil"//20100902
 			if Vcodocor == "06" .or. (Vcodocor == "15" .and. alltrim(cLayout) <> "Real400") .or. (Vcodocor == "08" .and. alltrim(cLayout) <> "Real400") //liquidacao normal //liquidacao em cartorio
 				DBSELECTAREA("SE1")
 				dbSetOrder(1) //E1_FILIAL+E1_PREFIXO+E1_NUMERO+E1_PARCELA+E1_TIPO    1234567890    12345678901234567

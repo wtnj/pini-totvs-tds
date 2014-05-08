@@ -2,8 +2,8 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="619" key="DIALOG_WIDTH"/>
-		<item value="11" key="DIALOG_Y_ORIGIN"/>
-		<item value="413" key="DIALOG_X_ORIGIN"/>
+		<item value="506" key="DIALOG_Y_ORIGIN"/>
+		<item value="530" key="DIALOG_X_ORIGIN"/>
 		<item value="283" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
@@ -13,16 +13,16 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="MATA103" key="selection"/>
+		<item value="MPROGPA1" key="selection"/>
 		<list key="findhistory">
-			<item value="mata103"/>
-			<item value="xtipo == 2"/>
-			<item value="MATA103"/>
-			<item value="cPais"/>
-			<item value="A1_CODPAIS"/>
-			<item value="aDest[15]"/>
-			<item value="suf"/>
-			<item value="IESUF"/>
+			<item value="MPROGPA1"/>
+			<item value="ValorConta"/>
+			<item value="cTipo"/>
+			<item value="D1_ITEM"/>
+			<item value="Pfin030"/>
+			<item value="&lt;nDI&gt;"/>
+			<item value="nDI"/>
+			<item value="DI"/>
 		</list>
 		<list key="replacehistory">
 		</list>

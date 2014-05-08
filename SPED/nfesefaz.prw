@@ -3898,10 +3898,10 @@ If cVerAmb== "2.00"
 		nTotTrib+= Val(nTributo)
 	EndIf
 Endif
-
+/*
 /*Nas situações em que o valor unitário comercial (vUnCom) for diferente do valor unitário tributável (vUnTrib), 
 ambas as informações deverão estar expressas e identificadas no DANFE - CH:TGCOQA*/
-
+/*
 cVunCom := ConvType(aProd[16],21,8)
 cVunTrib:= ConvType(aProd[10]/aProd[12],21,8)
 
@@ -3929,6 +3929,7 @@ If Len(aDI)>0 .And. ConvType(aDI[04][1]) == "I19"
 	EndIf
 	cString += '</DI>'
 	/*Impressão dos dados da DI nas informações complementares do Danfe - CH:TELKDV*/
+/*	
 	If lDInoDanfe
 		cMensFis += " "
 		cMensFis += "(Numero DI: "+ConvType(aDI[04][03])+ ", "
@@ -3954,6 +3955,8 @@ Elseif Len(aDI)>0
 	EndIf
 	cString += '</DI>'
 	/*Impressão dos dados da DI nas informações complementares do Danfe - CH:TELKDV*/
+	
+	/*
 	If lDInoDanfe
 		cMensFis += " "
 		cMensFis += "(Numero DI: "+ConvType(aDI[02][03])+ ", "
@@ -3962,7 +3965,7 @@ Elseif Len(aDI)>0
 		cMensFis += "Data do Desembaraco: "+ConvType(aDI[06][03])+ ") "	
 	EndIf
 EndIf
-
+*/
 //Combustiveis
 
 If Len(aComb) > 0  .And. !Empty(aComb[01])

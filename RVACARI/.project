@@ -19,4 +19,46 @@
 	<natures>
 		<nature>com.totvs.tds.sdk.advpl.totvsnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>sped/nfe/danfeii.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/danfeii.prw</location>
+		</link>
+		<link>
+			<name>sped/nfe/danfeiii.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/danfeiii.prw</location>
+		</link>
+		<link>
+			<name>sped/nfe/nfesefaz.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/nfesefaz.prw</location>
+		</link>
+		<link>
+			<name>sped/nfse/NFSEXml001.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/NFSEXml001.prw</location>
+		</link>
+		<link>
+			<name>sped/nfse/NFSEXml002.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/NFSEXml002.prw</location>
+		</link>
+		<link>
+			<name>sped/nfse/NFSEXml003.PRW</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/NFSEXml003.PRW</location>
+		</link>
+		<link>
+			<name>sped/nfse/NFSEXml102.PRW</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/NFSEXml102.PRW</location>
+		</link>
+		<link>
+			<name>sped/nfse/nfsexmlenv.prw</name>
+			<type>1</type>
+			<location>C:/Totvs/Rdmake_Srv/SPED/nfsexmlenv.prw</location>
+		</link>
+	</linkedResources>
 </projectDescription>

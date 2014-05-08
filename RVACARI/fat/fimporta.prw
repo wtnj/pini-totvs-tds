@@ -158,6 +158,8 @@ Local lHabil  := .F.
 Private nHdl  := 0
 Private cEOL  := "CHR(8)"
 Private nItem	:= 0001
+Private aCabec1	:= {}
+Private _cCodCli := "" 
 
 	If Empty(Alltrim(cArquivo))
 		Alert("Nao existem arquivos para importar. Processo ABORTADO")
@@ -212,6 +214,12 @@ Private nItem	:= 0001
 
 		If !empty(cLinha )
 		
+			If Substr(cLinha,1,1 )=="1"
+				
+				aadd(aCabec1, {Substr(cLinha,2,10 )})	
+			
+			Endif 
+		
 			If Substr(cLinha,1,1 )=="2"    
 			
 				aadd(aCabec,	{	Substr(cLinha,2,8	),;		//1Numero do Pedido
@@ -249,11 +257,11 @@ Private nItem	:= 0001
 			
 				aadd(aItens,{		Substr(cLinha,2,8 	),;		//1Numero do Pedido
 						            Substr(cLinha,10,8	),;     //2Codigo do Produto ContentStaff
-						            Substr(cLinha,18,15 ),;     //3Codigo do Produto Protheus
-						            Substr(cLinha,33,50 ),;     //4Descrição Produto ContentStaff
-						            Substr(cLinha,83,5  ),;     //5Qauntidade do Item
-						            Substr(cLinha,88,10 ),;     //6Valor de Venda do Produto
-						            Substr(cLinha,98,10 ),;		//7Peso do Produto ContentStaff
+						            Substr(cLinha,18,15 	),;     //3Codigo do Produto Protheus
+						            Substr(cLinha,33,50 	),;     //4Descrição Produto ContentStaff
+						            Substr(cLinha,83,5  	),;     //5Qauntidade do Item
+						            Substr(cLinha,88,10 	),;     //6Valor de Venda do Produto
+						            Substr(cLinha,98,10 	),;		//7Peso do Produto ContentStaff
 						            nItem++})                  	//8Soma dos Item
 						              
 						            
@@ -287,6 +295,7 @@ Private nItem	:= 0001
 						
 							ZC1->ZC1_FILIAL		:= xFilial("ZC1")
 							ZC1->ZC1_STATUS 		:= "1"	
+							ZC1->ZC1_DATA			:= STOD(aCabec1[1][1])
 							ZC1->ZC1_PEDSIT		:= aCabec[1][1]				
 							ZC1->ZC1_IDCLIE		:= aCabec[1][2]
 							ZC1->ZC1_NOMES		:= aCabec[1][3] 
@@ -326,7 +335,9 @@ Private nItem	:= 0001
 							//| Entra na Rotina para Cadastrar Clientes                             |
 							//+---------------------------------------------------------------------+
 							
-							ZC1->ZC1_CLIEPR		:= U_CADCLIS1(aCabec) 
+							_cCodCli := U_CADCLIS1(aCabec)
+							
+							ZC1->ZC1_CLIEPR := _cCodCli		 
 							
 						 	//+---------------------------------------------------------------------+
 							//| Entra na Rotina para Gerar Pedido de Venda                          |
@@ -496,7 +507,7 @@ _cCPFCGC := IIF(aCabec[1][11] = "J", aCabec[1][5],SUBSTR(aCabec[1][5],4,11))
 							cNumCod := ""
 						
 						Else   
-							//Alert("Cliente cadastrado com sucesso: " + cNumCod )
+							//U_MailNotify(_cMail,,"IMPORTAÇÃO PEDIDO DE VENDA EDITORA PINI CADASTRO DE CLIENTE ",{"CEP DIFERENTE DA BASE PROTHEUS X PEDIDO TXT " + Time() + " --- " + Memoread( "Cliente: " + SA1->A1_COD + " CEP TXT " + SUBSTR(aCabec[1][13],1,5) + "-" + SUBSTR(aCabec[1][13],6,3) + " CEP PROTHEUS " + SUBSTR(SA1->A1_CEP,1,5) + "-" + SUBSTR(SA1->A1_CEP,6,3)  ) },,.F.)
 						Endif
 
 	Else

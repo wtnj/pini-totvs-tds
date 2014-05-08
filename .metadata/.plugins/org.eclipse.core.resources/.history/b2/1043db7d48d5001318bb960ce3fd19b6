@@ -27,7 +27,7 @@ User Function SERIE_SI5(cTipo) //D=despesa de remessa. '' ou V = valor do item d
 Local n_serie  := 0
 Local aArea := GetArea()    
 
-if (SF2->F2_SERIE=='UNI' .OR. TRIM(SF2->F2_SERIE)=='D1' .OR. SF2->F2_SERIE=='CUP' .OR. SF2->F2_SERIE=='CFS' .OR.SF2->F2_SERIE=='CFA' .OR. SF2->F2_SERIE=='PUB' .OR. SF2->F2_SERIE=='CFB' .OR. SF2->F2_SERIE=='CFC' .OR. SF2->F2_SERIE=='CFD' .OR. SF2->F2_SERIE=='ANG' .OR. SF2->F2_SERIE=='CFE' .OR. SF2->F2_SERIE=='NFS' .OR. SF2->F2_SERIE=='SEN' .OR. SF2->F2_SERIE=='STD' .OR. SF2->F2_SERIE=='ECF' .OR. SF2->F2_SERIE=='1  ' .OR. SF2->F2_SERIE=='8  ' .OR. SF2->F2_SERIE=='EC1' .OR. SF2->F2_SERIE=='4  '.OR. SF2->F2_SERIE=='5  '.OR. SF2->F2_SERIE=='21 ')
+If (SF2->F2_SERIE=='UNI' .OR. TRIM(SF2->F2_SERIE)=='D1' .OR. SF2->F2_SERIE=='CUP' .OR. SF2->F2_SERIE=='CFS' .OR.SF2->F2_SERIE=='CFA' .OR. SF2->F2_SERIE=='PUB' .OR. SF2->F2_SERIE=='CFB' .OR. SF2->F2_SERIE=='CFC' .OR. SF2->F2_SERIE=='CFD' .OR. SF2->F2_SERIE=='ANG' .OR. SF2->F2_SERIE=='CFE' .OR. SF2->F2_SERIE=='NFS' .OR. SF2->F2_SERIE=='SEN' .OR. SF2->F2_SERIE=='STD' .OR. SF2->F2_SERIE=='ECF' .OR. SF2->F2_SERIE=='1  ' .OR. SF2->F2_SERIE=='8  ' .OR. SF2->F2_SERIE=='EC1' .OR. SF2->F2_SERIE=='4  '.OR. SF2->F2_SERIE=='5  '.OR. SF2->F2_SERIE=='21 ')
 	if alltrim(upper(cTipo)) == "1" .or. alltrim(upper(cTipo)) == "2"
 		IF ALLTRIM(SF2->F2_ESPECIE)=="CF" .AND. !EMPTY(SF2->F2_PDV) .AND. !EMPTY(SF2->F2_ECF) //20130325
 			n_serie := ValorLoja(SF2->F2_SERIE, SF2->F2_DOC, DTOS(SF2->F2_EMISSAO), SF2->F2_CLIENTE, SF2->F2_LOJA, cTipo, "S") //20130325

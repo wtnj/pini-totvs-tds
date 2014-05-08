@@ -1015,8 +1015,7 @@ For nY := 1 To nNumNF
 	        aadd(aItens,aLinha)                       
 		endif
     Next nX
-    //MATA103(aCabec,aItens,3)
-    MSExecAuto({|x,y| mata103(x,y)},aCabec,aItens)
+    MATA103(aCabec,aItens,3)
     If !lMsErroAuto
        while __lsx8
              confirmsx8()
@@ -1137,7 +1136,7 @@ For nY := 1 To nNumNF
     For nX := 1 To len(aCols)
         aLinha := {}
         if aCols[nX][7] > 0     // ZZY_qtdven
-	        //aadd(aLinha,{"D1_ITEM" ,aCols[nX][1],Nil})
+	        aadd(aLinha,{"D1_ITEM" ,aCols[nX][1],Nil})
 	        aadd(aLinha,{"D1_COD" ,aCols[nX][5],Nil})
             aadd(aLinha,{"D1_QUANT",aCols[nX][7],Nil})
 	        aadd(aLinha,{"D1_VUNIT",aCols[nX][11],Nil})
@@ -1150,7 +1149,7 @@ For nY := 1 To nNumNF
 	           	posicione("SF4",1,xfilial("SF4")+"018","F4_CODIGO") //20100810
 	        else
 		        aadd(aLinha,{"D1_TES","030",Nil})
-	           	posicione("SF4",1,xfilial("SF4")+"030","F4_CODIGO")
+	           	posicione("SF4",1,xfilial("SF4")+"018","F4_CODIGO")
 	        endif
 		    aadd(aLinha,{"D1_NFORI",aCols[nX][3],NIL})
 	        aadd(aLinha,{"D1_SERIORI",aCols[nX][4],NIL})
@@ -1168,8 +1167,7 @@ For nY := 1 To nNumNF
 	        aadd(aItens,aLinha)                       
 		endif
     Next nX
-    //MATA103(aCabec,aItens,3)
-    MSExecAuto({|x,y| mata103(x,y)},aCabec,aItens)
+    MATA103(aCabec,aItens,3)
     If !lMsErroAuto
        while __lsx8
              confirmsx8()
