@@ -97,7 +97,7 @@ MSGINFO("Processamento OK FIN1!")
 
 Return  
 
-User Function ADJFVLR()
+User Function ADJFNAT()
 
 Local _nPar := 0
 
@@ -156,73 +156,20 @@ Do While TRB->(!EOF())
 			Return
 		Endif
 	  
-		If SE1->(DBSEEK( TRB->E1_FILIAL + TRB->E1_CLIENTE + TRB->E1_LOJA + TRB->E1_PREFIXO + TRB->E1_NUM + _cParc + TRB->E1_TIPO )) .And. _cParc == "A"
+		If SE1->(DBSEEK( TRB->E1_FILIAL + TRB->E1_CLIENTE + TRB->E1_LOJA + TRB->E1_PREFIXO + TRB->E1_NUM + TRB->E1_PARCELA + TRB->E1_TIPO ))
 	    	
-	    	If SE1->E1_SALDO == 0	
-				SE1->(Reclock("SE1", .F.))
-				 	SE1->E1_VALOR		:= TRB->E1_VALPARC
-				 	SE1->E1_VALLIQ	:= TRB->E1_VALPARC
-				 	SE1->E1_VLCRUZ	:= TRB->E1_VALPARC 
-				SE1->(msUnLock())
-				
-				SE5->(DBSELECTAREA("SE5"))
-				SE5->(DBSETORDER(7))
-				SE5->(DBGOTOP())  
-				
-				If SE5->(DBSEEK(SE1->E1_FILIAL+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA+SE1->E1_TIPO+SE1->E1_CLIENTE+SE1->E1_LOJA)
-					SE5->(Reclock("SE1", .F.))
-					 	SE5->E5_VALOR		:= TRB->E1_VALPARC
-					 	SE5->E5_LVMOED2	:= TRB->E1_VALPARC
-					SE5->(msUnLock())
-				EndIf
-				                                                                                     
-			ElseIf SE1->E1_SALDO != 0	
-				SE1->(Reclock("SE1", .F.))
-					SE1->E1_SALDO		:= TRB->E1_VALPARC
-				 	SE1->E1_VALOR		:= TRB->E1_VALPARC
-				 	SE1->E1_VALLIQ	:= TRB->E1_VALPARC
-				 	SE1->E1_VLCRUZ	:= TRB->E1_VALPARC 
-				SE1->(msUnLock())
-			EndIf
-			
-		EndIf
+			SE1->(Reclock("SE1", .F.))
+			  
+			  
+			  
+			SE1->(msUnLock())
 		
-		If SE1->(DBSEEK( TRB->E1_FILIAL + TRB->E1_CLIENTE + TRB->E1_LOJA + TRB->E1_PREFIXO + TRB->E1_NUM + _cParc + TRB->E1_TIPO )) .And. _cParc != "A"
-	    	
-	    	If SE1->E1_SALDO == 0	
-				SE1->(Reclock("SE1", .F.))
-				 	SE1->E1_VALOR		:= TRB->E1_VALPARC
-				 	SE1->E1_VALLIQ	:= TRB->E1_VALPARC
-				 	SE1->E1_VLCRUZ	:= TRB->E1_VALPARC 
-				SE1->(msUnLock())
-				
-				SE5->(DBSELECTAREA("SE5"))
-				SE5->(DBSETORDER(7))
-				SE5->(DBGOTOP())  
-				
-				If SE5->(DBSEEK(SE1->E1_FILIAL+SE1->E1_PREFIXO+SE1->E1_NUM+SE1->E1_PARCELA+SE1->E1_TIPO+SE1->E1_CLIENTE+SE1->E1_LOJA)
-					SE5->(Reclock("SE1", .F.))
-					 	SE5->E5_VALOR		:= TRB->E1_VALPARC
-					 	SE5->E5_LVMOED2	:= TRB->E1_VALPARC
-					SE5->(msUnLock())
-				EndIf
-				                                                                                     
-			ElseIf SE1->E1_SALDO != 0	
-				SE1->(Reclock("SE1", .F.))
-					SE1->E1_SALDO		:= TRB->E1_VALPARC
-				 	SE1->E1_VALOR		:= TRB->E1_VALPARC
-				 	SE1->E1_VALLIQ	:= TRB->E1_VALPARC
-				 	SE1->E1_VLCRUZ	:= TRB->E1_VALPARC 
-				SE1->(msUnLock())
-			EndIf
-			
 		EndIf		
-				
 	Next _nPar			
 	TRB->(DBSKIP())
 Enddo     
 	
-MSGINFO("Processamento OK FIN2!")
+MSGINFO("Processamento OK FIN1!")
     
 	TRB->(DBCLOSEAREA())
 

@@ -55,7 +55,7 @@ EndIf
 cCodigoP := aCols[n,nPosProduto]
 nSaldo := U_CONSSLDO(cCodigoP,aCols[n,nTipoLocal], aCols[n,nPosTes] )             
 
-If ! ALLTRIM(M->C5_TIPOOP) $ "500|30"  
+If ! M->C5_TIPOOP == "500" .Or. M->C5_TIPOOP == "30 " 
 	//Validação para não deixar item duplicado.
 	For  nX := 1 To len(aCols)
 		If ! ACOLS[N,LEN(ACOLS[N])] .And. aCols[n,nTipoLocal] == "T5" .or. aCols[n,nTipoLocal] == "T6"

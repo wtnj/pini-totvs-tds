@@ -97,7 +97,7 @@ MSGINFO("Processamento OK FIN1!")
 
 Return  
 
-User Function ADJFVLR()
+User Function ADJFNAT()
 
 Local _nPar := 0
 
@@ -222,7 +222,7 @@ Do While TRB->(!EOF())
 	TRB->(DBSKIP())
 Enddo     
 	
-MSGINFO("Processamento OK FIN2!")
+MSGINFO("Processamento OK FIN1!")
     
 	TRB->(DBCLOSEAREA())
 
