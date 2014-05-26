@@ -47,23 +47,83 @@
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="AdvPL.editor" name="M410LIOK.PRW" partName="M410LIOK.PRW" path="C:/Totvs/Rdmake_Srv/RVACARI/fat/M410LIOK.PRW" title="M410LIOK.PRW" tooltip="RVACARI/fat/M410LIOK.PRW" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RVACARI/fat/M410LIOK.PRW"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3424" selectionTopPixel="575"/>
+<editor activePart="true" focus="true" id="AdvPL.editor" name="ValISS.prw" partName="ValISS.prw" path="C:/Totvs/Rdmake_Srv/Execblocks/ValISS.prw" title="ValISS.prw" tooltip="nova pini srv/execblocks/execblocks/ValISS.prw" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/nova pini srv/execblocks/execblocks/ValISS.prw"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1060" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
+<view id="org.eclipse.rse.ui.view.systemView" partName="Remote Systems">
+<viewState horizontalPosition="0" linkWithEditor="f" release="2.0.0" showFilterPools="f" verticalPosition="0">
+<expanded>
+<element path="Conn///cpd-danilo.Local"/>
+</expanded>
+<selection>
+<element path="Conn///cpd-danilo.Local"/>
+</selection>
+</viewState>
+</view>
 <view id="org.eclipse.search.ui.views.SearchView" partName="Procurar">
 <viewState isPinned="false">
 <view IMemento.internal.id="" org.eclipse.search.lastActivation="0"/>
 </viewState>
 </view>
-<view id="org.eclipse.rse.ui.view.systemView" partName="Remote Systems">
-<viewState horizontalPosition="0" linkWithEditor="f" release="2.0.0" showFilterPools="f" verticalPosition="0">
-<expanded>&#x0A;<element path="Conn///cpd-danilo.Local"/>
-</expanded>
-<selection>&#x0A;<element path="Conn///cpd-danilo.Local"/>
-</selection>
+<view id="org.eclipse.debug.ui.DebugView" partName="Depurar"/>
+<view id="com.totvs.tds.debug.TOTVSDebugComands" partName="AdvPL Comands">
+<viewState/>
+</view>
+<view id="com.totvs.tds.core.server.ui.TotvsServerMonitor" partName="TOTVS Application Monitor">
+<viewState>
+<ConfiguredColumns>
+<Servidor Visible="true" Width="100" WidthDefault="100"/>
+<Ambiente Visible="true" Width="110" WidthDefault="100"/>
+<Usuário Visible="true" Width="100" WidthDefault="100"/>
+<Máquina Visible="true" Width="85" WidthDefault="100"/>
+<ThreadId Visible="true" Width="70" WidthDefault="100"/>
+<UserServer Visible="true" Width="80" WidthDefault="100"/>
+<Programa Visible="true" Width="80" WidthDefault="100"/>
+<Conexão Visible="true" Width="150" WidthDefault="100"/>
+<Tempodecorrido Visible="true" Width="130" WidthDefault="100"/>
+<Instrucoes Visible="true" Width="85" WidthDefault="100"/>
+<InstrucoesxSegundo Visible="true" Width="130" WidthDefault="100"/>
+<Observacoes Visible="true" Width="530" WidthDefault="100"/>
+<Memória Visible="true" Width="80" WidthDefault="100"/>
+<SID Visible="true" Width="80" WidthDefault="100"/>
+<RPO Visible="true" Width="80" WidthDefault="100"/>
+</ConfiguredColumns>
+<TotvsServerMonitorViewer viewOrder="0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-"/>
+</viewState>
+</view>
+<view id="org.eclipse.debug.ui.BreakpointView" partName="Pontos de Interrupção"/>
+<view id="org.eclipse.debug.ui.VariableView" partName="Variáveis"/>
+<view id="org.eclipse.ui.views.TaskList" partName="Tarefas">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tarefas">
+<columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="300" org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.priorityField="30" org.eclipse.ui.ide.resourceField="90"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.completionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.priorityField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.descriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="com.totvs.tds.core.server.ui.TotvsDBAccessMonitor" partName="TOTVS DBAccess Monitor">
+<viewState>
+<ConfiguredColumns>
+<Servidor Visible="true" Width="140" WidthDefault="100"/>
+<Ambiente Visible="true" Width="110" WidthDefault="100"/>
+<ID Visible="true" Width="70" WidthDefault="100"/>
+<Usuario Visible="true" Width="100" WidthDefault="100"/>
+<TotalIOs Visible="true" Width="70" WidthDefault="100"/>
+<Tabelas Visible="true" Width="60" WidthDefault="100"/>
+<Comentario Visible="true" Width="180" WidthDefault="100"/>
+<Procedure Visible="true" Width="70" WidthDefault="100"/>
+<DBThread Visible="true" Width="90" WidthDefault="100"/>
+<Start Visible="true" Width="130" WidthDefault="100"/>
+<IP Visible="true" Width="85" WidthDefault="100"/>
+</ConfiguredColumns>
+<TotvsServerMonitorViewer viewOrder="0-1-2-3-4-5-6-7-8-9-10-"/>
 </viewState>
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problemas">
@@ -75,6 +135,9 @@
 <visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
 </viewState>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
 </view>
 <view id="org.eclipse.jdt.ui.PackageExplorer" partName="Explorador de Pacote">
 <viewState group_libraries="1" layout="2" linkWithEditor="0" rootMode="1" workingSetName="">
@@ -105,29 +168,11 @@
 </customFilters>
 </viewState>
 </view>
-<view id="com.totvs.tds.debug.TOTVSDebugComands" partName="AdvPL Comands">
-<viewState/>
-</view>
-<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
-<viewState/>
-</view>
 <view id="com.totvs.tds.debug.ui.expression" partName="Expressions">
 <viewState/>
 </view>
 <view id="com.totvs.tds.debug.ui.variableview" partName="Variables">
 <viewState/>
-</view>
-<view id="org.eclipse.ui.views.TaskList" partName="Tarefas">
-<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tarefas">
-<columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="300" org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.priorityField="30" org.eclipse.ui.ide.resourceField="90"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.completionField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.priorityField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.descriptionField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
-</viewState>
 </view>
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaração">
 <viewState/>
@@ -241,9 +286,13 @@
 <perspective_action id="com.totvs.tds.sdk.perspective.TotvsPerspective"/>
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
-<fastViews>&#x0A;<view id="org.eclipse.rse.ui.view.systemView" ratio="0.29964414"/>
+<fastViews>
+<view id="org.eclipse.rse.ui.view.systemView" ratio="0.29964414"/>
 </fastViews>
-<fastViewBars>&#x0A;<fastViewBar fastViewLocation="1024" id="folder" orientation="256" selectedTabId="com.totvs.tds.core.server.ui.TotvsServerMonitor" style="0">&#x0A;<fastViews>&#x0A;<view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
+<fastViewBars>
+<fastViewBar fastViewLocation="1024" id="folder" orientation="256" selectedTabId="com.totvs.tds.core.server.ui.TotvsServerMonitor" style="0">
+<fastViews>
+<view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
 <view id="com.totvs.tds.core.server.ui.TotvsDBAccessMonitor" ratio="0.3"/>
 <view id="org.eclipse.search.ui.views.SearchView" ratio="0.3"/>
 <view id="org.eclipse.ui.console.ConsoleView" ratio="0.29840848"/>
@@ -251,18 +300,26 @@
 </fastViews>
 </fastViewBar>
 </fastViewBars>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.ui.internal.ViewStack@115141f">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="com.totvs.tds.editor.navigator.view" label="LabelNotFound"/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@115141f">
+<folder appearance="2" expanded="2">
+<page content="com.totvs.tds.editor.navigator.view" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1fabff7" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="org.eclipse.ui.internal.ViewStack@115141f">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1fabff7" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="org.eclipse.ui.internal.ViewStack@115141f">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.25" ratioLeft="250" ratioRight="750" relationship="2" relative="org.eclipse.ui.internal.ViewStack@115141f"/>
-<info folder="true" part="folder" ratio="0.3568575" ratioLeft="268" ratioRight="483" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
+<info folder="true" part="folder" ratio="0.3568575" ratioLeft="268" ratioRight="483" relationship="4" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <page content="com.totvs.tds.core.server.ui.TotvsServerMonitor" label="LabelNotFound"/>
@@ -272,12 +329,16 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="folder_1" ratio="0.90986395" ratioLeft="1070" ratioRight="106" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<info folder="true" part="folder_1" ratio="0.90986395" ratioLeft="1070" ratioRight="106" relationship="2" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="com.totvs.tds.core.server.ui.TotvsServersOutlineView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@10e08e1" ratio="0.65976334" ratioLeft="446" ratioRight="230" relationship="4" relative="org.eclipse.ui.internal.ViewStack@115141f">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@10e08e1" ratio="0.65976334" ratioLeft="446" ratioRight="230" relationship="4" relative="org.eclipse.ui.internal.ViewStack@115141f">
+<folder appearance="2" expanded="2">
+<page content="com.totvs.tds.core.server.ui.TotvsServersManagerViewExtension" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
@@ -326,27 +387,40 @@
 <view id="com.totvs.tds.debug.ui.expression"/>
 <view id="com.totvs.tds.debug.TOTVSDebugComands"/>
 <view id="org.eclipse.search.ui.views.SearchView"/>
-<fastViewBars>&#x0A;<fastViewBar fastViewLocation="131072" id="org.eclipse.debug.internal.ui.ToolsFolderView" orientation="256" selectedTabId="org.eclipse.debug.ui.BreakpointView" style="0">&#x0A;<fastViews>&#x0A;<view id="org.eclipse.debug.ui.VariableView" ratio="0.3"/>
+<fastViewBars>
+<fastViewBar fastViewLocation="131072" id="org.eclipse.debug.internal.ui.ToolsFolderView" orientation="256" selectedTabId="org.eclipse.debug.ui.BreakpointView" style="0">
+<fastViews>
+<view id="org.eclipse.debug.ui.VariableView" ratio="0.3"/>
 <view id="org.eclipse.debug.ui.BreakpointView" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
-<fastViewBar fastViewLocation="131072" id="org.eclipse.debug.internal.ui.NavigatorFolderView" orientation="256" selectedTabId="org.eclipse.debug.ui.DebugView" style="0">&#x0A;<fastViews>&#x0A;<view id="org.eclipse.debug.ui.DebugView" ratio="0.3"/>
+<fastViewBar fastViewLocation="131072" id="org.eclipse.debug.internal.ui.NavigatorFolderView" orientation="256" selectedTabId="org.eclipse.debug.ui.DebugView" style="0">
+<fastViews>
+<view id="org.eclipse.debug.ui.DebugView" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="LabelNotFound"/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.DebugView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.74901444" ratioLeft="570" ratioRight="191" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.74901444" ratioLeft="570" ratioRight="191" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tarefas"/>
 <page content="com.totvs.tds.debug.ui.variableview" label="Variables"/>
 <page content="com.totvs.tds.debug.ui.expression" label="Expressions"/>
@@ -356,7 +430,8 @@
 <page content="org.eclipse.ui.views.PropertySheet" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -366,11 +441,15 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.44851658" ratioLeft="257" ratioRight="316" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="716" ratioRight="716" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="716" ratioRight="716" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.VariableView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
@@ -434,31 +513,29 @@
 <perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer"/>
 <fastViewBars>
 <fastViewBar fastViewLocation="1024" id="bottom" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
 <fastViews>
-<view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
+<view id="org.eclipse.ui.views.ProblemView" ratio="0.29973474"/>
 <view id="org.eclipse.jdt.ui.JavadocView" ratio="0.3"/>
 <view id="org.eclipse.jdt.ui.SourceView" ratio="0.3"/>
 <view id="org.eclipse.ui.console.ConsoleView" ratio="0.29973474"/>
 <view id="org.eclipse.search.ui.views.SearchView" ratio="0.29973474"/>
 </fastViews>
 </fastViewBar>
-<fastViewBar fastViewLocation="16384" id="left" orientation="512" selectedTabId="org.eclipse.jdt.ui.PackageExplorer" style="0">
-<fastViews>
-<view id="org.eclipse.jdt.ui.PackageExplorer" ratio="0.29964414"/>
-</fastViews>
-</fastViewBar>
 </fastViewBars>
 <layout>
 <mainWindow>
 <info folder="true" part="left">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
+<folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
+<page content="org.eclipse.jdt.ui.PackageExplorer" label="Explorador de Pacote"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
 </folder>
 </info>
 <info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="left">
@@ -468,7 +545,7 @@
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.25" ratioLeft="358" ratioRight="1074" relationship="2" relative="left"/>
+<info part="org.eclipse.ui.editorss" ratio="0.16305108" ratioLeft="233" ratioRight="1196" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.7493369" ratioLeft="565" ratioRight="189" relationship="4" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
@@ -495,13 +572,6 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/faturamento/Rvacari/EDVERCHV.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/fimporta.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/rel/RFAT121.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/faturamento/Rvacari/EDVERCHV.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/faturamento/Rvacari/MailNotify.prw"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/fimporta.prw"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/sped/nfe/nfesefaz.prw"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/rel/RFAT121.prw"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/faturamento/atualização/ATPINI02.prw"/>
@@ -525,153 +595,167 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/execblocks/execblocks/VALPODER3.prw"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/M410LIOK.PRW"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/fimporta.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/EST/PINICR.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/EST/MTA225MNU.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/EST/PINICADSB2.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/faturamento/atualização/ATPINI02.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/Compras/TSTMAT103.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/fimporta.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/ADJIN79.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/RVACARI/fat/fimporta.prw"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" path="/nova pini srv/execblocks/execblocks/ValISS.prw"/>
 </editors>
-<item historyLabel="ADJIN79.prw" index="0">
-<position info="not_deleted" x="110" y="12"/>
-</item>
-<item historyLabel="EDVERCHV.prw" index="1">
-<position info="not_deleted" x="3921" y="10"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="32128" y="0"/>
-</item>
-<item historyLabel="RFAT121.prw" index="3">
-<position info="not_deleted" x="300" y="79"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="32128" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="17469" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="22814" y="10"/>
-</item>
-<item historyLabel="EDVERCHV.prw" index="4">
-<position info="not_deleted" x="6214" y="10"/>
-</item>
-<item historyLabel="MailNotify.prw" index="5">
-<position info="not_deleted" x="719" y="0"/>
-</item>
-<item historyLabel="MailNotify.prw" index="5">
-<position info="not_deleted" x="2755" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="14570" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="14561" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="16308" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="7045" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="14570" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="14513" y="0"/>
-</item>
-<item historyLabel="fimporta.prw" index="2">
-<position info="not_deleted" x="0" y="32275"/>
-</item>
-<item historyLabel="MailNotify.prw" index="5">
-<position info="not_deleted" x="0" y="4605"/>
-</item>
-<item historyLabel="fimporta.prw" index="6">
-<position info="not_deleted" x="0" y="32275"/>
-</item>
-<item historyLabel="nfesefaz.prw" index="7">
-<position info="not_deleted" x="173664" y="0"/>
-</item>
-<item historyLabel="RFAT121.prw" index="8">
+<item historyLabel="RFAT121.prw" index="1">
 <position info="not_deleted" x="1146" y="0"/>
 </item>
-<item historyLabel="nfesefaz.prw" index="7">
+<item historyLabel="nfesefaz.prw" index="0">
 <position info="not_deleted" x="2033" y="0"/>
 </item>
-<item historyLabel="ATPINI02.prw" index="9">
+<item historyLabel="ATPINI02.prw" index="2">
 <position info="not_deleted" x="78133" y="0"/>
 </item>
-<item historyLabel="ATPINI02.prw" index="9">
+<item historyLabel="ATPINI02.prw" index="2">
 <position info="not_deleted" x="0" y="78133"/>
 </item>
-<item historyLabel="Pfin030.prw" index="10">
+<item historyLabel="Pfin030.prw" index="3">
 <position info="not_deleted" x="956" y="7"/>
 </item>
-<item historyLabel="Pfin030.prw" index="10">
+<item historyLabel="Pfin030.prw" index="3">
 <position info="not_deleted" x="2082" y="0"/>
 </item>
-<item historyLabel="ATPINI02.prw" index="11">
+<item historyLabel="ATPINI02.prw" index="4">
 <position info="not_deleted" x="39720" y="0"/>
 </item>
-<item historyLabel="EPFATR34.PRW" index="12">
+<item historyLabel="EPFATR34.PRW" index="5">
 <position info="not_deleted" x="12629" y="0"/>
 </item>
-<item historyLabel="LPSZ901.PRW" index="13">
+<item historyLabel="LPSZ901.PRW" index="6">
 <position info="not_deleted" x="36" y="7"/>
 </item>
-<item historyLabel="SERIE_SI5.prw" index="14">
+<item historyLabel="SERIE_SI5.prw" index="7">
 <position info="not_deleted" x="1702" y="9"/>
 </item>
-<item historyLabel="SERIE_SI5.prw" index="15">
+<item historyLabel="SERIE_SI5.prw" index="8">
 <position/>
 </item>
-<item historyLabel="SERIE_SI5.prw" index="14">
+<item historyLabel="SERIE_SI5.prw" index="7">
 <position info="not_deleted" x="1011" y="9"/>
 </item>
-<item historyLabel="SERIE_SI5.prw" index="15">
+<item historyLabel="SERIE_SI5.prw" index="8">
 <position info="not_deleted" x="1011" y="9"/>
 </item>
-<item historyLabel="SERIE_SI5.prw" index="14">
+<item historyLabel="SERIE_SI5.prw" index="7">
 <position info="not_deleted" x="4528" y="0"/>
 </item>
-<item historyLabel="RFIS002.PRW" index="16">
+<item historyLabel="RFIS002.PRW" index="9">
 <position info="not_deleted" x="1784" y="7"/>
 </item>
-<item historyLabel="RFIS002.PRW" index="17">
+<item historyLabel="RFIS002.PRW" index="10">
 <position info="not_deleted" x="1984" y="0"/>
 </item>
-<item historyLabel="TSTMAT103.prw" index="18">
+<item historyLabel="TSTMAT103.prw" index="11">
 <position info="not_deleted" x="0" y="3546"/>
 </item>
-<item historyLabel="PFINJ01.PRW" index="19">
+<item historyLabel="PFINJ01.PRW" index="12">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="Pfat146.prw" index="20">
+<item historyLabel="Pfat146.prw" index="13">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="AjusteVencto.prw" index="21">
+<item historyLabel="AjusteVencto.prw" index="14">
 <position info="not_deleted" x="13206" y="10"/>
 </item>
-<item historyLabel="lpsz902.prw" index="22">
+<item historyLabel="lpsz902.prw" index="15">
 <position info="not_deleted" x="580" y="502"/>
 </item>
-<item historyLabel="Pfin025.prw" index="23">
+<item historyLabel="Pfin025.prw" index="16">
 <position info="not_deleted" x="13754" y="0"/>
 </item>
-<item historyLabel="AjusteVencto.prw" index="24">
+<item historyLabel="AjusteVencto.prw" index="17">
 <position info="not_deleted" x="0" y="17476"/>
 </item>
-<item historyLabel="ADJIN79.prw" index="25">
+<item historyLabel="ADJIN79.prw" index="18">
 <position info="not_deleted" x="1970" y="9"/>
 </item>
-<item historyLabel="SldAlmox.prw" index="26">
+<item historyLabel="SldAlmox.prw" index="19">
 <position info="not_deleted" x="595" y="10"/>
 </item>
-<item historyLabel="ADJIN79.prw" index="27">
+<item historyLabel="ADJIN79.prw" index="20">
 <position info="not_deleted" x="0" y="7465"/>
 </item>
-<item historyLabel="VALPODER3.prw" index="28">
+<item historyLabel="VALPODER3.prw" index="21">
 <position info="not_deleted" x="1695" y="0"/>
 </item>
-<item active="true" historyLabel="M410LIOK.PRW" index="29">
+<item historyLabel="M410LIOK.PRW" index="22">
+<position info="not_deleted" x="3003" y="0"/>
+</item>
+<item historyLabel="fimporta.prw" index="23">
+<position info="not_deleted" x="57756" y="0"/>
+</item>
+<item historyLabel="M410LIOK.PRW" index="22">
+<position info="not_deleted" x="3003" y="0"/>
+</item>
+<item historyLabel="PINICR.prw" index="24">
+<position info="not_deleted" x="8880" y="0"/>
+</item>
+<item historyLabel="MTA225MNU.prw" index="25">
+<position info="not_deleted" x="4397" y="0"/>
+</item>
+<item historyLabel="PINICR.prw" index="24">
+<position info="not_deleted" x="8880" y="0"/>
+</item>
+<item historyLabel="M410LIOK.PRW" index="22">
+<position info="not_deleted" x="3003" y="0"/>
+</item>
+<item historyLabel="PINICADSB2.prw" index="26">
+<position info="not_deleted" x="7383" y="0"/>
+</item>
+<item historyLabel="ATPINI02.prw" index="27">
+<position info="not_deleted" x="4847" y="0"/>
+</item>
+<item historyLabel="TSTMAT103.prw" index="28">
+<position info="not_deleted" x="23" y="0"/>
+</item>
+<item historyLabel="ADJIN79.prw" index="29">
+<position info="not_deleted" x="8456" y="0"/>
+</item>
+<item historyLabel="ADJIN79.prw" index="29">
+<position/>
+</item>
+<item historyLabel="ADJIN79.prw" index="29">
+<position info="not_deleted" x="8456" y="0"/>
+</item>
+<item historyLabel="TSTMAT103.prw" index="28">
+<position info="not_deleted" x="23" y="0"/>
+</item>
+<item historyLabel="ADJIN79.prw" index="29">
+<position info="not_deleted" x="8214" y="0"/>
+</item>
+<item historyLabel="M410LIOK.PRW" index="22">
 <position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="M410LIOK.PRW" index="22">
+<position info="not_deleted" x="2941" y="0"/>
+</item>
+<item historyLabel="fimporta.prw" index="30">
+<position info="not_deleted" x="31917" y="0"/>
+</item>
+<item historyLabel="ADJIN79.prw" index="31">
+<position info="not_deleted" x="1970" y="9"/>
+</item>
+<item historyLabel="fimporta.prw" index="32">
+<position info="not_deleted" x="31924" y="0"/>
+</item>
+<item historyLabel="fimporta.prw" index="32">
+<position info="not_deleted" x="1030" y="0"/>
+</item>
+<item historyLabel="ValISS.prw" index="33">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item active="true" historyLabel="ValISS.prw" index="33">
+<position info="not_deleted" x="929" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -682,6 +766,11 @@
 <trimArea IMemento.internal.id="16384">
 <trimItem IMemento.internal.id="left"/>
 </trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="org.eclipse.ui.editorss"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.ToolsFolderView"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
@@ -691,18 +780,40 @@
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
 <trimItem IMemento.internal.id="com.totvs.tds.core.selectedServerAndEnvironment"/>
 <trimItem IMemento.internal.id="bottom"/>
+<trimItem IMemento.internal.id="folder"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="M410LIOK.PRW" tooltip="RVACARI/fat/M410LIOK.PRW">
-<persistable path="/RVACARI/fat/M410LIOK.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="VALPODER3.prw" tooltip="nova pini srv/execblocks/execblocks/VALPODER3.prw">
-<persistable path="/nova pini srv/execblocks/execblocks/VALPODER3.prw"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ValISS.prw" tooltip="nova pini srv/execblocks/execblocks/ValISS.prw">
+<persistable path="/nova pini srv/execblocks/execblocks/ValISS.prw"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ADJIN79.prw" tooltip="RVACARI/fat/ADJIN79.prw">
 <persistable path="/RVACARI/fat/ADJIN79.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="fimporta.prw" tooltip="RVACARI/fat/fimporta.prw">
+<persistable path="/RVACARI/fat/fimporta.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="M410LIOK.PRW" tooltip="RVACARI/fat/M410LIOK.PRW">
+<persistable path="/RVACARI/fat/M410LIOK.PRW"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="TSTMAT103.prw" tooltip="RVACARI/Compras/TSTMAT103.prw">
+<persistable path="/RVACARI/Compras/TSTMAT103.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ATPINI02.prw" tooltip="nova pini srv/faturamento/atualização/ATPINI02.prw">
+<persistable path="/nova pini srv/faturamento/atualização/ATPINI02.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="PINICADSB2.prw" tooltip="RVACARI/EST/PINICADSB2.prw">
+<persistable path="/RVACARI/EST/PINICADSB2.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="MTA225MNU.prw" tooltip="RVACARI/EST/MTA225MNU.prw">
+<persistable path="/RVACARI/EST/MTA225MNU.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="PINICR.prw" tooltip="RVACARI/EST/PINICR.prw">
+<persistable path="/RVACARI/EST/PINICR.prw"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="VALPODER3.prw" tooltip="nova pini srv/execblocks/execblocks/VALPODER3.prw">
+<persistable path="/nova pini srv/execblocks/execblocks/VALPODER3.prw"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="SldAlmox.prw" tooltip="nova pini srv/execblocks/execblocks/SldAlmox.prw">
 <persistable path="/nova pini srv/execblocks/execblocks/SldAlmox.prw"/>
@@ -718,27 +829,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="Pfat146.prw" tooltip="RVACARI/fat/Pfat146.prw">
 <persistable path="/RVACARI/fat/Pfat146.prw"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="PFINJ01.PRW" tooltip="nova pini srv/jobs/jobs/PFINJ01.PRW">
-<persistable path="/nova pini srv/jobs/jobs/PFINJ01.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="TSTMAT103.prw" tooltip="RVACARI/Compras/TSTMAT103.prw">
-<persistable path="/RVACARI/Compras/TSTMAT103.prw"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="RFIS002.PRW" tooltip="nova pini srv/fiscal/relatorios/RFIS002.PRW">
-<persistable path="/nova pini srv/fiscal/relatorios/RFIS002.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="SERIE_SI5.prw" tooltip="nova pini srv/execblocks/execblocks/SERIE_SI5.prw">
-<persistable path="/nova pini srv/execblocks/execblocks/SERIE_SI5.prw"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="LPSZ901.PRW" tooltip="nova pini srv/execblocks/execblocks/LPSZ901.PRW">
-<persistable path="/nova pini srv/execblocks/execblocks/LPSZ901.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="EPFATR34.PRW" tooltip="RVACARI/nf modelo 21/EPFATR34.PRW">
-<persistable path="/RVACARI/nf modelo 21/EPFATR34.PRW"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="AdvPL.editor" name="ATPINI02.prw" tooltip="nova pini srv/faturamento/atualização/ATPINI02.prw">
-<persistable path="/nova pini srv/faturamento/atualização/ATPINI02.prw"/>
 </file>
 </mruList>
 </workbench>

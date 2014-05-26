@@ -11284,3 +11284,1098 @@ java.lang.NullPointerException
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+!SESSION 2014-05-16 15:32:01.669 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=pt_BR
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.osgi 2 0 2014-05-16 15:32:10.680
+!MESSAGE Ao carregar a classe "com.totvs.tds.core.server.TOTVSServers$1", o encadeamento "Thread[Thread-2,6,main]" teve seu tempo de execução esgotado aguardando (5000ms) para que o encadeamento "Thread[main,6,main]" concluísse o início do pacote "com.totvs.tds.core_11.2.32.201307051511 [466]". Para evitar conflito, o encadeamento "Thread[Thread-2,6,main]" prosseguirá mas "com.totvs.tds.core.server.TOTVSServers$1" pode não ser inicializado totalmente.
+!STACK 0
+org.osgi.framework.BundleException: Alteração do estado no progresso do pacote {0} pela segmentação {1}.
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 17 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+
+!ENTRY org.eclipse.ui 4 4 2014-05-16 15:32:12.580
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:32:12.620
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_1_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:32:12.620
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_lblNewLabel_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:32:12.620
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:32:12.630
+!MESSAGE NLS missing message: TotvsServerMonitor_text_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.ui 4 4 2014-05-16 15:32:16.222
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.jface 2 0 2014-05-16 15:32:16.272
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-05-16 15:32:16.272
+!MESSAGE A conflict occurred for CTRL+A:
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@98e93a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@98e93a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@98e93a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@98e93a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-16 15:33:30.430
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.180
+!MESSAGE Ignorando o gabarito createtemp porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.185
+!MESSAGE Ignorando o gabarito declareeforeach porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.190
+!MESSAGE Ignorando o gabarito declareeopencursor porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.195
+!MESSAGE Ignorando o gabarito deletenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.200
+!MESSAGE Ignorando o gabarito insertnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.205
+!MESSAGE Ignorando o gabarito isnull porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.209
+!MESSAGE Ignorando o gabarito selectnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.213
+!MESSAGE Ignorando o gabarito sqlcodevalidation porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.216
+!MESSAGE Ignorando o gabarito transacao porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.219
+!MESSAGE Ignorando o gabarito updatenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.222
+!MESSAGE Ignorando o gabarito whenevercontinue porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-16 15:37:21.225
+!MESSAGE Ignorando o gabarito wheneverstop porque ele não tem ID.
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.618
+!MESSAGE NLS unused message: Activator_2 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.621
+!MESSAGE NLS unused message: Activator_1 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.624
+!MESSAGE NLS unused message: Activator_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.627
+!MESSAGE NLS unused message: Activator_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.630
+!MESSAGE NLS missing message: ASPSourceEditor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.633
+!MESSAGE NLS missing message: ASPSourceEditor_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.635
+!MESSAGE NLS missing message: ContentAssistProcessor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.638
+!MESSAGE NLS missing message: ContentAssistProcessor_7 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.641
+!MESSAGE NLS missing message: TotvsEditor_10 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:37:21.742
+!MESSAGE NLS missing message: TotvsEditor_9 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 15:39:37.802
+!MESSAGE NLS unused message: LocalAppServer_23 in: com.totvs.tds.core.extensions.servers.messages
+
+!ENTRY org.eclipse.ui 4 0 2014-05-16 15:42:33.360
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.954
+!MESSAGE NLS unused message: dw_lblSelecionaODestino_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.959
+!MESSAGE NLS unused message: dw_SelecionarDiretorioPacote_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.964
+!MESSAGE NLS unused message: dw_btnNewButton_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.969
+!MESSAGE NLS unused message: dw_lblNewLabel_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.973
+!MESSAGE NLS unused message: dw_lblSelecionaODestino_text_1 in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.976
+!MESSAGE NLS unused message: dw_button_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.979
+!MESSAGE NLS missing message: TOTVSCompilaVersaoPageProjects_lblSeleopodeseUtilizar_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.982
+!MESSAGE NLS missing message: TOTVSCompilaVersaoPageProjects_btApplySelection_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.986
+!MESSAGE NLS missing message: TOTVSCompilaVersaoPageEnvironment_btnLoadCfg_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-16 16:09:23.989
+!MESSAGE NLS missing message: TOTVSCompilaVersaoPageProjects_btnSalvarConfigurao_text in: com.totvs.tds.core.patch.CompilaVersao.messages
+!SESSION 2014-05-19 16:37:35.465 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=pt_BR
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.osgi 2 0 2014-05-19 16:37:52.865
+!MESSAGE Ao carregar a classe "com.totvs.tds.core.server.TOTVSServers$1", o encadeamento "Thread[Thread-2,6,main]" teve seu tempo de execução esgotado aguardando (5007ms) para que o encadeamento "Thread[main,6,main]" concluísse o início do pacote "com.totvs.tds.core_11.2.32.201307051511 [466]". Para evitar conflito, o encadeamento "Thread[Thread-2,6,main]" prosseguirá mas "com.totvs.tds.core.server.TOTVSServers$1" pode não ser inicializado totalmente.
+!STACK 0
+org.osgi.framework.BundleException: Alteração do estado no progresso do pacote {0} pela segmentação {1}.
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 17 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+
+!ENTRY org.eclipse.ui 4 4 2014-05-19 16:37:55.397
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:37:55.439
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_1_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:37:55.442
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_lblNewLabel_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:37:55.445
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:37:55.449
+!MESSAGE NLS missing message: TotvsServerMonitor_text_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.ui 4 4 2014-05-19 16:38:01.803
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.jface 2 0 2014-05-19 16:38:01.852
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-05-19 16:38:01.852
+!MESSAGE A conflict occurred for CTRL+A:
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@99f15e,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@99f15e,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@99f15e,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@99f15e,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.891
+!MESSAGE Ignorando o gabarito createtemp porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.894
+!MESSAGE Ignorando o gabarito declareeforeach porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.897
+!MESSAGE Ignorando o gabarito declareeopencursor porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.900
+!MESSAGE Ignorando o gabarito deletenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.903
+!MESSAGE Ignorando o gabarito insertnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.906
+!MESSAGE Ignorando o gabarito isnull porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.909
+!MESSAGE Ignorando o gabarito selectnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.912
+!MESSAGE Ignorando o gabarito sqlcodevalidation porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.915
+!MESSAGE Ignorando o gabarito transacao porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.918
+!MESSAGE Ignorando o gabarito updatenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.921
+!MESSAGE Ignorando o gabarito whenevercontinue porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-19 16:38:28.924
+!MESSAGE Ignorando o gabarito wheneverstop porque ele não tem ID.
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.249
+!MESSAGE NLS unused message: Activator_2 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.254
+!MESSAGE NLS unused message: Activator_1 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.259
+!MESSAGE NLS unused message: Activator_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.264
+!MESSAGE NLS unused message: Activator_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.270
+!MESSAGE NLS missing message: ASPSourceEditor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.275
+!MESSAGE NLS missing message: ASPSourceEditor_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.278
+!MESSAGE NLS missing message: ContentAssistProcessor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.281
+!MESSAGE NLS missing message: ContentAssistProcessor_7 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.284
+!MESSAGE NLS missing message: TotvsEditor_10 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:29.287
+!MESSAGE NLS missing message: TotvsEditor_9 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.ui 4 0 2014-05-19 16:38:41.438
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-19 16:38:43.689
+!MESSAGE NLS unused message: LocalAppServer_23 in: com.totvs.tds.core.extensions.servers.messages
+
+!ENTRY org.eclipse.ui 4 0 2014-05-19 16:42:51.171
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 15:08:21.309
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 15:32:06.271
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:26:14.887
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:28:24.150
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+!SESSION 2014-05-20 16:28:35.747 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=pt_BR
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.osgi 2 0 2014-05-20 16:28:43.928
+!MESSAGE Ao carregar a classe "com.totvs.tds.core.server.TOTVSServers$1", o encadeamento "Thread[Thread-2,6,main]" teve seu tempo de execução esgotado aguardando (5006ms) para que o encadeamento "Thread[main,6,main]" concluísse o início do pacote "com.totvs.tds.core_11.2.32.201307051511 [466]". Para evitar conflito, o encadeamento "Thread[Thread-2,6,main]" prosseguirá mas "com.totvs.tds.core.server.TOTVSServers$1" pode não ser inicializado totalmente.
+!STACK 0
+org.osgi.framework.BundleException: Alteração do estado no progresso do pacote {0} pela segmentação {1}.
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 17 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+
+!ENTRY org.eclipse.ui 4 4 2014-05-20 16:28:44.640
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-20 16:28:44.653
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_1_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-20 16:28:44.657
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_lblNewLabel_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-20 16:28:44.661
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-20 16:28:44.665
+!MESSAGE NLS missing message: TotvsServerMonitor_text_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.ui 4 4 2014-05-20 16:28:46.155
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.jface 2 0 2014-05-20 16:28:46.211
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-05-20 16:28:46.211
+!MESSAGE A conflict occurred for CTRL+A:
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@c824d8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@c824d8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@c824d8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@c824d8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@c824d8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:29:22.237
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl.refreshBreakpoints(SelectServerEnvironmentControl.java:365)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl.validarSelecaoDeAmbiente(SelectServerEnvironmentControl.java:349)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:280)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:29:26.679
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-20 16:29:27.379
+!MESSAGE NLS unused message: LocalAppServer_23 in: com.totvs.tds.core.extensions.servers.messages
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:31:52.552
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2014-05-20 16:32:41.951
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+!SESSION 2014-05-22 14:55:43.371 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=pt_BR
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.osgi 2 0 2014-05-22 14:55:52.644
+!MESSAGE Ao carregar a classe "com.totvs.tds.core.server.TOTVSServers$1", o encadeamento "Thread[Thread-2,6,main]" teve seu tempo de execução esgotado aguardando (5006ms) para que o encadeamento "Thread[main,6,main]" concluísse o início do pacote "com.totvs.tds.core_11.2.32.201307051511 [466]". Para evitar conflito, o encadeamento "Thread[Thread-2,6,main]" prosseguirá mas "com.totvs.tds.core.server.TOTVSServers$1" pode não ser inicializado totalmente.
+!STACK 0
+org.osgi.framework.BundleException: Alteração do estado no progresso do pacote {0} pela segmentação {1}.
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 17 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1087)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:297)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at com.totvs.tds.core.server.TOTVSServers.sortByComparator(TOTVSServers.java:143)
+	at com.totvs.tds.core.server.TOTVSServers.getActiveServers(TOTVSServers.java:127)
+	at com.totvs.tds.core.tools.beans.TOTVSTools.run(TOTVSTools.java:144)
+	at java.lang.Thread.run(Unknown Source)
+
+!ENTRY org.eclipse.ui 4 4 2014-05-22 14:55:54.791
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 14:55:54.811
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_1_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 14:55:54.815
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_lblNewLabel_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 14:55:54.818
+!MESSAGE NLS unused message: TotvsServerLogRepDialog_btnNewButton_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 14:55:54.822
+!MESSAGE NLS missing message: TotvsServerMonitor_text_text in: com.totvs.tds.core.server.ui.messages
+
+!ENTRY org.eclipse.ui 4 4 2014-05-22 14:55:59.159
+!MESSAGE Unable to create menu item "com.totvs.tds.core.serverServerEnvironmentSelection", command "com.totvs.tds.core.serverServerEnvironmentSelection" not defined
+
+!ENTRY org.eclipse.jface 2 0 2014-05-22 14:55:59.209
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-05-22 14:55:59.209
+!MESSAGE A conflict occurred for CTRL+A:
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@1059a3b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@1059a3b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@1059a3b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@1059a3b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+A,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.selectAll,Selecionar Todos,
+		Selecionar tudo,
+		Category(org.eclipse.ui.category.edit,Editar,null,true),
+		org.eclipse.ui.internal.handlers.SelectAllHandler@1059a3b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.569
+!MESSAGE Ignorando o gabarito createtemp porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.572
+!MESSAGE Ignorando o gabarito declareeforeach porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.575
+!MESSAGE Ignorando o gabarito declareeopencursor porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.578
+!MESSAGE Ignorando o gabarito deletenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.581
+!MESSAGE Ignorando o gabarito insertnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.584
+!MESSAGE Ignorando o gabarito isnull porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.587
+!MESSAGE Ignorando o gabarito selectnoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.590
+!MESSAGE Ignorando o gabarito sqlcodevalidation porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.593
+!MESSAGE Ignorando o gabarito transacao porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.596
+!MESSAGE Ignorando o gabarito updatenoerror porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.599
+!MESSAGE Ignorando o gabarito whenevercontinue porque ele não tem ID.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2014-05-22 15:03:19.602
+!MESSAGE Ignorando o gabarito wheneverstop porque ele não tem ID.
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.545
+!MESSAGE NLS unused message: Activator_2 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.550
+!MESSAGE NLS unused message: Activator_1 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.555
+!MESSAGE NLS unused message: Activator_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.560
+!MESSAGE NLS unused message: Activator_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.566
+!MESSAGE NLS missing message: ASPSourceEditor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.571
+!MESSAGE NLS missing message: ASPSourceEditor_5 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.576
+!MESSAGE NLS missing message: ContentAssistProcessor_4 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.579
+!MESSAGE NLS missing message: ContentAssistProcessor_7 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.581
+!MESSAGE NLS missing message: TotvsEditor_10 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:20.584
+!MESSAGE NLS missing message: TotvsEditor_9 in: com.totvs.tds.editor.messages
+
+!ENTRY org.eclipse.ui 4 0 2014-05-22 15:03:56.726
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+	at com.totvs.tds.core.extensions.TotvsServersExtensionView.setIconConnected(TotvsServersExtensionView.java:1971)
+	at com.totvs.tds.core.server.ui.SelectServerEnvironmentControl$MenuItemAction.widgetSelected(SelectServerEnvironmentControl.java:282)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:240)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4165)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3754)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2701)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2665)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2499)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:679)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:668)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:123)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-22 15:03:56.808
+!MESSAGE NLS unused message: LocalAppServer_23 in: com.totvs.tds.core.extensions.servers.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-23 11:14:06.038
+!MESSAGE NLS missing message: DBAccessMonitor_text_1_text in: com.totvs.tds.sdk.dbaccess.ui.monitor.messages
+
+!ENTRY org.eclipse.osgi 2 1 2014-05-23 12:35:22.975
+!MESSAGE NLS missing message: AdvPLLaunchTab_group_text in: com.totvs.tds.debug.ui.launcher.messages

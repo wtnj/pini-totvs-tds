@@ -1048,7 +1048,9 @@ For nY := 1 To nNumNF
 		    endif
 		
 		next nX        
-        return
+        If ! MsgYesNo("Deseja continuar mesmo assim?")
+	        return
+	 	EndIf
     EndIf
 Next nY        
 
@@ -1204,8 +1206,10 @@ For nY := 1 To nNumNF
 				msunlock()
 			endif
 		next nX
-        
-        return
+  	If ! MsgYesNo("Deseja continuar mesmo assim?")
+		return
+	EndIf
+       
     EndIf
 Next nY
 
@@ -1302,16 +1306,29 @@ For nX := 1 To len(aCols)
         C6_EDSUSP   := 9999
         C6_REGCOT   := '99'+space(13)
         C6_TPPROG   := 'N'
-        C6_SITUAC   :='AA'                                                        
-//        c6_comis1 := IIF(cTComis1 $ "OP",cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMOTEL")),cValToChar(posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMREP1")))
-        if !empty(sc5->c5_vend3)
-        	c6_comis3 := posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMSUP")
-        endif
-        if !empty(sc5->c5_vend4)
-        	c6_comis4 := posicione("SZ3",1,xfilial("SZ3")+aCols[nX][5]+cRegiao,"Z3_COMGLOC")
-        endif     
+        C6_SITUAC   :='AA'  
+
+        SZ3->(DBSELECTAREA("SZ3"))
+        SZ3->(DBGOTOP())
+        If SZ3->(DBSEEK(xfilial("SZ3")+aCols[nX][5]+cRegiao))                                                             
+	  		If cTComis1 $ "OP"
+	  			c6_comis1 := SZ3->Z3_COMOTEL
+			Else
+				c6_comis1 := SZ3->Z3_COMREP1
+			Endif
+	        
+	        If !empty(sc5->c5_vend3)
+	        	c6_comis3 := SZ3->Z3_COMSUP
+	        endif
+	        
+	        If !empty(sc5->c5_vend4)
+	        	c6_comis4 := SZ3->Z3_COMGLOC
+	        endif     
+	    EndIf
+	        
         C6_CLASFIS := Subs(SB1->B1_ORIGEM,1,1)+SF4->F4_SITTRIB //20100715
-		msunlock()    
+		
+	msunlock()    
 
 		//u_PINILOGP3(cCliente, cLoja, cSerie, cDoc, cItem, cProd, cTipo, cCliLog, cLojaLog, cSerLog, cDocLog, cPedLog, cTransf, nQtdLog)
         U_PINILOGP3(m->ZZY_client, m->ZZY_loja, aCols[nX][4], aCols[nX][3], aCols[nX][1], aCols[nX][5], "PE", "PEDIDO/ NUMERO "+ m->ZZY_pedido +"/ CLI: "+ m->ZZY_nclien + m->ZZY_loja +"/ EM "+ DTOS(DDATABASE), m->ZZY_nclien, m->ZZY_nloja, nil, nil, m->ZZY_pedido, nil, aCols[nX][7])  //pedido Nf Devolucao

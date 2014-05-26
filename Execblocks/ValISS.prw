@@ -25,7 +25,7 @@ DbSelectArea("SF4")
 DbSetOrder(1)
 DbSeek(xFilial("SF4")+SD2->D2_TES)
 IF SF4->F4_DUPLIC=='S'
-   If Trim(SD2->D2_SERIE)$'UNI%D1%CUP%CFA%CFB%CFS%ANG%CFE%NFS%SEN%ECF%1%8%4' //20090611 //20100507 ECF
+   If Trim(SD2->D2_SERIE)$'UNI%D1%CUP%CFA%CFB%CFS%ANG%CFE%NFS%SEN%ECF%1%8%4%5' //20090611 //20100507 ECF //Rodolfo Vacari 23/05/14 Solicitado por Jose Ricardo
    	   if SB1->B1_TIPO=="CD" //20090525 salgado
 	   	   mISS:=0//20090525 salgado
    	   elseif SB1->B1_TIPO=="EV" //20090525 salgado

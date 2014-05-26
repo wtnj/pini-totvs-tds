@@ -55,7 +55,15 @@ EndIf
 cCodigoP := aCols[n,nPosProduto]
 nSaldo := U_CONSSLDO(cCodigoP,aCols[n,nTipoLocal], aCols[n,nPosTes] )             
 
-If ! ALLTRIM(M->C5_TIPOOP) $ "500|30"  
+SB1->(DBSELECTAREA("SB1"))
+SB1->(DBSETORDER(1))
+SB1->(DBSEEK(xFilial("SB1") + ALLTRIM(aCols[n,nPosProduto]) ))
+
+If ! ALLTRIM(M->C5_TIPOOP) $ "500|30"
+	Return(.T.)
+EndIf
+
+If ! ALLTRIM(M->C5_TIPOOP) $ "500|30" .And. SB1->B1_GRUPO $ "0100|0300|4000|3610|0804" 
 	//Validação para não deixar item duplicado.
 	For  nX := 1 To len(aCols)
 		If ! ACOLS[N,LEN(ACOLS[N])] .And. aCols[n,nTipoLocal] == "T5" .or. aCols[n,nTipoLocal] == "T6"
