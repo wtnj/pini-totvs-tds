@@ -472,7 +472,7 @@ Private _cBloq	:= "1"
 SA1->(DBSELECTAREA("SA1"))
 SA1->(DBSETORDER(3)) 
 
-_cCPFCGC := IIF(ZC1->ZC1_TIPOSI = "2", ZC1->ZC1_CGCS,SUBSTR(ZC1->ZC1_CGCS,4,11))
+_cCPFCGC := IIF(ZC1->ZC1_TIPOSI = "J", ZC1->ZC1_CGCS,SUBSTR(ZC1->ZC1_CGCS,4,11))
 
 If VAL(_cCPFCGC) == 0
 	Alert("Verificar CPF do Cliente " + ZC1->ZC1_PEDSIT)
@@ -521,7 +521,7 @@ EndIf
 						{"A1_TIPO"      	,"F"					,Nil},; // Tipo				 
 						{"A1_END"       	,_cEnd					,Nil},; // Endereco				 
  						{"A1_MUN"       	,_cMunip				,Nil},; // Munincipio					 
-						{"A1_PESSOA"    	,IIF(LEN(_cCPFCGC) == 11, "F", "J")		,Nil},; // Tipo do Cliente
+						{"A1_PESSOA"    	,IIF(ZC1->ZC1_TIPOSI == "F", "F", "J")		,Nil},; // Tipo do Cliente
 						{"A1_CGC"    		,_cCPFCGC				,Nil},; // CGC
 						{"A1_BAIRRO"   		,_cBairro				,Nil},; // Bairro
 						{"A1_CEP"   		,_cCep			   		,Nil},; // Cep
@@ -739,7 +739,7 @@ Private _nDescP := 0
 		dbselectarea("SA1")
 		dbsetorder(3)
 		
-		_cCPFCGC := IIF(ZC1->ZC1_TIPOSI = "2", ZC1->ZC1_CGCS,SUBSTR(ZC1->ZC1_CGCS,4,11))
+		_cCPFCGC := IIF(ZC1->ZC1_TIPOSI = "J", ZC1->ZC1_CGCS,SUBSTR(ZC1->ZC1_CGCS,4,11))
 
 		If ! SA1->(DBSEEK(xFilial("SA1") + _cCPFCGC ))
 			MsgAlert("Cliente não localizado!")
@@ -874,7 +874,7 @@ Private _nDescP := 0
 					
 					If ZC1->ZC1_ZPARS >= 3
 						SC5->C5_PARC3	:= ZC1->ZC1_VALORS  / ZC1->ZC1_ZPARS 
-						SC5->C5_DATA3	:= ddatabase	+ (nDias * 3)                  
+						SC5->C5_DATA3	:= ddatabase	+ (90 * 3)                  
 					EndIf               
 					
 					If ZC1->ZC1_ZPARS >= 4
@@ -1139,7 +1139,7 @@ EndIf
 	@ 012, 140 MSGET oGet1 VAR _cNome 		SIZE 149, 010 OF oDlg COLORS 0, 16777215 PIXEL
 		
     @ 028, 040 MSGET oGet1 VAR _cEnd 		SIZE 249, 010 OF oDlg COLORS 0, 16777215 PIXEL
-    @ 043, 040 MSGET oGet2 VAR _cBairro 	SIZE 137, 010 OF oDlg COLORS 0, 16777215 PIXEL
+    @ 043, 040 MSGET oGet2 VAR _cBairro 	SIZE 137, 010 OF oDlg VALID (IIF(EMPTY(_cBairro),.F.,.T.)) COLORS 0, 16777215 PIXEL
     @ 057, 040 MSGET oGet3 VAR _cCep 		SIZE 069, 010 OF oDlg  PICTURE "@R 99999-999" COLORS 0, 16777215 PIXEL
     @ 057, 140 MSGET oGet4 VAR _cEstado 	SIZE 035, 010 OF oDlg COLORS 0, 16777215 PIXEL
     @ 072, 040 MSGET oGet5 VAR _cMunip 		SIZE 069, 010 OF oDlg COLORS 0, 16777215 PIXEL

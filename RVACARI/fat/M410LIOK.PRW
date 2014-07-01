@@ -58,13 +58,14 @@ nSaldo := U_CONSSLDO(cCodigoP,aCols[n,nTipoLocal], aCols[n,nPosTes] )
 SB1->(DBSELECTAREA("SB1"))
 SB1->(DBSETORDER(1))
 SB1->(DBSEEK(xFilial("SB1") + ALLTRIM(aCols[n,nPosProduto]) ))
-
-If ! ALLTRIM(M->C5_TIPOOP) $ "500|30"
+/*
+If ALLTRIM(M->C5_TIPOOP) $ "500|30"
 	Return(.T.)
 EndIf
-
-If ! ALLTRIM(M->C5_TIPOOP) $ "500|30" .And. SB1->B1_GRUPO $ "0100|0300|4000|3610|0804" 
+*/
+If ( ! ALLTRIM(M->C5_LOTEFAT) $ "500|30" .and.   ! SB1->B1_GRUPO $ "0100|0300|4000|3610|0804" )
 	//Validação para não deixar item duplicado.
+	
 	For  nX := 1 To len(aCols)
 		If ! ACOLS[N,LEN(ACOLS[N])] .And. aCols[n,nTipoLocal] == "T5" .or. aCols[n,nTipoLocal] == "T6"
 			If nX != n .And. cCodigoP == aCols[nX,nPosProduto] .And. ! ACOLS[nX,LEN(ACOLS[nX])]  
@@ -76,8 +77,8 @@ If ! ALLTRIM(M->C5_TIPOOP) $ "500|30" .And. SB1->B1_GRUPO $ "0100|0300|4000|3610
            
 	//Valida quantidade em Estoque
 	If ! ACOLS[N,LEN(ACOLS[N])] .And. aCols[n,nTipoLocal] == "T5" .or. aCols[n,nTipoLocal] == "T6"
-		If  nSaldo < aCols[n,nPosQuant] .And. ! ACOLS[n,LEN(ACOLS[n])]  
-			Alert("ATENÇÃO: Produto: " + ALLTRIM(cCodigoP) + " Não contem saldo suficiente para atender este pedido, Saldo: " + cValToChar(nSaldo) ,"M410LIOK") 
+		If  nSaldo < aCols[n,nPosQuant] .And. (! ACOLS[n,LEN(ACOLS[n])])  
+			Alert("ATENÇÃO: Produto: " + ALLTRIM(cCodigoP) + " Não contem saldo suficiente para atender este pedido: " + cValToChar(nSaldo) ,"M410LIOK") 
 			nRetorno := .F.         
         Endif
     Endif           
@@ -92,13 +93,13 @@ User Function CONSSLDO(_cCodigo,_cLocal, _cTes)
 
 Private nSaldo := 0
 
-cQuery := " SELECT (B2_QATU - B2_RESERVA) AS B2_QATU FROM "+RETSQLNAME("SB2")+" SB2 " 
+cQuery := " SELECT (B2_QATU - B2_RESERVA) AS B2_QATU FROM "+RETSQLNAME("SB2")+" SB2  " 
 cQuery += " WHERE SB2.D_E_L_E_T_ != '*' AND SB2.B2_LOCAL = '"+_cLocal+"' AND SB2.B2_COD = '"+_cCodigo+"' "
 
 dbUseArea(.T., "TOPCONN", TCGenQry(, , cQuery), "TRB", .F., .T.)
 
 
-cQuery := " SELECT F4_ESTOQUE FROM SF4010 WHERE D_E_L_E_T_ != '*' AND F4_CODIGO = '"+_cTes+"' "
+cQuery := " SELECT F4_ESTOQUE FROM "+RETSQLNAME("SF4")+" SF4 WHERE D_E_L_E_T_ != '*' AND F4_FILIAL = '01' AND F4_CODIGO = '"+_cTes+"' "
 
 dbUseArea(.T., "TOPCONN", TCGenQry(, , cQuery), "TRD", .F., .T.)
 

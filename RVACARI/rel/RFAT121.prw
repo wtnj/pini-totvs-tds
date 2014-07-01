@@ -1,4 +1,5 @@
 #include "totvs.ch"
+#include "protheus.ch"
 #INCLUDE "TOPCONN.CH"  //consulta SQL
 /*/
 ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
@@ -61,6 +62,11 @@ Private _cCodP
 Private _cDescP
 Private _cDocOr
 Private _cEmiss
+Private _nSomaC	:= 0
+Private _nSomaT	:= 0
+Private _nSomaS1	:= 0
+Private _nSomaE	:= 0     
+Private _nSomaS	:= 0
 
 
 if mv_par05  == 1
@@ -90,19 +96,28 @@ If mv_par07  == 1
 	If TCSPExist("SP_REL_PODER_TERCEIROS")
 		
 		aRet := TCSPExec("SP_REL_PODER_TERCEIROS", mv_par01, mv_par02, dtos(mv_par03), dtos(mv_par04), cSituacao, cFormato)
-				
+		/*		
 		cQuery := "SELECT TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, ROUND(QTDSAIDA,1) AS QTDSAIDA, ROUND(NVL(QTDENTR,0),1) AS QTDENTR, ROUND(QTDDIF,1) AS QTDDIF, SD2.D2_CUSTO1 AS CUSTO1"
 		cQuery += " FROM rel_poder_terceiros "
 		cQuery += " JOIN SD2010 SD2 ON SD2.D_E_L_E_T_ != '*' AND SD2.D2_DOC = DOCORI AND SD2.D2_SERIE = SERIE AND SD2.D2_COD = PRODUTO "
-		cQuery += " WHERE TIPO = 'S' ORDER BY SERIEORI, DOCORI, PRODUTO, TIPO DESC "
+		cQuery += " WHERE TIPO = 'S' " 
+		cQuery += " ORDER BY SERIEORI, DOCORI, PRODUTO, TIPO DESC "
+		*/
 		
+		cQuery := "SELECT TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, ROUND(QTDSAIDA,1) AS QTDSAIDA, ROUND(NVL(QTDENTR,0),1) AS QTDENTR, ROUND(QTDDIF,1) AS QTDDIF, AVG(SD2.D2_CUSTO1) AS CUSTO1 " + CRLF
+		cQuery += " FROM rel_poder_terceiros " + CRLF 
+		cQuery += " JOIN SD2010 SD2 ON SD2.D_E_L_E_T_ != '*' AND SD2.D2_FILIAL = '01' AND SD2.D2_DOC = DOCORI AND SD2.D2_SERIE = SERIE AND SD2.D2_COD = PRODUTO AND DOCORI = SD2.D2_DOC " + CRLF 
+		cQuery += " WHERE TIPO = 'S' AND DOCORI LIKE  '%061205%' " + CRLF
+		cQuery += " GROUP BY TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, QTDSAIDA, QTDENTR, QTDDIF " + CRLF
+		cQuery += " ORDER BY SERIEORI, DOCORI, PRODUTO, TIPO DESC " + CRLF
+		 
 		MsAguarde({|| DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PODER3", .T., .F. )},"Aguarde - NAO DESCONECTE!","Selecionando dados. Isto pode demorar um pouco...")
 		
 		TcSetField("PODER3","QTDSAIDA" ,"N",10,0)
 		TcSetField("PODER3","QTDENTR"  ,"N",10,0)
 		TcSetField("PODER3","QTDDIF"   ,"N",10,0)
     	
- 		cMontaCVS := "TIPO; SERIEORI; DOCORI; SERIE; DOC; OBS; EMISSAO; TPPROD; PRODUTO; DESCR; QTDSAIDA; QTDENTR; QTDDIF; CUSTO;"
+ 		cMontaCVS := "TIPO; SERIEORI; DOCORI; SERIE; DOC; OBS; EMISSAO; TPPROD; PRODUTO; DESCR; QTDSAIDA; QTDENTR; QTDDIF; CUSTO_SAIDA; CUSTO_ENTRADA;SAIDA-ENTRADA"
  		
  		cMontaCVS += CRLF // Salto de linha para .csv (excel)  
 			
@@ -128,12 +143,12 @@ If mv_par07  == 1
 			//Busca dados da entrada
 			
 			cQuery := "SELECT TIPO, SERIEORI, DOCORI, SERIE, DOC, OBS, EMISSAO, TPPROD, PRODUTO, DESCR, ROUND(QTDSAIDA,1) AS QTDSAIDA, ROUND(NVL(QTDENTR,0),1) AS QTDENTR, ROUND(QTDDIF,1) AS QTDDIF, ROUND(CUSTO1,1) AS CUSTO1 FROM rel_poder_terceiros"
-			cQuery += " WHERE TIPO = 'E' AND DOCORI = '"+PODER3->DOCORI+"' AND PRODUTO = '"+PODER3->PRODUTO+"' " 
+			cQuery += " WHERE TIPO = 'E' AND DOCORI = '"+PODER3->DOCORI+"' AND PRODUTO = '"+PODER3->PRODUTO+"'  " 
 			cQuery += " ORDER BY SERIEORI, DOCORI, PRODUTO, TIPO DESC "
 			
 			DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "PODER32", .T., .F. )
 			
-			If ! EMPTY (PODER3->TIPO)
+			If ! EMPTY (PODER32->TIPO)
 					
 					If MV_PAR06 == 1				
 						cMontaCVS += CRLF // Salto de linha para .csv (excel)
@@ -142,7 +157,8 @@ If mv_par07  == 1
 						Do While PODER32->(!EOF())
 						    
 						    If MV_PAR06 == 1
-						    
+						    	
+						    	
 								cMontaCVS += PODER32->TIPO + ";"
 								cMontaCVS += PODER32->SERIEORI + ";"
 								cMontaCVS += PODER32->DOCORI + ";"				 
@@ -156,36 +172,59 @@ If mv_par07  == 1
 								cMontaCVS += cValToChar(PODER32->QTDSAIDA) + ";"
 								cMontaCVS += cValToChar(PODER32->QTDENTR) + ";"
 								cMontaCVS += cValToChar(PODER32->QTDDIF) + ";" 
-								cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * PODER32->QTDENTR,2) ) + ";"
-																						           
-					        	cMontaCVS += CRLF // Salto de linha para .csv (excel)
+								cMontaCVS += IIF( PODER32->TIPO == "S" ,cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) ,2) ) + ";","0" + ";")
+								cMontaCVS += IIF( PODER32->TIPO == "E" ,cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * PODER32->QTDENTR ,2) ) + ";","0" + ";")
+							
+					        	cMontaCVS += CRLF // Salto de linha para .csv (excel) 
+					        
+					        	_nSomaE	+= IIF( PODER32->TIPO == "E" , ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * PODER32->QTDENTR ,2),0)					       
 					        Endif
 					        	 
-				        	nSomaS 		:= nSomaS + PODER32->QTDENTR
-				        	_cCodP		:= PODER32->PRODUTO
-				        	_cDescP 	:= PODER32->DESCR
-				        	_cDocOr	:= PODER32->DOCORI
-				        	 			        		        	
+				        	nSomaS 		:= nSomaS + PODER32->QTDENTR   
+			        		_cCodP		:= PODER3->PRODUTO
+				        	_cDescP 	:= PODER3->DESCR
+				        	_cDocOr		:= PODER3->DOCORI
+				        	_nSomaC		:= _nSomaE
+				        	 
+				        				        		        	
 							PODER32->(dbSkip())
 						Enddo
 						
 						If MV_PAR06 == 1 .And. nSomaS != 0		        	
-			     			cMontaCVS += "Total;;"+_cDocOr+";;;;"+_cEmiss+";;"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" 
+			     			cMontaCVS += "TOTAL;;"+_cDocOr+";;;;"+_cEmiss+";"+PODER3->TPPROD+";"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" + cValToChar(PODER3->CUSTO1) + ";"+ cValToChar(_nSomaC) + ";"+ cValToChar(PODER3->CUSTO1 - _nSomaC)
+			     			_nSomaE 	:= 0 
+			     			nSomaS		:= 0
+			     			nSomaC		:= 0  
+			     			cMontaCVS += CRLF // Salto de linha para .csv (excel)
+			     			cMontaCVS += "TIPO; SERIEORI; DOCORI; SERIE; DOC; OBS; EMISSAO; TPPROD; PRODUTO; DESCR; QTDSAIDA; QTDENTR; QTDDIF; CUSTO_SAIDA; CUSTO_ENTRADA;SAIDA-ENTRADA" 
 						EndIf
-			Endif		
+			
+			Else		
 	                   
-	        //Busca informações do custo1
-			If MV_PAR06 == 1 .And. (PODER3->QTDSAIDA - nSomaS) != 0
-			
-				cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * (PODER3->QTDSAIDA - nSomaS),2) )
-						
-	     	Endif
-	
-		    nSomaS := 0
+	        	//Busca informações do custo1
+				If MV_PAR06 == 1 //.And. (PODER3->QTDSAIDA - nSomaS) != 0
+					
+		        	_cCodP		:= PODER3->PRODUTO
+		        	_cDescP 	:= PODER3->DESCR
+		        	_cDocOr		:= PODER3->DOCORI
+		
+					//cMontaCVS += cValToChar( ROUND((PODER3->CUSTO1 / PODER3->QTDSAIDA) * (PODER3->QTDSAIDA - nSomaS),2) )
+						cMontaCVS += CRLF 
+						_nSomaC := 0
+		     			cMontaCVS += "TOTAL;;"+_cDocOr+";;;;"+_cEmiss+";"+PODER3->TPPROD+";"+_cCodP+";"+_cDescP+";" + cValTochar(PODER3->QTDSAIDA) + ";" + cValToChar(nSomaS) + ";" + cValToChar((PODER3->QTDSAIDA - nSomaS)) + ";" + cValToChar(PODER3->CUSTO1) + ";"+ cValToChar(_nSomaC) + ";"+ cValToChar(PODER3->CUSTO1 - _nSomaC)
+		     			_nSomaE 	:= 0 
+		     			nSomaS		:= 0
+		     			nSomaC		:= 0  
+		     			cMontaCVS += CRLF // Salto de linha para .csv (excel)
+		     			cMontaCVS += "TIPO; SERIEORI; DOCORI; SERIE; DOC; OBS; EMISSAO; TPPROD; PRODUTO; DESCR; QTDSAIDA; QTDENTR; QTDDIF; CUSTO_SAIDA; CUSTO_ENTRADA;SAIDA-ENTRADA" 
+			  	Endif
+		
+			    nSomaS := 0
+			    
 		    
-	       	PODER32->(DBCloseArea("PODER32"))
-			
-				cMontaCVS += CRLF // Salto de linha para .csv (excel)  			
+			EndIf
+			cMontaCVS += CRLF // Salto de linha para .csv (excel)  			
+		   	PODER32->(DBCloseArea("PODER32"))
 			PODER3->(DBSKIP())
 		Enddo
 	    

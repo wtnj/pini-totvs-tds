@@ -18,9 +18,11 @@
 
 User Function MT110GRV()
 
+
+
 Local aArea     := GetArea()
 Local cRet := .T.
-
+Return
 //GRAVA O NOME DA FUNCAO NA Z03
 U_CFGRD001(FunName())
 

@@ -244,7 +244,7 @@ While !EOF() .and. dtos(SF2->F2_EMISSAO) >= dtos(DATADE) .and. dtos(SF2->F2_EMIS
 		DBSkip()             
 	END // LOOP DO SD2
 
-	IF MNFSERV == "S" .AND. ((SF2->F2_SERIE=="UNI" .and. SM0->M0_CODIGO<>"01") .or. (SF2->F2_SERIE == "SEN") .or. (SF2->F2_SERIE == "STD") .or. (SF2->F2_SERIE == "8  ") .or. (SF2->F2_SERIE == "4  ")) //20080220 SEN //20081031 STD //20090226 .and. SM0->M0_CODIGO<>"01" //20110404 //20130423
+	IF MNFSERV == "S" .AND. ((SF2->F2_SERIE=="UNI" .and. SM0->M0_CODIGO<>"01") .or. (SF2->F2_SERIE == "SEN") .or. (SF2->F2_SERIE == "STD") .or. (SF2->F2_SERIE == "8  ") .or. (SF2->F2_SERIE == "4  ") .or. (SF2->F2_SERIE == "5  "))  //20080220 SEN //20081031 STD //20090226 .and. SM0->M0_CODIGO<>"01" //20110404 //20130423
 		DbSelectArea("SC5")
 		DbSetOrder(1)  
 		IF DbSeek(xFilial("SC5")+MPEDIDO) // DEDUZIR A DESPESA DE REMESSA

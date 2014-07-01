@@ -2,9 +2,9 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="619" key="DIALOG_WIDTH"/>
-		<item value="438" key="DIALOG_Y_ORIGIN"/>
+		<item value="36" key="DIALOG_Y_ORIGIN"/>
 		<item value="283" key="DIALOG_HEIGHT"/>
-		<item value="314" key="DIALOG_X_ORIGIN"/>
+		<item value="829" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
@@ -13,18 +13,21 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="cNumPed" key="selection"/>
+		<item value="vUnTrib" key="selection"/>
 		<list key="findhistory">
-			<item value="cNumPed"/>
-			<item value="MPROGPA1"/>
-			<item value="ValorConta"/>
-			<item value="cTipo"/>
-			<item value="D1_ITEM"/>
-			<item value="Pfin030"/>
-			<item value="&lt;nDI&gt;"/>
-			<item value="nDI"/>
+			<item value="vUnTrib"/>
+			<item value="dt"/>
+			<item value="dtp"/>
+			<item value="DTPROVA"/>
+			<item value="DT"/>
+			<item value="vUnCom"/>
+			<item value="aProd"/>
+			<item value="D2_TOTAL"/>
 		</list>
 		<list key="replacehistory">
+			<item value="ZX1_"/>
+			<item value="ZX1"/>
+			<item value="ZX1-&gt;"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">

@@ -6,7 +6,7 @@
 ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
 ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
 ±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
-±±ºPrograma  ³PINISPCONTRIBºAutor  ³DANILO C S PALA     º Data ³  20130129   º±±
+±±ºPrograma  ³PINISPCONTRIBºAutor  ³DANILO C S PALA     º Data ³  20130129º±±
 ±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
 ±±ºDesc.     ³                                                            º±±
 ±±º          ³                                                            º±±
@@ -51,7 +51,7 @@ IF MV_PAR01==1
 	//ED
 	cQuery := cQuery + "select 'ED' as empresa, ft_conta, ft_aliqpis, ft_aliqcof, sum(ft_valcont) valorcont, sum(ft_total) total  from sft010 FT "
 	cQuery := cQuery + " where ft_filial='"+ xFilial("SFT") +"' AND ft_entrada>='"+ dtos(mv_par02) +"' AND ft_entrada<='"+ dtos(mv_par03) +"' and FT.d_e_l_e_t_<>'*'  "
-	cQuery := cQuery + " and (FT_CSTPIS<>'  ' OR FT_BASEPIS>0) AND FT_TIPOMOV='S'"
+	cQuery := cQuery + " and (FT_CSTPIS<>'  ' OR FT_BASEPIS>0) AND FT_TIPOMOV='E'"
 	cQuery := cQuery + " group by ft_conta , ft_aliqpis, ft_aliqcof"
 	cQuery := cQuery + " order by empresa, ft_conta ,ft_aliqpis, ft_aliqcof"
 	

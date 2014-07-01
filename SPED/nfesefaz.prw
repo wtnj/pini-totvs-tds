@@ -413,7 +413,7 @@ If cTipo == "1"
 							SF2->F2_DOC == (cAliasSD2)->D2_DOC . And. SF2->F2_SERIE == (cAliasSD2)->D2_SERIE .And.;
 							SF2->F2_CLIENTE == (cAliasSD2)->D2_CLIENTE .And. SF2->F2_LOJA == (cAliasSD2)->D2_LOJA .And.;
 							SF3->F3_TIPO == "S"
-							nPrTotal += (cAliasSD2)->D2_PRCVEN
+							nPrTotal += ROUND((cAliasSD2)->D2_PRCVEN,2)
 							SD2->(DbSkip ())
 	   				EndDo
 	   				
@@ -3865,21 +3865,26 @@ EndIf
 cString += NfeTag('<EXTIPI>',ConvType(aProd[06]))
 cString += '<CFOP>'+ConvType(aProd[07])+'</CFOP>'
 cString += '<uCom>'+ConvType(aProd[08])+'</uCom>'
+
 cString += '<qCom>'+ConvType(aProd[09],15,4)+'</qCom>'
-If cVerAmb== "2.00"
-	cString += '<vUnCom>'+ConvType(aProd[16],21,4)+'</vUnCom>'	 //20120209 cString += '<vUnCom>'+ConvType(aProd[16],21,8)+'</vUnCom>'	
-Else                                       
-	cString += '<vUnCom>'+ConvType(aProd[16],16,4)+'</vUnCom>'	//20120209
-Endif
+
+If cVerAmb== "2.00" //'	 //20120209 cString += '<vUnCom>'+ConvType(aProd[16],21,8)+'</vUnCom>'	teste
+       cString += '<vUnCom>'+ConvType(aProd[16],21,4)+'</vUnCom>' 
+Else                                      
+       cString += '<vUnCom>'+ConvType(aProd[16],16,4)+'</vUnCom>' 
+Endif 
+
 cString += '<vProd>' +ConvType(aProd[10],15,2)+'</vProd>' 
 cString += '<eantrib>'+ConvType(aProd[03])+'</eantrib>'
 cString += '<uTrib>'+ConvType(aProd[11])+'</uTrib>'
 cString += '<qTrib>' + ConvType(aProd[12], 15, Min(IIf(cTipo == "0", TamSX3("D1_QUANT")[2], TamSX3("D2_QUANT")[2]), 4)) + '</qTrib>'
+
 If cVerAmb== "2.00"
-	cString += '<vUnTrib>'+ConvType(aProd[10]/aProd[12],21,4)+'</vUnTrib>' //20120209 cString += '<vUnTrib>'+ConvType(aProd[10]/aProd[12],21,8)+'</vUnTrib>'		
+       cString += '<vUnTrib>'+ConvType(aProd[10]/aProd[12],21,4)+'</vUnTrib>'         
 Else
-	cString += '<vUnTrib>'+ConvType(aProd[10]/aProd[12],16,4)+'</vUnTrib>' //20120209	
-Endif
+      cString += '<vUnTrib>'+ConvType(aProd[10]/aProd[12],16,4)+'</vUnTrib>'   
+Endif	
+
 cString += NfeTag('<vFrete>',ConvType(aProd[13],15,2))
 cString += NfeTag('<vSeg>'  ,ConvType(aProd[14],15,2))
 cString += NfeTag('<vDesc>' ,ConvType((aProd[15]+aProd[26]),15,2))
@@ -5537,7 +5542,7 @@ Else
 	//nao alterei, deixei o padrao, vamos ver..
 	If (cAliasSD2)->D2_QUANT < 1
 	    
-		if (cAliasSD2)->D2_PRUNIT == (cAliasSD2)->D2_PRCVEN
+		if (cAliasSD2)->D2_PRUNIT == ROUND((cAliasSD2)->D2_PRCVEN,2)
 			nRetorno := ( ( ( (cAliasSD2)->D2_PRUNIT * (cAliasSD2)->D2_QUANT ) + nDesconto + (cAliasSD2)->D2_DESCZFR ) / (cAliasSD2)->D2_QUANT )	
 		else
 			nRetorno := ( ( ( (cAliasSD2)->D2_PRUNIT * (cAliasSD2)->D2_QUANT ) + (cAliasSD2)->D2_DESCZFR ) / (cAliasSD2)->D2_QUANT )

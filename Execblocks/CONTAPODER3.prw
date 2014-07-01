@@ -330,7 +330,7 @@ EndIf
 //Outros comandos
 
 //
-
+/*
 If SF4->F4_CODIGO = "662" .Or. SF4->F4_CODIGO = "FE6"
 
 
@@ -620,6 +620,6 @@ If SF4->F4_CODIGO = "662" .Or. SF4->F4_CODIGO = "FE6"
 Endif
 
 
-
+*/
 RestArea(aArea)
 RETURN(cConta)

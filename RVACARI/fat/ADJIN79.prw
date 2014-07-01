@@ -69,9 +69,9 @@ cQuery := " SELECT E1_FILIAL,E1_CLIENTE,E1_LOJA,E1_PREFIXO,E1_NUM,E1_PARCELA,E1_
 cQuery += " FROM SE1010 SE1 " + CRLF
 cQuery += " JOIN SC5010 SC5 ON SC5.D_E_L_E_T_ != '*' AND SC5.C5_FILIAL = SE1.E1_FILIAL AND SC5.C5_NUM = SE1.E1_PEDIDO AND SC5.C5_CLIENTE = SE1.E1_CLIENTE AND SE1.E1_LOJA = SC5.C5_LOJACLI " + CRLF
 cQuery += " JOIN SZ9010 SZ9 ON SZ9.D_E_L_E_T_ != '*' AND SC5.C5_FILIAL = SE1.E1_FILIAL AND SZ9.Z9_TIPOOP = SC5.C5_TIPOOP " + CRLF
-cQuery += " WHERE SE1.D_E_L_E_T_ != '*' AND SE1.D_E_L_E_T_ != '*'  AND SE1.E1_EMISSAO >= '20140101' " + CRLF
+cQuery += " WHERE SE1.D_E_L_E_T_ != '*' AND SE1.D_E_L_E_T_ != '*'  AND SE1.E1_EMISSAO >= '20140501' " + CRLF
 cQuery += " AND E1_NATUREZ != Z9_NATBX2 " + CRLF
-cQuery += " AND E1_PARCELA != 'A' AND E1_SALDO != 0 AND Z9_NATBX2 != ' ' " + CRLF
+cQuery += " AND E1_PARCELA NOT IN ( 'A', ' ') AND E1_SALDO != 0 AND Z9_NATBX2 != ' ' " + CRLF
 cQuery += " ORDER BY E1_EMISSAO " + CRLF
 
 dbUseArea(.T., "TOPCONN", TCGenQry(, , cQuery), "TRB", .F., .T.)
@@ -95,7 +95,46 @@ MSGINFO("Processamento OK FIN1!")
     
 	TRB->(DBCLOSEAREA())
 
+Return 
+
+User Function ADJFNATA()
+
+SE1->(DBSELECTAREA("SE1"))
+SE1->(DBSETORDER(2))
+SE1->(DBGOTOP())  
+
+cQuery := " SELECT E1_FILIAL,E1_CLIENTE,E1_LOJA,E1_PREFIXO,E1_NUM,E1_PARCELA,E1_TIPO,E1_NATUREZ, Z9_NATBX " + CRLF                                                                                             
+cQuery += " FROM SE1010 SE1 " + CRLF
+cQuery += " JOIN SC5010 SC5 ON SC5.D_E_L_E_T_ != '*' AND SC5.C5_FILIAL = SE1.E1_FILIAL AND SC5.C5_NUM = SE1.E1_PEDIDO AND SC5.C5_CLIENTE = SE1.E1_CLIENTE AND SE1.E1_LOJA = SC5.C5_LOJACLI " + CRLF
+cQuery += " JOIN SZ9010 SZ9 ON SZ9.D_E_L_E_T_ != '*' AND SC5.C5_FILIAL = SE1.E1_FILIAL AND SZ9.Z9_TIPOOP = SC5.C5_TIPOOP " + CRLF
+cQuery += " WHERE SE1.D_E_L_E_T_ != '*' AND SE1.D_E_L_E_T_ != '*'  AND SE1.E1_EMISSAO >= '20140501' " + CRLF
+cQuery += " AND E1_NATUREZ != Z9_NATBX " + CRLF
+cQuery += " AND E1_PARCELA = 'A' AND E1_SALDO != 0 AND Z9_NATBX != ' ' " + CRLF
+cQuery += " ORDER BY E1_EMISSAO " + CRLF
+
+dbUseArea(.T., "TOPCONN", TCGenQry(, , cQuery), "TRB", .F., .T.)
+
+Do While TRB->(!EOF())
+    
+		If SE1->(DBSEEK( TRB->E1_FILIAL + TRB->E1_CLIENTE + TRB->E1_LOJA + TRB->E1_PREFIXO + TRB->E1_NUM + TRB->E1_PARCELA + TRB->E1_TIPO ))
+	    	
+			SE1->(Reclock("SE1", .F.))
+			  
+			  SE1->E1_NATUREZ = TRB->Z9_NATBX
+			  
+			SE1->(msUnLock())
+		
+		EndIf		
+				
+	TRB->(DBSKIP())
+Enddo     
+	
+MSGINFO("Processamento OK FIN1!")
+    
+	TRB->(DBCLOSEAREA())
+
 Return  
+ 
 
 User Function ADJFVLR()
 

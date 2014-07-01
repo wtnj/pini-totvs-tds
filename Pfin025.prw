@@ -148,7 +148,7 @@ elseif alltrim(cLayout) == "Real240"
 elseif alltrim(cLayout) == "Banrisul"
 	ItpReg := 1 //inicio 
 	TtpReg := 1 //tamanho
-	Inossonum := 117 //inicio 
+	Inossonum := 52 //inicio 
 	Tnossonum := 10 //tamanho
 	Idesconto := 241 //inicio 
 	Tdesconto := 13 //tamanho

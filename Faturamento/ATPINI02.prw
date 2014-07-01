@@ -1310,7 +1310,7 @@ For nX := 1 To len(aCols)
 
         SZ3->(DBSELECTAREA("SZ3"))
         SZ3->(DBGOTOP())
-        If SZ3->(DBSEEK(xfilial("SZ3")+aCols[nX][5]+cRegiao))                                                             
+        If SZ3->(DBSEEK(xfilial("SZ3")+cValToChar(aCols[nX][5])+cValToChar(cRegiao)))                                                             
 	  		If cTComis1 $ "OP"
 	  			c6_comis1 := SZ3->Z3_COMOTEL
 			Else

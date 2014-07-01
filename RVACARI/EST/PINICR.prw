@@ -1,4 +1,4 @@
-#INCLUDE "rwmake.ch"
+#INCLUDE "protheus.ch"
 
 /*/
 ‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
@@ -120,23 +120,30 @@ SetRegua(RecCount())
 //≥ While !EOF() .And. xFilial() == A1_FILIAL                           ≥
 //¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ                   
 
-cQuery := " SELECT SC6.C6_NUM, SC5.C5_NOTA, SC6.C6_ITEM, SC6.C6_PRODUTO, SC6.C6_DESCRI, SC6.C6_LOCAL, SC6.C6_QTDVEN, SB2.B2_QATU, SB2.B2_RESERVA, SB2.B2_QATU - SB2.B2_RESERVA AS SALDO, SC6.C6_DATA "
-cQuery += " FROM SC6010 SC6 "
-cQuery += " JOIN SC5010 SC5 ON SC5.D_E_L_E_T_ != '*' "
-cQuery += "      AND SC6.C6_FILIAL = SC5.C5_FILIAL "
-cQuery += "      AND SC5.C5_NUM = SC6.C6_NUM "
-cQuery += "      AND SC5.C5_CLIENTE = SC6.C6_CLI "
-cQuery += "      AND SC5.C5_LOJACLI = SC6.C6_LOJA "
-cQuery += " JOIN SB2010 SB2 ON SB2.D_E_L_E_T_ != '*' "
-cQuery += "      AND SB2.B2_COD = SC6.C6_PRODUTO "
-cQuery += "      AND SB2.B2_LOCAL = SC6.C6_LOCAL "
-cQuery += " WHERE SC6.D_E_L_E_T_ != '*' "
-cQuery += " AND SC6.C6_NUM BETWEEN '"+MV_PAR01+"' AND '"+MV_PAR02+"' "
-cQuery += " AND SC6.C6_NOTA = ' ' "
-cQuery += " AND SC6.C6_DATA BETWEEN '"+DTOS(MV_PAR03)+"' AND '"+DTOS(MV_PAR04)+"' "
-cQuery += " AND SC6.C6_LOCAL BETWEEN '"+MV_PAR05+"' AND '"+MV_PAR06+"' "
-cQuery += " AND SC6.C6_PRODUTO BETWEEN '"+MV_PAR07+"' AND '"+MV_PAR08+"' "
-cQuery += " ORDER BY SC6.C6_NUM, SC6.C6_DATA "
+cQuery := " SELECT SC6.C6_NUM, SC5.C5_NOTA, SC6.C6_ITEM, SC6.C6_PRODUTO, SC6.C6_DESCRI, SC6.C6_LOCAL, SC6.C6_QTDVEN, SB2.B2_QATU, SB2.B2_RESERVA, SB2.B2_QATU - SB2.B2_RESERVA AS SALDO, SC6.C6_DATA " + CRLF
+cQuery += " FROM SC6010 SC6 " + CRLF
+cQuery += " JOIN SC5010 SC5 ON SC5.D_E_L_E_T_ != '*'  " + CRLF
+cQuery += "      AND SC6.C6_FILIAL = SC5.C5_FILIAL  " + CRLF
+cQuery += "      AND SC5.C5_NUM = SC6.C6_NUM  " + CRLF
+cQuery += "      AND SC5.C5_CLIENTE = SC6.C6_CLI  " + CRLF
+cQuery += "      AND SC5.C5_LOJACLI = SC6.C6_LOJA " + CRLF
+cQuery += " JOIN SB2010 SB2 ON SB2.D_E_L_E_T_ != '*' " + CRLF
+cQuery += "      AND SB2.B2_COD = SC6.C6_PRODUTO " + CRLF
+cQuery += "      AND SB2.B2_LOCAL = SC6.C6_LOCAL " + CRLF
+cQuery += " JOIN SB1010 SB1 ON SB1.D_E_L_E_T_ != '*' " + CRLF
+cQuery += "      AND SB1.B1_COD = SC6.C6_PRODUTO  " + CRLF
+cQuery += "      AND SB1.B1_FILIAL = '  ' " + CRLF
+cQuery += " WHERE SC6.D_E_L_E_T_ != '*' " + CRLF
+cQuery += " AND SC6.C6_FILIAL = '01' " + CRLF
+cQuery += " AND SC6.C6_LOCAL IN ('T5', 'T6') " + CRLF
+cQuery += " AND SB1.B1_TIPO NOT IN ('RE', 'DC') " + CRLF
+cQuery += " AND SC5.C5_NOTA = ' '  " + CRLF
+cQuery += " AND SC5.C5_LIBEROK != ' '  " + CRLF
+cQuery += " AND NOT EXISTS (SELECT D2_PEDIDO FROM SD2010 SD2 WHERE SD2.D2_PEDIDO = SC6.C6_NUM) " + CRLF
+cQuery += " AND SC6.C6_DATA BETWEEN '"+DTOS(MV_PAR03)+"' AND '"+DTOS(MV_PAR04)+"' "+ CRLF
+cQuery += " AND SC6.C6_LOCAL BETWEEN '"+MV_PAR05+"' AND '"+MV_PAR06+"' " + CRLF
+cQuery += " AND SC6.C6_PRODUTO BETWEEN '"+MV_PAR07+"' AND '"+MV_PAR08+"' " + CRLF
+cQuery += " ORDER BY SC6.C6_NUM, SC6.C6_DATA "+ CRLF 
 
 dbUseArea(.T., "TOPCONN", TCGenQry(, , cQuery), "TRB", .F., .T.)
 

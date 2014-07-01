@@ -1,0 +1,202 @@
+#include "rwmake.ch"
+#include "topconn.ch"
+#include "tbiconn.ch"
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณPfat253   บAutor  ณDanilo Pala         บ Data ณ  20130813   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ											                  บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ Pini                                                       บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/                                                             
+User Function Pfat253()
+//TELA
+Private _cTitulo  := "Administrar Revistas Avulsas"
+Private _ccMens1  := "Fonte: \siga\etiquetas\[arquivo].[txt]"
+Private cMsgFinal := space(200)
+Private cRevista  := ""
+Private cEdicao   := space(4)
+Private cOpcao := ""
+Private cQtd  	  := space(4)
+Private cDoc		:= SPACE(9)
+Private nCusto		:= 0
+Private aItens := {"0128 CM","0127 GUIA","0116 TEC","0124 AU","0125 EOA","0132 INFRA","0115 CM+GUIA"}
+Private aOpItens := {"Inserir","Repor estoque"}
+
+@ 010,001 TO 200,520 DIALOG oDlg252 TITLE _cTitulo
+@ 010,005 SAY "Revista"
+@ 020,005 COMBOBOX cRevista ITEMS aItens SIZE 80,30
+@ 010,100 SAY "Edi็ใo"
+@ 020,100 GET cEdicao Picture "@R 9999"                                               
+@ 010,140 SAY "Qtde"
+@ 020,140 GET cQtd Picture "@R 9999"
+@ 010,180 SAY "Op็ใo"
+@ 020,180 COMBOBOX cOpcao ITEMS aOpItens SIZE 70,30
+@ 045,005 SAY "Custo R$"
+@ 045,040 GET nCusto SIZE 55,11 PICTURE "@E 999,999,999.99"
+@ 045,140 SAY "Documento"
+@ 045,180 GET cDoc SIZE 55,11 PICTURE "@R 999999999"
+
+@ 070,005 BUTTON "Executar" SIZE 40,12 ACTION Processa({||ProcArq()})
+@ 070,060 BUTTON "Fechar" SIZE 40,12 ACTION ( Close(oDlg252) )
+Activate Dialog oDlg252 CENTERED
+
+
+Return     
+
+
+Static Function ProcArq()
+	Local cProduto := ""
+	Local cQuery := ""
+	Local lproc := .f.
+	Local cMsg := ""
+	
+	cProduto := substr(cRevista,1,4) + strzero(Val(alltrim(cEdicao)),4)
+	
+	DbSelectArea("SB1")
+	DBSetOrder(1)
+	If DBSeek(xFilial("SB1")+  alltrim(cProduto))
+		If substr(cOpcao,1,1) =="I" //inserir
+			If MsgYesNo("Este produto jแ existe. Deseja repor o estoque do produto "+ cProduto +"?")
+				ProcRepor(cProduto, Val(Alltrim(cQtd)))
+				cMsg := "Estoque do produto "+ Alltrim(cProduto) + " reposto"
+			Else
+				cMsg := "Produto jแ existente, estoque nใo reposto, opera็ใo cancelada pelo usuแrio"
+			Endif
+		Else
+		 	//MsgAlert("Repor o estoque do produto "+ cProduto)
+		 	ProcRepor(cProduto, Val(Alltrim(cQtd)))
+		 	cMsg := "Estoque do produto "+ Alltrim(cProduto) + " reposto"
+		Endif
+		 //Repor o estoque
+	Else 
+		If substr(cOpcao,1,1) =="I" //inserir
+			//MsgAlert("Inserir o produto "+ cProduto)
+			ProcInsert(cProduto, cEdicao)
+			 
+			//MsgAlert("Repor o estoque do produto "+ cProduto)
+			ProcRepor(cProduto, Val(Alltrim(cQtd)))
+			cMsg := "Produto "+ Alltrim(cProduto) + " inserido e estoque reposto"
+		Else
+			If MsgYesNo("Este produto nใo existe. Deseja inserir o produto "+ cProduto +"?")
+				ProcInsert(cProduto, cEdicao)
+				//MsgAlert("Repor o estoque do produto "+ cProduto)
+				ProcRepor(cProduto, Val(Alltrim(cQtd)))
+				cMsg := "Produto "+ Alltrim(cProduto) + " inserido e estoque reposto"
+			Else
+				cMsg := "Produto nใo existente, estoque nใo reposto, opera็ใo cancelada pelo usuแrio"	
+			Endif
+		Endif
+	EndIf
+	MsgInfo(cMsg)
+Return
+
+
+Static Function ProcInsert(cProduto, cEdicao)
+	Local cQuery := ""
+	
+	cQuery := "SELECT B1_FILIAL, B1_COD, B1_DESC, B1_TIPO, B1_UM, B1_GRUPO ,B1_CONTA, B1_CC, B1_TIPCONV, B1_TS, B1_POSIPI, B1_LOCPAD, B1_PESO, B1_PRV1, B1_APROPRI ,B1_FANTASM, B1_ORIGEM" 
+	cQuery += ", B1_RASTRO, B1_TIPODEC, B1_MRP, B1_ATIVO, B1_PONTOS, B1_LOCALIZ, B1_TITULO, B1_REGCOT, B1_IMPORT, B1_TIPOCQ, B1_OPAUTOM, B1_SOLICIT, B1_INSS, B1_CONTA2, B1_PROCESS" 
+	cQuery += ", B1_CONTA1, B1_ORIGPRO, B1_MCUSTD, B1_PCOFINS, B1_PCSLL, B1_PPIS, B1_QTMIDIA ,B1_TPPROD, B1_CODTAB, B1_PIS, B1_COFINS ,B1_CSLL, B1_FLAGSIT"
+	cQuery += " FROM "+ RETSQLNAME("SB1") +" WHERE B1_FILIAL='"+ XFILIAL("SB1") +"' AND B1_COD='"+ substr(cProduto,1,4) +"001' AND D_E_L_E_T_<>'*'"
+	DbUseArea( .T., "TOPCONN", TcGenQry(,,cQuery), "QUERYSB1", .T., .F. )
+	//TcSetField("QUERYSB1","B1_FLAGSIT","C",1)
+	DBSelectArea("QUERYSB1")
+	DBGotop()
+	
+	If !eof()
+		RECLOCK("SB1",.T.) //insert
+			SB1->B1_FILIAL	:= XFILIAL("SB1")
+			SB1->B1_COD		:= cProduto
+			SB1->B1_DESC		:= Alltrim(QUERYSB1->B1_DESC) +" ED."+strzero(Val(alltrim(cEdicao)),4) 
+			SB1->B1_TIPO		:= QUERYSB1->B1_TIPO
+			SB1->B1_UM			:= QUERYSB1->B1_UM
+			SB1->B1_GRUPO		:= QUERYSB1->B1_GRUPO
+			SB1->B1_CONTA		:= QUERYSB1->B1_CONTA
+			SB1->B1_CC			:= QUERYSB1->B1_CC
+			SB1->B1_TIPCONV	:= QUERYSB1->B1_TIPCONV
+			SB1->B1_TS			:= QUERYSB1->B1_TS
+			SB1->B1_POSIPI	:= QUERYSB1->B1_POSIPI
+			SB1->B1_LOCPAD	:= QUERYSB1->B1_LOCPAD
+			SB1->B1_PESO		:= QUERYSB1->B1_PESO
+			SB1->B1_PRV1		:= QUERYSB1->B1_PRV1
+			SB1->B1_APROPRI	:= QUERYSB1->B1_APROPRI
+			SB1->B1_FANTASM	:= QUERYSB1->B1_FANTASM
+			SB1->B1_ORIGEM	:= QUERYSB1->B1_ORIGEM
+			SB1->B1_RASTRO	:= QUERYSB1->B1_RASTRO
+			SB1->B1_TIPODEC	:= QUERYSB1->B1_TIPODEC
+			SB1->B1_MRP		:= QUERYSB1->B1_MRP
+			SB1->B1_ATIVO		:= QUERYSB1->B1_ATIVO
+			SB1->B1_PONTOS	:= QUERYSB1->B1_PONTOS
+			SB1->B1_LOCALIZ	:= QUERYSB1->B1_LOCALIZ
+			SB1->B1_TITULO	:= QUERYSB1->B1_TITULO
+			SB1->B1_REGCOT	:= QUERYSB1->B1_REGCOT
+			SB1->B1_IMPORT	:= QUERYSB1->B1_IMPORT
+			SB1->B1_TIPOCQ	:= QUERYSB1->B1_TIPOCQ
+			SB1->B1_OPAUTOM	:= QUERYSB1->B1_OPAUTOM
+			SB1->B1_SOLICIT	:= QUERYSB1->B1_SOLICIT
+			SB1->B1_INSS		:= QUERYSB1->B1_INSS
+			SB1->B1_CONTA2	:= QUERYSB1->B1_CONTA2
+			SB1->B1_PROCESS	:= QUERYSB1->B1_PROCESS
+			SB1->B1_CONTA1	:= QUERYSB1->B1_CONTA1
+			SB1->B1_ORIGPRO	:= QUERYSB1->B1_ORIGPRO
+			SB1->B1_MCUSTD	:= QUERYSB1->B1_MCUSTD
+			SB1->B1_PCOFINS	:= QUERYSB1->B1_PCOFINS
+			SB1->B1_PCSLL		:= QUERYSB1->B1_PCSLL
+			SB1->B1_PPIS		:= QUERYSB1->B1_PPIS
+			SB1->B1_QTMIDIA	:= QUERYSB1->B1_QTMIDIA
+			SB1->B1_TPPROD	:= QUERYSB1->B1_TPPROD
+			SB1->B1_CODTAB	:= QUERYSB1->B1_CODTAB
+			SB1->B1_PIS		:= QUERYSB1->B1_PIS
+			SB1->B1_COFINS	:= QUERYSB1->B1_COFINS
+			SB1->B1_CSLL		:= QUERYSB1->B1_CSLL
+			SB1->B1_FLAGSIT	:= .T.
+		MSUNLOCK()
+	Else
+		MsgAlert("Problema ao inserir o produto")
+	Endif
+Return
+
+
+Static Function ProcRepor(cProduto, nQtd)
+	Local _aCab1 := {}
+	Local _aItem := {}
+	Local _atotitem:={}
+	Local cCodigoTM:="001"
+	Local cUnid:="UN"
+	Local cAlmox :=  "T5"
+
+	Private lMsHelpAuto := .t. // se .t. direciona as mensagens de help
+	Private lMsErroAuto := .f. //necessario a criacao
+
+	Private _acod:={"1","MP1"}
+	//PREPARE ENVIRONMENT EMPRESA "99" FILIAL "01" MODULO "EST"
+
+	_aCab1 := { {"D3_TM" ,cCodigoTM , NIL},;
+	{"D3_CC" ,"002", NIL},;
+	{"D3_EMISSAO" ,ddatabase, NIL}} 
+	_aItem:={ {"D3_COD" ,cProduto ,NIL},;
+	{"D3_UM" ,cUnid ,NIL},; 
+	{"D3_QUANT", nQtd ,NIL},;
+	{"D3_LOCAL", cAlmox ,NIL},;
+	{"D3_CUSTO1", cAlmox ,NIL}}
+	
+	
+	//{"D3_LOTECTL", Substr(cProduto,3,6) ,NIL}}
+
+	aadd(_atotitem,_aitem) 
+	MSExecAuto({|x,y,z| MATA241(x,y,z)},_aCab1,_atotitem,3)
+
+	If lMsErroAuto 
+		Mostraerro() 
+		DisarmTransaction() 
+		break
+	EndIf
+Return
